@@ -75,7 +75,7 @@ io.on('connection', function (socket) {
     // Online
     if(online_users[str.to] !== undefined){
       console.log("online");
-      online_users[str.to].emit('file',{'from':account, 'to': str.to, 'type': 1, 'content':str.file_name, 'time': time});
+      online_users[str.to].emit('message',{'from':account, 'to': str.to, 'type': 1, 'content':str.file_name, 'time': time});
     }else{
       // Offline operation
       console.log("offline");
