@@ -15,6 +15,7 @@ const bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
 var chatRouter = require('./routes/chat');
+var SettingRouter = require('./routes/setting');//新写的，共2行，这里是第1行
 
 var app = express();
 app.use(bodyParser.json());//数据JSON类型
@@ -31,6 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/chat', chatRouter);
+app.use('/setting', SettingRouter);//新写的，共2行，这里是第2行
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

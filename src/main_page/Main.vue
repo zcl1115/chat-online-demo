@@ -1,23 +1,23 @@
 <template>
   <div class="Body">
     <el-container>
-      <el-aside class="LeftAside" width="100px">
-        <el-menu>
+      <el-aside class="LeftAside" :class="{LeftAsideDark: IsDarkMode}" width="100px">
+        <el-menu class="LeftAsideMenu" :class="{LeftAsideMenuDark: IsDarkMode}">
           <div class="UserLogoDiv">
             <img src="../assets/logo2.png" alt />
           </div>
-          <el-menu-item index="1-1" @click="show_page = 'chatting'">
+          <el-menu-item index="1-1" @click="show_page = 'chatting'" :class="{MenuItemDark: IsDarkMode}">
             <i class="el-icon-chat-round"></i>
           </el-menu-item>
-          <el-menu-item index="1-2" @click="show_page = 'contacts'">
+          <el-menu-item index="1-2" @click="show_page = 'contacts'" :class="{MenuItemDark: IsDarkMode}">
             <i class="el-icon-user"></i>
           </el-menu-item>
-          <el-menu-item index="1-3" @click="show_page = 'setting'">
+          <el-menu-item index="1-3" @click="show_page = 'setting'" :class="{MenuItemDark: IsDarkMode}">
             <i class="el-icon-setting"></i>
           </el-menu-item>
         </el-menu>
       </el-aside>
-      <component :is="show_page" @SetDisplayPage="SetDisplayPage"></component>
+      <component :is="show_page" :IsDarkMode="IsDarkMode" @UpdateModle="UpdateModle" @SetDisplayPage="SetDisplayPage"></component>
     </el-container>
   </div>
 </template>
@@ -32,11 +32,16 @@
       return {
         logoURL:require("../assets/logo.png"),
         show_page: "chatting",
+        IsDarkMode: false
       }
     },
     methods: {
       SetDisplayPage(val) {
         this.show_page = val;
+      },
+      UpdateModle(val){
+        console.log(val);
+        this.IsDarkMode=val.mode;
       }
     },
     sockets: {
@@ -92,12 +97,27 @@
     background-color: rgb(242, 242, 242);
     text-align: center;
 
-    .el-menu {
+    .LeftAsideMenu {
       background-color: rgb(242, 242, 242);
       border: none;
     }
+
+    .LeftAsideMenuDark {
+      background-color: #1d2935;
+    }
+
+    .MenuItemDark:hover {
+      background-color: rgb(47, 66, 85);
+    }
+
+    .MenuItemDark.is-active {
+      background-color: rgb(50, 71, 92);
+    }
   }
 
+  .LeftAsideDark{
+    background-color: #1d2935;
+  }
 
   .UserLogoDiv {
     height: 50px;

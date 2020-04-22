@@ -6,7 +6,7 @@ function DB_helper(){
     var connection = mysql.createConnection({
         host     : 'localhost',
         user     : 'root',
-        password : 'root',
+        password : 'zheng1998',
         database : 'test',
         timezone : "08:00",
         charset  :'UTF8MB4_GENERAL_CI'

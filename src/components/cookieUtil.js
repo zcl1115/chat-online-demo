@@ -22,6 +22,15 @@ export function getCookie(param) {
         return c_param;
     }
 }
+
+export function DeleteCookie(key) {
+    var exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    var c = getCookie(key);
+    if (c != null){
+        document.cookie = key + "=" + c + ";expires=" + exp.toGMTString();
+    }
+}
 /*
 function padLeftZero (str) {
     return ('00' + str).substr(str.length);
