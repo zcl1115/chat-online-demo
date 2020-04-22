@@ -24,10 +24,7 @@
         <!--eslint-disable-next-line-->
         <div class="message_show">
           <div class="message_box" v-for="(message, index) in messages" :key="index">
-            {{message}}
             <div v-if="message.to === contact_account && message.from === account">
-              {{message}}
-              {{}}
               <!--            <img :src="recent_contacts_list[isactive].img_path" class="contactor_avatar">-->
               <div class="btalk">
                 <div class="avatar_box">
@@ -47,7 +44,7 @@
             <div v-if="message.from === contact_account && message.to === account">
               <div class="atalk">
                 <div class="avatar_box">
-                  <img :src="img_path" class="contactor_avatar">
+                  <img :src="recent_contacts_list[isactive].img_path" class="contactor_avatar">
                 </div>
                 <span class="message" v-if="message.type === 0">{{message.content}}</span>
                 <span class="message" v-if="message.type === 1">
@@ -132,6 +129,24 @@
           return b1-a1;
         });
       });
+      this.sockets.subscribe('file', (data) => {
+        this.messages.push(data);
+        this.unread_contacts.push(data.from);
+
+        var i=this.get_index(data.from);
+        let temp=this.recent_contacts_list[i];
+        temp.chat_time=data.time;
+        this.$set(this.recent_contacts_list,i,temp);
+        this.recent_contacts_list.sort((a,b) => {
+          let atime=a.chat_time;
+          let btime=b.chat_time;
+          atime=atime.replace(/-/g,'/');
+          btime=btime.replace(/-/g,'/');
+          let a1=new Date(atime).getTime();
+          let b1=new Date(btime).getTime();
+          return b1-a1;
+        });
+      });
       this.sockets.subscribe('getFile', (data) => {
         console.log("receive file");
         var blob = new Blob([data.arraybuffer], {type: "text/plain;charset=utf-8"});
@@ -141,6 +156,9 @@
       });
       this.sockets.subscribe('login', (data) => {
         this.img_path = data.img_path;
+        console.log("login");
+        console.log(data);
+        console.log(this.img_path);
       });
 
     },
