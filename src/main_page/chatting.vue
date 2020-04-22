@@ -129,24 +129,6 @@
           return b1-a1;
         });
       });
-      this.sockets.subscribe('file', (data) => {
-        this.messages.push(data);
-        this.unread_contacts.push(data.from);
-
-        var i=this.get_index(data.from);
-        let temp=this.recent_contacts_list[i];
-        temp.chat_time=data.time;
-        this.$set(this.recent_contacts_list,i,temp);
-        this.recent_contacts_list.sort((a,b) => {
-          let atime=a.chat_time;
-          let btime=b.chat_time;
-          atime=atime.replace(/-/g,'/');
-          btime=btime.replace(/-/g,'/');
-          let a1=new Date(atime).getTime();
-          let b1=new Date(btime).getTime();
-          return b1-a1;
-        });
-      });
       this.sockets.subscribe('getFile', (data) => {
         console.log("receive file");
         var blob = new Blob([data.arraybuffer], {type: "text/plain;charset=utf-8"});
