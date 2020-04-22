@@ -27,8 +27,7 @@ io.on('connection', function (socket) {
     // load offline messages
     db_helper.getOfflineMessage(str.account,function (messages) {
       for(var i=0; i < messages.length; i++){
-        if(messages[i].type === 0)
-          socket.emit('message',{'from':messages[i].account_from, 'to': messages[i].account_to, 'type': messages[i].type, 'content':messages[i].message, 'time':messages[i].time});
+        socket.emit('message',{'from':messages[i].account_from, 'to': messages[i].account_to, 'type': messages[i].type, 'content':messages[i].message, 'time':messages[i].time});
       }
       // clear stored offline messages
       db_helper.clearOfflineMessage(account);
@@ -42,7 +41,7 @@ io.on('connection', function (socket) {
     let time = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
     console.log("(sendMessage) account: " + account + ' to ' +str.to + ' message: ' + str.message + 'time: ' +  time);
     // Online
-    if(str.to in online_users){
+    if(online_users[str.to] !== undefined){
       console.log("online");
       online_users[str.to].emit('message',{'from':account, 'to': str.to, 'type': 0, 'content':str.message, 'time': time});
     }else{
@@ -74,7 +73,7 @@ io.on('connection', function (socket) {
     });
 
     // Online
-    if(str.to in online_users){
+    if(online_users[str.to] !== undefined){
       console.log("online");
       online_users[str.to].emit('file',{'from':account, 'to': str.to, 'type': 1, 'content':str.file_name, 'time': time});
     }else{
@@ -103,7 +102,7 @@ io.on('connection', function (socket) {
     if(account != null)
     {
       db_helper.setOffline(account,function () {
-        //online_users[account] = undefined;
+        online_users[account] = undefined;
         console.log("(disconnect) account: " + account);
       });
     }else{
