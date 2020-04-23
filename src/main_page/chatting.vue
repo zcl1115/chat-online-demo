@@ -1,23 +1,24 @@
 <template>
-    <el-container>
-      <el-aside class="MiddleAside" width="300px">
+    <el-container :class="{el_dark: IsDarkMode}">
+      <el-aside class="MiddleAside" :class="{MiddleAsideDark: IsDarkMode}" width="300px">
         <div class="search_area">
           <el-input
+                  :class="{dark_search: IsDarkMode}"
                   placeholder="搜索最近联系人"
                   v-model="search_name"
                   suffix-icon="el-icon-search">
           </el-input>
         </div>
-        <div class="recent_contacts">
-          <ul v-for="(people,index) in filter_recent_contacts" v-bind:key="index" class="contact" :class = "isactive == index ? 'addclass' : '' " v-on:click="select_contact(people.name,people.contact,index)">
+        <div class="recent_contacts" >
+          <ul v-for="(people,index) in filter_recent_contacts" v-bind:key="index" class="contact" :class="{contact_dark: IsDarkMode, addclass: isactive === index}" v-on:click="select_contact(people.name,people.contact,index)">
             <img :src="people.img_path" class="round_icon">
             <a class="contact_name">{{people.name}}</a>
             <img src="../assets/point.png" class="notice" v-if="unread_contacts.indexOf(people.contact) !== -1 && isactive !== index"/>
           </ul>
         </div>
       </el-aside>
-      <div class="chat_area" v-if="isShow">
-        <div class="friend_name">
+      <div class="chat_area" v-if="isShow" :class="{chat_area_dark: IsDarkMode}">
+        <div class="friend_name" :class="{friend_name_dark: IsDarkMode}">
           {{contacts}}
 <!--          {{contact_account}}-->
         </div>
@@ -67,7 +68,7 @@
             <emoji_picker @emoji_clicked = "emoji_clicked" :inputData="emoji_picker_isShow"></emoji_picker>
           </div>
           <div class="input_area">
-            <textarea class="content" id="message" type="text"/>
+            <textarea class="content" :class="{content_dark: IsDarkMode}" id="message" type="text"/>
           </div>
           <div class="send_area">
             <el-button type="primary" v-on:click="send_message()" style="background: rgb(80,80,160);border:rgb(80,80,160)">发送<i class="el-icon-s-promotion el-icon--right" ></i></el-button>
@@ -89,9 +90,8 @@
     data(){
       return {
         account:'',
-        img_path:'',
+        img_path:getCookie('user_img_path'),
         logoURL:require("../assets/logo.png"),
-        img_url:'',
         contacts:'',
         contact_account:'',
         recent_contacts_list:[],
@@ -104,6 +104,11 @@
         cur_file:"",
         fileData:"",
         search_name:'',
+      }
+    },
+    props:{
+      IsDarkMode: {
+        type: Boolean,
       }
     },
     created(){
@@ -137,7 +142,6 @@
         // FileSaver.saveAs(blob, "hello world.txt");
       });
       this.sockets.subscribe('login', (data) => {
-        this.img_path = data.img_path;
         console.log("login");
         console.log(data);
         console.log(this.img_path);
@@ -227,16 +231,27 @@
     },
   }
 </script>
-
+<style>
+  .dark_search .el-input__inner {
+    background-color: rgb(0, 0, 0);
+    color: rgb(240, 240, 240);
+  }
+</style>
 <style  lang="less" scoped>
   .el-container {
     height: 100%;
     margin: 0;
   }
-
+  .el_dark{
+    background-color: rgb(0, 0, 0);
+  }
   .MiddleAside {
     background-color: rgb(247, 247, 247);
     text-align: center;
+  }
+
+  .MiddleAsideDark {
+    background-color: rgb(0, 0, 0);
   }
 
   .search_area{
@@ -251,16 +266,26 @@
     overflow: auto;
     overflow-x: hidden;
   }
+  /*.recent_contacts_dark{*/
+
+  /*}*/
   .chat_area{
     width: 75%;
     height: 100%;
     float: left;
   }
+  .char_area_dark{
+    background-color: rgb(0, 0, 0);
+  }
+
   .friend_name{
     text-align: center;
     width: 100%;
     height: 6%;
     box-shadow: 0px 2px 0px 0px #F2F2F2;
+  }
+  .friend_name_dark{
+    color: rgb(240, 240, 240);
   }
   .message_show{
     width: 100%;
@@ -293,6 +318,10 @@
     height: 100%;
     line-height:10px;
     font-size: 20px;
+  }
+  .content_dark{
+    background-color: rgb(0, 0, 0);
+    color: rgb(240, 240, 240);
   }
   .content:focus{
     outline: none;
@@ -333,6 +362,11 @@
     width: 100%;
     height: 60px;
   }
+
+  .contact_dark{
+    color: rgb(240, 240, 240);
+  }
+
   .icon{
     margin-left: 5px;
     width: 25px;
@@ -349,7 +383,8 @@
     margin-left: 30px;
   }
   .addclass{
-    background-color : white;
+    background-color: #1A1A1A;
+    color: rgb(250, 250, 250);
   }
   .message_box{
     /*width: 50%;*/

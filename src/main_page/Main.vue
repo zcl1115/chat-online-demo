@@ -4,7 +4,7 @@
       <el-aside class="LeftAside" :class="{LeftAsideDark: IsDarkMode}" width="100px">
         <el-menu class="LeftAsideMenu" :class="{LeftAsideMenuDark: IsDarkMode}">
           <div class="UserLogoDiv">
-            <img src="../assets/logo2.png" alt />
+            <img :src="user_img_path" alt />
           </div>
           <el-menu-item index="1-1" @click="show_page = 'chatting'" :class="{MenuItemDark: IsDarkMode}">
             <i class="el-icon-chat-round"></i>
@@ -32,6 +32,7 @@
       return {
         logoURL:require("../assets/logo.png"),
         show_page: "chatting",
+        user_img_path: getCookie('user_img_path'),
         IsDarkMode: false
       }
     },
@@ -103,20 +104,20 @@
     }
 
     .LeftAsideMenuDark {
-      background-color: #1d2935;
+      background-color: rgb(0,0,0);
     }
 
     .MenuItemDark:hover {
-      background-color: rgb(47, 66, 85);
+      background-color: rgb(0, 0, 0);
     }
 
     .MenuItemDark.is-active {
-      background-color: rgb(50, 71, 92);
+      background-color: #1A1A1A;
     }
   }
 
   .LeftAsideDark{
-    background-color: #1d2935;
+    background-color: rgb(0,0,0);
   }
 
   .UserLogoDiv {

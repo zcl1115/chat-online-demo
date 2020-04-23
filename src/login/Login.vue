@@ -59,6 +59,7 @@
           if(res.status==='0'){
             setCookie('username',res.name);
             setCookie('user_account',this.account);
+            setCookie('user_img_path',res.img_path);
             window.location.href="chat.html";
           }else if (res.status==='1'){
             this.error.pwd='';

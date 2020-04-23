@@ -49,7 +49,7 @@ import SetLogoComponent from "./SetLogoComponent.vue";
 import SetThemeModeComponent from "./SetThemeModeComponent.vue";
 import { getCookie, DeleteCookie } from "../components/cookieUtil";
 
-const UserDefaultLogoPath = require("../assets/img/DefaultLogo.png");
+const UserDefaultLogoPath = getCookie('user_img_path');
 const GetPersonalInfoURL = "api/setting/GetPersonalInfo";
 const GetPersonalLogoURL = "api/setting/GetPersonalLogo";
 const SetLoginStatusURL = "api/setting/SetLoginStatus"
@@ -219,28 +219,6 @@ export default {
   }
 }
 
-.LeftAside {
-  background-color: rgb(242, 242, 242);
-  text-align: center;
-
-  .LeftAsideMenu {
-    background-color: rgb(242, 242, 242);
-    border: none;
-  }
-
-  .LeftAsideMenuDark {
-    background-color: #1d2935;
-  }
-
-  .MenuItemDark:hover {
-    background-color: rgb(47, 66, 85);
-  }
-
-  .MenuItemDark.is-active {
-    background-color: rgb(50, 71, 92);
-  }
-}
-
 .MiddleAside {
   background-color: rgb(247, 247, 247);
   text-align: center;
@@ -267,23 +245,23 @@ export default {
     }
 
     .MenuItem2Dark {
-      background-color: rgb(60, 84, 108);
+      background-color: rgb(0, 0, 0);
       color: rgb(220, 220, 220);
     }
 
     .MenuItem2Dark:hover {
-      background-color: rgb(68, 96, 128);
+      background-color: rgb(0, 0, 0);
       color: rgb(240, 240, 240);
     }
 
     .MenuItem2Dark.is-active {
-      background-color: rgb(71, 100, 129);
+      background-color: #1A1A1A;
       color: rgb(250, 250, 250);
     }
   }
 
   .MiddleAsideMenuDark {
-    background-color: rgb(44, 62, 80);
+    background-color: rgb(0, 0, 0);
   }
 
   .MenuItemDark {
@@ -291,12 +269,12 @@ export default {
   }
 
   .MenuItemDark:hover {
-    background-color: rgb(55, 79, 102);
+    background-color: rgb(0, 0, 0);
     color: rgb(220, 220, 220);
   }
 
   .MenuItemDark.is-active {
-    background-color: rgb(65, 91, 118);
+    background-color: #1A1A1A;
     color: rgb(240, 240, 240);
   }
 }
@@ -319,11 +297,8 @@ export default {
   }
 }
 
-.LeftAsideDark {
-  background-color: #1d2935;
-}
 
 .MiddleAsideDark {
-  background-color: rgb(44, 62, 80);
+  background-color: rgb(0, 0, 0);
 }
 </style>

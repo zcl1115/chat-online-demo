@@ -112,18 +112,20 @@ function DB_helper(){
             }
             var status;
             var name;
+            var img_path;
             console.log("pwd:" + password);
             if(result.length === 0){
                 status = 1;
             }else if (result[0].password === password){
                 status = 0;
                 name = result[0].name;
+                img_path=result[0].img_path;
             }else{
                 status = 2;
             }
             console.log(status);
             console.log(name);
-            if(cb != null ) return cb(status, name);
+            if(cb != null ) return cb(status, name, img_path);
         });
     }
     this.getImgPath = function (account, cb) {

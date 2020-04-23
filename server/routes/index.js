@@ -7,25 +7,26 @@ router.get('/', function(req, res) {
   res.render('index', { title: 'Express' });
 });
 router.post('/login', function(req, res) {
-  db_helper.signIn(req.body.account,req.body.pass,function (status,name) {
+  db_helper.signIn(req.body.account,req.body.pass,function (status,name,img_path) {
     //status:: 0: verified ; 1:not exists ; 2:verification error
     if(status === 0){
       res.json({
               status:'0',
               name: name,
-            })
+              img_path: img_path
+            });
       return;
     }
     else if(status === 1){
       res.json({
               status:'1'
-            })
+            });
       return;
     }
     else {
       res.json({
         status:'2'
-      })
+      });
       return;
     }
   });
