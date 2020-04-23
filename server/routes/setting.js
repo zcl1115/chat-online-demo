@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const connection = require("../db/sql");
 const multiparty = require('multiparty');
 const fs = require('fs');
 
@@ -29,6 +30,7 @@ router.post('/GetPersonalInfo', (req, res) => {
 })
 
 router.post('/GetPersonalLogo', (req, res) => {
+  console.log("GetPersonalLogo req: ", req.body);
   var FilePath = LogoSavePathBase + req.body.UserID;
   var JSONData = {
     Status: false,
@@ -117,28 +119,6 @@ router.post('/SetPassword', (req, res) => {
 router.post('/NewLogo', (req, res) => {
   console.log("NewLogo");
 
-  console.log("body: ", req.params);
-
-  var TempForm = new multiparty.Form()
-  TempForm.parse(req, (err, fields) => {
-    if (err) {
-      console.log("error");
-    } else {
-      if (fields) {
-        console.log("NewLogoFile:", fields.NewLogoFile);
-      }
-    }
-  })
-
-  res.json({
-    Status: true
-  });
-})
-
-router.post('/NewLogo2', (req, res) => {
-  console.log("NewLogo");
-  console.log("body: ", req.params);
-
   var TempForm = new multiparty.Form()
   TempForm.parse(req, (err, fields, files) => {
     if (err) {
@@ -158,35 +138,17 @@ router.post('/NewLogo2', (req, res) => {
 
     console.log("fields:", fields);
     console.log("file:", files.file[0]);
-    console.log("path:", files.file[0].path);
 
-    var UserID = fields.UserID;
-    var FileType = fields.FileType;
-    var NewLogoPath = LogoSavePathBase + UserID;
+    var NewLogoPath = LogoSavePathBase + fields.UserID;
 
     var ReaderStream = fs.createReadStream(files.file[0].path);
     var WriterStream = fs.createWriteStream(NewLogoPath);
 
-    var SQLString = "update user set img_path = ? where account = ?";
-    var SQLParam = [FileType, UserID];
-
     ReaderStream.pipe(WriterStream);
 
-    connection.query(SQLString, SQLParam, (err, results) => {
-      if (err) {
-        res.json({
-          Status: false
-        })
-      } else if (results.affectedRows == 1) {
-        res.json({
-          Status: true
-        })
-      } else {
-        res.json({
-          Status: false
-        })
-      }
-    })
+    res.json({
+      Status: true
+    });
   })
 })
 
