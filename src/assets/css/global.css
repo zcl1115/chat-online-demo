@@ -2,4 +2,23 @@ html, body, #app{
   height: 100%;
   margin: 0;
   padding: 0;
+  font-family: "黑体";
+}
+
+button{
+  font-family: "黑体";
+}
+
+.FormLabel {
+  text-align: right;
+  vertical-align: middle;
+  font-size: 14px;
+  color: #606266;
+  line-height: 40px;
+  padding: 0 12px 0 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  transform: translate(-100%);
 }
