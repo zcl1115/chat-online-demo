@@ -87,15 +87,11 @@ export default {
 
         var Temp = { UserID: this.UserIDProp };
 
-        if (this.PersonlInfoForm.NewName != this.UserNameProp) {
+        if (this.PersonlInfoForm.NewName !== this.UserNameProp) {
           Temp.NewName = this.PersonlInfoForm.NewName;
         }
-        if (this.PersonlInfoForm.NewIntroduction != this.UserIntroductionProp) {
+        if (this.PersonlInfoForm.NewIntroduction !== this.UserIntroductionProp) {
           Temp.NewIntroduction = this.PersonlInfoForm.NewIntroduction;
-        }
-        if (this.UploadMark) {
-          Temp.NewLogoFile = this.NewLogoFile;
-          Temp.NewLogoFileType = this.NewLogoFileType;
         }
 
         var SendObj = this.qs.stringify(Temp);

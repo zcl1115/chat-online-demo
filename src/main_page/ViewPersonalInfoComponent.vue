@@ -22,11 +22,7 @@
 <script>
 export default {
   data() {
-    return {
-      UserID: "",
-      UserName: "",
-      UserIntroduction: ""
-    };
+    return {};
   },
   methods: {
     SubmitButtonClicked() {
@@ -36,7 +32,13 @@ export default {
       this.$emit("SetDisplayMark", "SetLogoComponent");
     }
   },
-  props: ["UserIDProp", "UserNameProp", "UserIntroductionProp", "UserLogoPathProp", "IsDarkModeProp"],
+  props: [
+    "UserIDProp",
+    "UserNameProp",
+    "UserIntroductionProp",
+    "UserLogoPathProp",
+    "IsDarkModeProp"
+  ],
 
   beforeCreate() {},
   created() {},

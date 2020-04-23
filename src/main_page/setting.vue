@@ -1,44 +1,44 @@
 <template>
-    <el-container>
-      <el-aside class="MiddleAside" :class="{MiddleAsideDark: IsDarkMode}" width="300px">
-        <el-menu class="MiddleAsideMenu" :class="{MiddleAsideMenuDark: IsDarkMode}">
-          <el-menu-item
-            index="2-1"
-            class="LogoutButton"
-            @click="LogoutButtonClicked()"
-            :class="{MenuItem2Dark: IsDarkMode}"
-          >退出登录</el-menu-item>
-          <el-menu-item
-            index="2-2"
-            class="OtherSettingButtons"
-            @click="RightSideDisplayMark = 'ViewPersonalInfoComponent'"
-            :class="{MenuItemDark: IsDarkMode}"
-          >个人信息</el-menu-item>
-          <el-menu-item
-            index="2-3"
-            class="OtherSettingButtons"
-            @click="RightSideDisplayMark = 'SetPasswordComponent'"
-            :class="{MenuItemDark: IsDarkMode}"
-          >帐号密码</el-menu-item>
-          <el-menu-item
-            index="2-4"
-            class="OtherSettingButtons"
-            @click="RightSideDisplayMark = 'SetThemeModeComponent'"
-            :class="{MenuItemDark: this.IsDarkMode}"
-          >设置主题</el-menu-item>
-        </el-menu>
-      </el-aside>
-      <component
-        :is="RightSideDisplayMark"
-        @SetDisplayMark="SetDisplayMark"
-        @UpdatePersonalInfoInVue="UpdatePersonalInfoInVue"
-        :UserIDProp="UserID"
-        :UserNameProp="UserName"
-        :UserIntroductionProp="UserIntroduction"
-        :UserLogoPathProp="UserLogoPath"
-        :IsDarkModeProp="IsDarkMode"
-      ></component>
-    </el-container>
+  <el-container>
+    <el-aside class="MiddleAside" :class="{MiddleAsideDark: IsDarkMode}" width="300px">
+      <el-menu class="MiddleAsideMenu" :class="{MiddleAsideMenuDark: IsDarkMode}">
+        <el-menu-item
+          index="2-1"
+          class="LogoutButton"
+          @click="LogoutButtonClicked()"
+          :class="{MenuItem2Dark: IsDarkMode}"
+        >退出登录</el-menu-item>
+        <el-menu-item
+          index="2-2"
+          class="OtherSettingButtons"
+          @click="RightSideDisplayMark = 'ViewPersonalInfoComponent'"
+          :class="{MenuItemDark: IsDarkMode}"
+        >个人信息</el-menu-item>
+        <el-menu-item
+          index="2-3"
+          class="OtherSettingButtons"
+          @click="RightSideDisplayMark = 'SetPasswordComponent'"
+          :class="{MenuItemDark: IsDarkMode}"
+        >帐号密码</el-menu-item>
+        <el-menu-item
+          index="2-4"
+          class="OtherSettingButtons"
+          @click="RightSideDisplayMark = 'SetThemeModeComponent'"
+          :class="{MenuItemDark: this.IsDarkMode}"
+        >设置主题</el-menu-item>
+      </el-menu>
+    </el-aside>
+    <component
+      :is="RightSideDisplayMark"
+      @SetDisplayMark="SetDisplayMark"
+      @UpdatePersonalInfoInVue="UpdatePersonalInfoInVue"
+      :UserIDProp="UserID"
+      :UserNameProp="UserName"
+      :UserIntroductionProp="UserIntroduction"
+      :UserLogoPathProp="UserLogoPath"
+      :IsDarkModeProp="IsDarkMode"
+    ></component>
+  </el-container>
 </template>
 
 <script>
@@ -47,14 +47,15 @@ import SetPersonalInfoComponent from "./SetPersonalInfoComponent.vue";
 import SetPasswordComponent from "./SetPasswordComponent.vue";
 import SetLogoComponent from "./SetLogoComponent.vue";
 import SetThemeModeComponent from "./SetThemeModeComponent.vue";
-import { getCookie, DeleteCookie } from "../components/cookieUtil";
+import { getCookie, DeleteCookie, setCookie } from "../components/cookieUtil";
 
-const UserDefaultLogoPath = getCookie('user_img_path');
+const UserDefaultLogoPath = require("../assets/img/DefaultLogo.png");
 const GetPersonalInfoURL = "api/setting/GetPersonalInfo";
 const GetPersonalLogoURL = "api/setting/GetPersonalLogo";
-const SetLoginStatusURL = "api/setting/SetLoginStatus"
-const UserIDCookie = "user_account";
-const LoginMark = true;
+const SetLoginStatusURL = "api/setting/SetLoginStatus";
+const UserIDCookieKey = "user_account";
+const UserLogoPathCookieKey = "UserLogoPath";
+//const LoginMark = true;
 const LogoutMark = false;
 
 export default {
@@ -65,12 +66,13 @@ export default {
       UserID: "",
       UserName: "",
       UserIntroduction: "",
-      UserLogoPath: UserDefaultLogoPath,
+      UserLogoPath: UserDefaultLogoPath
     };
   },
-  props:{
-    IsDarkMode: {
-      type: Boolean,
+  watch: {
+    UserLogoPath(NewVal) {
+      this.$emit("UpdateDataInVue", { NewUserLogoPath: NewVal });
+      setCookie(UserLogoPathCookieKey, NewVal);
     }
   },
   methods: {
@@ -139,13 +141,13 @@ export default {
         this.UserLogoPath = val.UserLogoPath;
       }
       if (val.IsDarkMode !== undefined) {
-        var mode=val.IsDarkMode;
+        var mode = val.IsDarkMode;
         this.$emit("UpdateModle", { mode });
       }
     },
     LogoutButtonClicked() {
       this.SetLoginStatus(LogoutMark);
-      DeleteCookie(UserIDCookie);
+      DeleteCookie(UserIDCookieKey);
 
       window.location.href = "login.html";
     },
@@ -178,22 +180,23 @@ export default {
     SetPasswordComponent,
     SetThemeModeComponent
   },
+  props: ["IsDarkMode"],
 
   beforeCreate() {},
   created() {
-    this.UserID = getCookie(UserIDCookie);
+    this.UserID = getCookie(UserIDCookieKey);
 
-    this.SetLoginStatus(LoginMark);
+    //this.SetLoginStatus(LoginMark);
     this.GetPersonalInfo();
-    this.GetPersonalLogo();
+    //this.GetPersonalLogo();
+    this.UserLogoPath = getCookie(UserLogoPathCookieKey);
   },
   beforeMount() {},
   mounted() {}
 };
 </script>
 
-<style  lang="less" scoped>
-
+<style lang="less" scoped>
 .el-container {
   height: 100%;
   margin: 0;
@@ -255,7 +258,7 @@ export default {
     }
 
     .MenuItem2Dark.is-active {
-      background-color: #1A1A1A;
+      background-color: #1a1a1a;
       color: rgb(250, 250, 250);
     }
   }
@@ -274,7 +277,7 @@ export default {
   }
 
   .MenuItemDark.is-active {
-    background-color: #1A1A1A;
+    background-color: #1a1a1a;
     color: rgb(240, 240, 240);
   }
 }
@@ -296,7 +299,6 @@ export default {
     border-radius: 50%;
   }
 }
-
 
 .MiddleAsideDark {
   background-color: rgb(0, 0, 0);

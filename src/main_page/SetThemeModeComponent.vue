@@ -28,9 +28,7 @@
 <script>
 export default {
   data() {
-    return {
-      IsDarkMode: false
-    };
+    return {};
   },
   methods: {
     ModeButtonClicked(val) {
@@ -81,6 +79,6 @@ export default {
 }
 
 .BGCDark {
-  background-color: rgb(0,0,0);
+  background-color: rgb(0, 0, 0);
 }
 </style>

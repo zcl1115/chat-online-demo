@@ -34,7 +34,7 @@
 </template>
 
 <script>
-const SetLogoURL = "api/setting/NewLogo2";
+const SetLogoURL = "api/setting/NewLogo";
 const LegalImageType = ["image/jpeg", "image/png"];
 const LegalImageSize = 1048576;
 
@@ -58,7 +58,7 @@ export default {
         if (UploadButton) {
           UploadButton.style.display = "block";
         }
-      }, 500);
+      }, 700);
 
       this.UploadMark = false;
     },
@@ -119,8 +119,8 @@ export default {
       console.log("NewLogoURL", NewLogoURL);
 
       this.UploadMark = false;
-      
-      this.$emit("UpdatePersonalInfoInVue", {UserLogoPath: NewLogoURL});
+
+      this.$emit("UpdatePersonalInfoInVue", { UserLogoPath: NewLogoURL });
       this.$emit("SetDisplayMark", "ViewPersonalInfoComponent");
     },
     UploadOnError() {
@@ -132,13 +132,23 @@ export default {
     },
     SubmitButtonClicked() {
       if (!this.UploadMark) {
-        console.log("nonthing to upload!");
+        this.$message({
+          showClose: true,
+          message: "未选择图片，请上传图片！",
+          type: "error"
+        });
         return;
       }
       this.$refs.UploadLogoRef.submit();
     }
   },
-  props: ["UserIDProp", "UserNameProp", "UserIntroductionProp", "UserLogoPathProp", "IsDarkModeProp"],
+  props: [
+    "UserIDProp",
+    "UserNameProp",
+    "UserIntroductionProp",
+    "UserLogoPathProp",
+    "IsDarkModeProp"
+  ],
 
   beforeCreate() {},
   created() {},
@@ -150,7 +160,7 @@ export default {
 };
 </script>
 
-<style  lang="less" scoped>
+<style lang="less" scoped>
 .el-container {
   height: 100%;
   margin: 0;
