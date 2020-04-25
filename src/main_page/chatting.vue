@@ -10,10 +10,10 @@
           </el-input>
         </div>
         <div class="recent_contacts" >
-          <ul v-for="(people,index) in filter_recent_contacts" v-bind:key="index" class="contact" :class="{contact_dark: IsDarkMode, addclass: isactive === index}" v-on:click="select_contact(people.name,people.contact,index)">
+          <ul v-for="(people,index) in filter_recent_contacts" v-bind:key="index" class="contact" :class="{contact_dark: IsDarkMode, addclassdark: contact_account === people.contact&&IsDarkMode,addclass: contact_account === people.contact}" v-on:click="select_contact(people.name,people.contact,people.img_path)">
             <img :src="people.img_path" class="round_icon">
             <a class="contact_name">{{people.name}}</a>
-            <img src="../assets/point.png" class="notice" v-if="unread_contacts.indexOf(people.contact) !== -1 && isactive !== index"/>
+            <img src="../assets/point.png" class="notice" v-if="unread_contacts.indexOf(people.contact) !== -1 && contact_account !== people.contact"/>
           </ul>
         </div>
       </el-aside>
@@ -45,7 +45,7 @@
             <div v-if="message.from === contact_account && message.to === account">
               <div class="atalk">
                 <div class="avatar_box">
-                  <img :src="recent_contacts_list[isactive].img_path" class="contactor_avatar">
+                  <img :src="contact_img" class="contactor_avatar">
                 </div>
                 <span class="message" v-if="message.type === 0">{{message.content}}</span>
                 <span class="message" v-if="message.type === 1">
@@ -96,7 +96,7 @@
         contact_account:'',
         recent_contacts_list:[],
         isShow:false,
-        isactive:-1,
+        contact_img: '',
         messages:[],
         unread_contacts:[],
         emoji_picker_isShow:false,
@@ -149,11 +149,12 @@
 
     },
     methods: {
-      select_contact(name, account, index) {
+      select_contact(name, account, img_path) {
         this.contacts = name;
         this.contact_account = account;
+        console.log(this.contact_account);
         this.isShow = true;
-        this.isactive = index;
+        this.contact_img=img_path;
         this.unread_contacts.splice(this.unread_contacts.indexOf(account),1);
       },
       init_recent_contacts() {
@@ -383,6 +384,9 @@
     margin-left: 30px;
   }
   .addclass{
+    background-color: white;
+  }
+  .addclassdark{
     background-color: #1A1A1A;
     color: rgb(250, 250, 250);
   }
