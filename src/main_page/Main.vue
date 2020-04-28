@@ -3,8 +3,8 @@
     <el-container>
       <el-aside class="LeftAside" :class="{LeftAsideDark: IsDarkMode}" width="100px">
         <el-menu class="LeftAsideMenu" :class="{LeftAsideMenuDark: IsDarkMode}">
-          <div class="UserLogoDiv">
-            <img :src="UserLogoPath" alt />
+          <div class="UserLogoDiv" :class="{UserLogoDivDark: IsDarkMode}">
+            <img :src="UserLogoPath" />
           </div>
           <el-menu-item
             index="1-1"
@@ -47,9 +47,12 @@ import contacts from "./contacts.vue";
 import { getCookie, setCookie } from "../components/cookieUtil";
 
 const UserDefaultLogoPath = require("../assets/img/DefaultLogo.png");
+const GetPersonalInfoURL = "api/setting/GetPersonalInfo";
 const GetPersonalLogoURL = "api/setting/GetPersonalLogo";
 const UserIDCookieKey = "user_account";
 const UserLogoPathCookieKey = "UserLogoPath";
+const UserNameCookieKey = "UserName";
+const UserIntroductionCookieKey = "UserIntroduction";
 
 export default {
   data() {
@@ -103,8 +106,28 @@ export default {
         console.log("UserLogoURL:", UserLogoURL);
       });
     },
+    GetPersonalInfo() {
+      var SendObj = this.qs.stringify({
+        UserID: this.UserID
+      });
+
+      this.axios.post(GetPersonalInfoURL, SendObj).then(response => {
+        if (!response.data.Status) {
+          this.$message({
+            showClose: true,
+            message: "errer GetPersonalInfo()",
+            type: "error"
+          });
+
+          return;
+        }
+
+        setCookie(UserNameCookieKey, response.data.UserName);
+        setCookie(UserIntroductionCookieKey, response.data.UserIntroduction);
+      });
+    },
     UpdateDataInVue(val) {
-      if(val.NewUserLogoPath != undefined) {
+      if (val.NewUserLogoPath != undefined) {
         this.UserLogoPath = val.NewUserLogoPath;
       }
     }
@@ -131,11 +154,12 @@ export default {
   created() {
     this.UserID = getCookie(UserIDCookieKey);
     this.GetPersonalLogo();
+    this.GetPersonalInfo();
   }
 };
 </script>
 
-<style  lang="less" scoped>
+<style lang="less" scoped>
 .Body {
   height: 100%;
   margin: 0;
@@ -156,9 +180,14 @@ export default {
 .el-aside {
   color: #333;
   height: 100%;
+
   .el-menu-item.is-active {
     background-color: #fff;
     color: #000;
+  }
+  
+  .el-menu-item:hover {
+    background-color: rgb(250, 250, 250);
   }
 }
 
@@ -172,20 +201,22 @@ export default {
   }
 
   .LeftAsideMenuDark {
-    background-color: rgb(0, 0, 0);
+    background-color: #1d2935;
   }
 
   .MenuItemDark:hover {
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(55, 79, 102);
+    color: rgb(220, 220, 220);
   }
 
   .MenuItemDark.is-active {
-    background-color: #1a1a1a;
+    background-color: rgb(65, 91, 118);
+    color: rgb(240, 240, 240);
   }
 }
 
 .LeftAsideDark {
-  background-color: rgb(0, 0, 0);
+  background-color: #1d2935;
 }
 
 .UserLogoDiv {
@@ -197,10 +228,15 @@ export default {
   margin-top: 40px;
   margin-bottom: 40px;
   background-color: rgb(242, 242, 242);
+
   img {
     height: 100%;
     width: 100%;
     border-radius: 50%;
   }
+}
+
+.UserLogoDivDark {
+  background-color: #1d2935;
 }
 </style>
