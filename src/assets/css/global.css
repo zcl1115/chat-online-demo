@@ -22,3 +22,11 @@ button{
   left: 0;
   transform: translate(-100%);
 }
+
+.BGCDark {
+  background-color: #3a5169;
+}
+
+.FontDark {
+  color: rgb(230, 230, 230);
+}
