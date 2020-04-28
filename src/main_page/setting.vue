@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-aside class="MiddleAside" :class="{MiddleAsideDark: IsDarkMode}" width="300px">
-      <el-menu class="MiddleAsideMenu" :class="{MiddleAsideMenuDark: IsDarkMode}">
+      <el-menu class="MiddleAsideMenu" :class="{MiddleAsideMenuDark: IsDarkMode}" default-active="1">
         <el-menu-item
           index="2-1"
           class="LogoutButton"
@@ -55,6 +55,8 @@ const GetPersonalLogoURL = "api/setting/GetPersonalLogo";
 const SetLoginStatusURL = "api/setting/SetLoginStatus";
 const UserIDCookieKey = "user_account";
 const UserLogoPathCookieKey = "UserLogoPath";
+const UserNameCookieKey = "UserName";
+const UserIntroductionCookieKey = "UserIntroduction";
 //const LoginMark = true;
 const LogoutMark = false;
 
@@ -68,12 +70,6 @@ export default {
       UserIntroduction: "",
       UserLogoPath: UserDefaultLogoPath
     };
-  },
-  watch: {
-    UserLogoPath(NewVal) {
-      this.$emit("UpdateDataInVue", { NewUserLogoPath: NewVal });
-      setCookie(UserLogoPathCookieKey, NewVal);
-    }
   },
   methods: {
     SetDisplayMark(val) {
@@ -131,16 +127,20 @@ export default {
       });
     },
     UpdatePersonalInfoInVue(val) {
-      if (val.NewName) {
+      if (val.NewName != undefined) {
         this.UserName = val.NewName;
+        setCookie(UserNameCookieKey, val.NewName)
       }
-      if (val.NewIntroduction) {
+      if (val.NewIntroduction != undefined) {
         this.UserIntroduction = val.NewIntroduction;
+        setCookie(UserIntroductionCookieKey, val.NewIntroduction)
       }
-      if (val.UserLogoPath) {
+      if (val.UserLogoPath != undefined) {
         this.UserLogoPath = val.UserLogoPath;
+        this.$emit("UpdateDataInVue", { NewUserLogoPath: val.UserLogoPath });
+        setCookie(UserLogoPathCookieKey, val.UserLogoPath);
       }
-      if (val.IsDarkMode !== undefined) {
+      if (val.IsDarkMode != undefined) {
         var mode = val.IsDarkMode;
         this.$emit("UpdateModle", { mode });
       }
@@ -185,9 +185,11 @@ export default {
   beforeCreate() {},
   created() {
     this.UserID = getCookie(UserIDCookieKey);
+    this.UserName = getCookie(UserNameCookieKey);
+    this.UserIntroduction = getCookie(UserIntroductionCookieKey);
 
     //this.SetLoginStatus(LoginMark);
-    this.GetPersonalInfo();
+    //this.GetPersonalInfo();
     //this.GetPersonalLogo();
     this.UserLogoPath = getCookie(UserLogoPathCookieKey);
   },
@@ -200,12 +202,6 @@ export default {
 .el-container {
   height: 100%;
   margin: 0;
-}
-
-.el-header {
-  background-color: #b3c0d1;
-  color: #333;
-  line-height: 60px;
 }
 
 .el-aside {
@@ -248,23 +244,23 @@ export default {
     }
 
     .MenuItem2Dark {
-      background-color: rgb(0, 0, 0);
+      background-color: rgb(60, 84, 108);
       color: rgb(220, 220, 220);
     }
 
     .MenuItem2Dark:hover {
-      background-color: rgb(0, 0, 0);
+      background-color: rgb(68, 96, 128);
       color: rgb(240, 240, 240);
     }
 
     .MenuItem2Dark.is-active {
-      background-color: #1a1a1a;
+      background-color: rgb(71, 100, 129);
       color: rgb(250, 250, 250);
     }
   }
 
   .MiddleAsideMenuDark {
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(44, 62, 80);
   }
 
   .MenuItemDark {
@@ -272,12 +268,12 @@ export default {
   }
 
   .MenuItemDark:hover {
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(55, 79, 102);
     color: rgb(220, 220, 220);
   }
 
   .MenuItemDark.is-active {
-    background-color: #1a1a1a;
+    background-color: rgb(65, 91, 118);
     color: rgb(240, 240, 240);
   }
 }
@@ -301,6 +297,6 @@ export default {
 }
 
 .MiddleAsideDark {
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(44, 62, 80);
 }
 </style>

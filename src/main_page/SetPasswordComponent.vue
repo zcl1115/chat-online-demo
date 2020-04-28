@@ -14,15 +14,15 @@
         >
           <el-form-item label prop="OldPassword">
             <label class="FormLabel" :class="{FontDark: IsDarkModeProp}">原密码：</label>
-            <el-input v-model="SetPasswordForm.OldPassword"></el-input>
+            <el-input v-model="SetPasswordForm.OldPassword" type="password"></el-input>
           </el-form-item>
           <el-form-item label prop="NewPassword">
             <label class="FormLabel" :class="{FontDark: IsDarkModeProp}">新密码：</label>
-            <el-input v-model="SetPasswordForm.NewPassword"></el-input>
+            <el-input v-model="SetPasswordForm.NewPassword" type="password"></el-input>
           </el-form-item>
           <el-form-item label prop="CheckPassword">
             <label class="FormLabel" :class="{FontDark: IsDarkModeProp}">确认：</label>
-            <el-input v-model="SetPasswordForm.CheckPassword"></el-input>
+            <el-input v-model="SetPasswordForm.CheckPassword" type="password"></el-input>
           </el-form-item>
           <el-form-item class="SubmitButtonFormItem" label-width="0">
             <el-button type="primary" class="SubmitButton" @click="SubmitButtonClicked()">提交修改</el-button>
