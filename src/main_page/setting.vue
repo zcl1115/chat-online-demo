@@ -1,30 +1,34 @@
 <template>
   <el-container>
     <el-aside class="MiddleAside" :class="{MiddleAsideDark: IsDarkMode}" width="300px">
-      <el-menu class="MiddleAsideMenu" :class="{MiddleAsideMenuDark: IsDarkMode}" default-active="1">
+      <el-menu
+        class="MiddleAsideMenu"
+        :class="{MiddleAsideMenuDark: IsDarkMode}"
+        :default-active="RightSideDisplayMark"
+      >
         <el-menu-item
-          index="2-1"
+          index
           class="LogoutButton"
           @click="LogoutButtonClicked()"
           :class="{MenuItem2Dark: IsDarkMode}"
         >退出登录</el-menu-item>
         <el-menu-item
-          index="2-2"
+          index="ViewPersonalInfoComponent"
           class="OtherSettingButtons"
-          @click="RightSideDisplayMark = 'ViewPersonalInfoComponent'"
+          @click="SetDisplayMark('ViewPersonalInfoComponent')"
           :class="{MenuItemDark: IsDarkMode}"
         >个人信息</el-menu-item>
         <el-menu-item
-          index="2-3"
+          index="SetPasswordComponent"
           class="OtherSettingButtons"
-          @click="RightSideDisplayMark = 'SetPasswordComponent'"
+          @click="SetDisplayMark('SetPasswordComponent')"
           :class="{MenuItemDark: IsDarkMode}"
         >帐号密码</el-menu-item>
         <el-menu-item
-          index="2-4"
+          index="SetThemeModeComponent"
           class="OtherSettingButtons"
-          @click="RightSideDisplayMark = 'SetThemeModeComponent'"
-          :class="{MenuItemDark: this.IsDarkMode}"
+          @click="SetDisplayMark('SetThemeModeComponent')"
+          :class="{MenuItemDark: IsDarkMode}"
         >设置主题</el-menu-item>
       </el-menu>
     </el-aside>
@@ -101,7 +105,6 @@ export default {
       });
 
       this.axios.post(GetPersonalLogoURL, SendObj).then(response => {
-        console.log("response.data:", response.data);
         if (!response.data.Status) {
           this.$message({
             showClose: true,
@@ -122,18 +125,16 @@ export default {
         var FileBlob = new Blob([Array2], { type: "" });
         var UserLogoURL = URL.createObjectURL(FileBlob);
         this.UserLogoPath = UserLogoURL;
-
-        console.log("UserLogoURL:", UserLogoURL);
       });
     },
     UpdatePersonalInfoInVue(val) {
       if (val.NewName != undefined) {
         this.UserName = val.NewName;
-        setCookie(UserNameCookieKey, val.NewName)
+        setCookie(UserNameCookieKey, val.NewName);
       }
       if (val.NewIntroduction != undefined) {
         this.UserIntroduction = val.NewIntroduction;
-        setCookie(UserIntroductionCookieKey, val.NewIntroduction)
+        setCookie(UserIntroductionCookieKey, val.NewIntroduction);
       }
       if (val.UserLogoPath != undefined) {
         this.UserLogoPath = val.UserLogoPath;
@@ -141,8 +142,7 @@ export default {
         setCookie(UserLogoPathCookieKey, val.UserLogoPath);
       }
       if (val.IsDarkMode != undefined) {
-        var mode = val.IsDarkMode;
-        this.$emit("UpdateModle", { mode });
+        this.$emit("UpdateDataInVue", { IsDarkMode: val.IsDarkMode });
       }
     },
     LogoutButtonClicked() {
@@ -156,7 +156,6 @@ export default {
         UserID: this.UserID,
         LoginStatus: val
       });
-      console.log("SendObj: ", SendObj);
 
       this.axios.post(SetLoginStatusURL, SendObj).then(response => {
         if (!response.data.Status) {
@@ -208,7 +207,7 @@ export default {
   color: #333;
   height: 100%;
 
-  .el-menu-item.is-active {
+  .el-menu-item.is-active, .el-menu-item:focus {
     background-color: #fff;
     color: #000;
   }
@@ -253,7 +252,7 @@ export default {
       color: rgb(240, 240, 240);
     }
 
-    .MenuItem2Dark.is-active {
+    .MenuItem2Dark.is-active, .MenuItem2Dark:focus {
       background-color: rgb(71, 100, 129);
       color: rgb(250, 250, 250);
     }
@@ -272,7 +271,7 @@ export default {
     color: rgb(220, 220, 220);
   }
 
-  .MenuItemDark.is-active {
+  .MenuItemDark.is-active, .MenuItemDark:focus {
     background-color: rgb(65, 91, 118);
     color: rgb(240, 240, 240);
   }

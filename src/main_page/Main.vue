@@ -79,7 +79,6 @@ export default {
       });
 
       this.axios.post(GetPersonalLogoURL, SendObj).then(response => {
-        console.log("response.data:", response.data);
         if (!response.data.Status) {
           this.$message({
             showClose: true,
@@ -102,8 +101,6 @@ export default {
         this.UserLogoPath = UserLogoURL;
 
         setCookie(UserLogoPathCookieKey, UserLogoURL);
-
-        console.log("UserLogoURL:", UserLogoURL);
       });
     },
     GetPersonalInfo() {
@@ -129,6 +126,9 @@ export default {
     UpdateDataInVue(val) {
       if (val.NewUserLogoPath != undefined) {
         this.UserLogoPath = val.NewUserLogoPath;
+      }
+      if(val.IsDarkMode != undefined) {
+        this.IsDarkMode = val.IsDarkMode;
       }
     }
   },
