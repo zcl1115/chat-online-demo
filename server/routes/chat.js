@@ -3,8 +3,11 @@ var express = require('express');
 var router = express.Router();
 var http = require('http');
 var fs = require('fs');
+var async = require('async');
 var server = http.createServer(function (req, res) {
 }).listen(3001);//创建http服务
+
+var LogoSavePathBase = "./UserLogos/";
 
 console.log('Server running ');
 var io = require('socket.io').listen(server);
@@ -118,6 +121,13 @@ router.get('/', function(req, res, next) {
 
 router.post('/get_recent_list', function(req, res, next) {
   db_helper.getRecentList(req.body.account, function (results) {
+    let user;
+    for (user in results){
+      var FilePath = LogoSavePathBase + results[user].contact;
+      let data = fs.readFileSync(FilePath, (err, data) => {
+      });
+      results[user].img_path = data;
+    }
     res.json(results);
   });
 });

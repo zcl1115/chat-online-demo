@@ -90,7 +90,7 @@
     data(){
       return {
         account:'',
-        img_path:getCookie('user_img_path'),
+        img_path:'',
         logoURL:require("../assets/logo.png"),
         contacts:'',
         contact_account:'',
@@ -142,14 +142,13 @@
         // FileSaver.saveAs(blob, "hello world.txt");
       });
       this.sockets.subscribe('login', (data) => {
-        console.log("login");
         console.log(data);
-        console.log(this.img_path);
       });
 
     },
     methods: {
       select_contact(name, account, img_path) {
+        this.img_path = getCookie("UserLogoPath");
         this.contacts = name;
         this.contact_account = account;
         console.log(this.contact_account);
@@ -163,6 +162,22 @@
           account: temp
         })).then((response) => {
           this.recent_contacts_list = response.data;
+          console.log(this.recent_contacts_list);
+          let i;
+          for (i in this.recent_contacts_list){
+            var FileLength = this.recent_contacts_list[i].img_path.data.length;
+            var Array1 = new ArrayBuffer(FileLength);
+            var Array2 = new Uint8Array(Array1);
+
+            for (var j = 0; j < FileLength; j++) {
+              Array2[j] = this.recent_contacts_list[i].img_path.data[j];
+            }
+
+            var FileBlob = new Blob([Array2], { type: "" });
+            var UserLogoURL = URL.createObjectURL(FileBlob);
+            this.recent_contacts_list[i].img_path = UserLogoURL;
+          }
+
           this.recent_contacts_list.sort((a,b) => {
             let atime=a.chat_time;
             let btime=b.chat_time;

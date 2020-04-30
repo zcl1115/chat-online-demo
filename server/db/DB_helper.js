@@ -1,13 +1,11 @@
-// provide db interface
-// Necessary Modules
-// var User = require("./User");
+
 function DB_helper() {
     var mysql = require('mysql');
     var connection = mysql.createConnection({
         host: 'localhost',
-        user: 'rjgc',
-        password: 'rjgc123',
-        database: 'seproject',
+        user: 'root',
+        password: 'zheng1998',
+        database: 'test',
         timezone: "08:00",
         charset: 'UTF8MB4_GENERAL_CI'
     });
