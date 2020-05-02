@@ -1,14 +1,23 @@
+const SQLConfig = {
+    host: 'localhost',
+    user: 'root',
+    password: 'zheng1998',
+    database: 'test',
+    timezone: "08:00",
+    charset: 'UTF8MB4_GENERAL_CI'
+};
+const SQLConfig2 = {
+    host: 'localhost',
+    user: 'rjgc',
+    password: 'rjgc123',
+    database: 'seproject',
+    timezone: "08:00",
+    charset: 'UTF8MB4_GENERAL_CI'
+};
 
 function DB_helper() {
     var mysql = require('mysql');
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'zheng1998',
-        database: 'test',
-        timezone: "08:00",
-        charset: 'UTF8MB4_GENERAL_CI'
-    });
+    var connection = mysql.createConnection(SQLConfig2);
     connection.connect();
     this.isAcoountExist = function (account, cb) {
         var sql = 'SELECT count(*) AS exist FROM user where account = ?';
