@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const multiparty = require('multiparty');
 const fs = require('fs');
 
@@ -17,9 +17,8 @@ router.post('/GetPersonalInfo', (req, res) => {
 })
 
 router.post('/GetPersonalLogo', (req, res) => {
-  console.log("GetPersonalLogo req: ", req.body);
-  var FilePath = LogoSavePathBase + req.body.UserID;
-  var JSONData = {
+  let FilePath = LogoSavePathBase + req.body.UserID;
+  let JSONData = {
     Status: false,
     UserLogoFile: null
   }
@@ -31,10 +30,8 @@ router.post('/GetPersonalLogo', (req, res) => {
     }
     JSONData.Status = true;
     JSONData.UserLogoFile = data;
-    console.log("length:", data.length);
 
     res.json(JSONData);
-    return;
   })
 })
 
@@ -67,49 +64,42 @@ router.post('/SetPassword', (req, res) => {
 })
 
 router.post('/NewLogo', (req, res) => {
-  console.log("NewLogo");
+  let TempForm = new multiparty.Form();
+  let ReturnData = {
+    Status: false
+  };
 
-  var TempForm = new multiparty.Form()
   TempForm.parse(req, (err, fields, files) => {
     if (err) {
       console.log("error");
-      res.json({
-        Status: false
-      });
+      res.json(ReturnData);
       return;
     }
     if (!files || !files.file) {
       console.log("files error");
-      res.json({
-        Status: false
-      });
+      res.json(ReturnData);
       return;
     }
 
-    console.log("fields:", fields);
-    console.log("file:", files.file[0]);
-
-    var NewLogoPath = LogoSavePathBase + fields.UserID;
-
-    var ReaderStream = fs.createReadStream(files.file[0].path);
-    var WriterStream = fs.createWriteStream(NewLogoPath);
+    let NewLogoPath = LogoSavePathBase + fields.UserID;
+    let ReaderStream = fs.createReadStream(files.file[0].path);
+    let WriterStream = fs.createWriteStream(NewLogoPath);
 
     ReaderStream.pipe(WriterStream);
+    ReturnData.Status = true;
 
-    res.json({
-      Status: true
-    });
+    res.json(ReturnData);
   })
 })
 
 router.post('/SetLoginStatus', (req, res) => {
   let InputData = {
     UserID: req.body.UserID,
-    LoginStatus: 1
+    LoginStatus: 0
   };
 
-  if (req.body.LoginStatus === "false") {
-    InputData.LoginStatus = 0;
+  if (req.body.LoginStatus === "true") {
+    InputData.LoginStatus = 1;
   }
 
   db_helper.SetLoginStatus(InputData, (ReturnData) => {
