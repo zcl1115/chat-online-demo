@@ -4,10 +4,9 @@
       <el-menu
         class="MiddleAsideMenu"
         :class="{MiddleAsideMenuDark: IsDarkMode}"
-        :default-active="RightSideDisplayMark"
+        :default-active="ActiveButtonIndex"
       >
         <el-menu-item
-          index
           class="LogoutButton"
           @click="LogoutButtonClicked()"
           :class="{MenuItem2Dark: IsDarkMode}"
@@ -35,6 +34,7 @@
     <component
       :is="RightSideDisplayMark"
       @SetDisplayMark="SetDisplayMark"
+      @SetDisplayMark2="SetDisplayMark2"
       @UpdatePersonalInfoInVue="UpdatePersonalInfoInVue"
       :UserIDProp="UserID"
       :UserNameProp="UserName"
@@ -53,7 +53,6 @@ import SetLogoComponent from "./SetLogoComponent.vue";
 import SetThemeModeComponent from "./SetThemeModeComponent.vue";
 import { getCookie, DeleteCookie, setCookie } from "../components/cookieUtil";
 
-const UserDefaultLogoPath = require("../assets/img/DefaultLogo.png");
 const GetPersonalInfoURL = "api/setting/GetPersonalInfo";
 const GetPersonalLogoURL = "api/setting/GetPersonalLogo";
 const SetLoginStatusURL = "api/setting/SetLoginStatus";
@@ -61,22 +60,26 @@ const UserIDCookieKey = "user_account";
 const UserLogoPathCookieKey = "UserLogoPath";
 const UserNameCookieKey = "UserName";
 const UserIntroductionCookieKey = "UserIntroduction";
-//const LoginMark = true;
 const LogoutMark = false;
 
 export default {
   data() {
     return {
       RightSideDisplayMark: "ViewPersonalInfoComponent",
+      ActiveButtonIndex: "ViewPersonalInfoComponent",
 
-      UserID: "",
-      UserName: "",
-      UserIntroduction: "",
-      UserLogoPath: UserDefaultLogoPath
+      UserID: getCookie(UserIDCookieKey),
+      UserName: getCookie(UserNameCookieKey),
+      UserIntroduction: getCookie(UserIntroductionCookieKey),
+      UserLogoPath: getCookie(UserLogoPathCookieKey)
     };
   },
   methods: {
     SetDisplayMark(val) {
+      this.RightSideDisplayMark = val;
+      this.ActiveButtonIndex = val;
+    },
+    SetDisplayMark2(val) {
       this.RightSideDisplayMark = val;
     },
     GetPersonalInfo() {
@@ -183,14 +186,14 @@ export default {
 
   beforeCreate() {},
   created() {
-    this.UserID = getCookie(UserIDCookieKey);
-    this.UserName = getCookie(UserNameCookieKey);
-    this.UserIntroduction = getCookie(UserIntroductionCookieKey);
+    //this.UserID = getCookie(UserIDCookieKey);
+    //this.UserName = getCookie(UserNameCookieKey);
+    //this.UserIntroduction = getCookie(UserIntroductionCookieKey);
 
     //this.SetLoginStatus(LoginMark);
     //this.GetPersonalInfo();
     //this.GetPersonalLogo();
-    this.UserLogoPath = getCookie(UserLogoPathCookieKey);
+    //this.UserLogoPath = getCookie(UserLogoPathCookieKey);
   },
   beforeMount() {},
   mounted() {}

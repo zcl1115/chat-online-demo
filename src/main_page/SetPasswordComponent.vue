@@ -12,17 +12,17 @@
           :rules="SetPasswordFormRules"
           ref="SetPasswordFromRef"
         >
-          <el-form-item label prop="OldPassword">
+          <el-form-item prop="OldPassword">
             <label class="FormLabel" :class="{FontDark: IsDarkModeProp}">原密码：</label>
-            <el-input v-model="SetPasswordForm.OldPassword" type="password"></el-input>
+            <el-input v-model="SetPasswordForm.OldPassword" type="password" show-password></el-input>
           </el-form-item>
-          <el-form-item label prop="NewPassword">
+          <el-form-item prop="NewPassword">
             <label class="FormLabel" :class="{FontDark: IsDarkModeProp}">新密码：</label>
-            <el-input v-model="SetPasswordForm.NewPassword" type="password"></el-input>
+            <el-input v-model="SetPasswordForm.NewPassword" type="password" show-password></el-input>
           </el-form-item>
-          <el-form-item label prop="CheckPassword">
+          <el-form-item prop="CheckPassword">
             <label class="FormLabel" :class="{FontDark: IsDarkModeProp}">确认：</label>
-            <el-input v-model="SetPasswordForm.CheckPassword" type="password"></el-input>
+            <el-input v-model="SetPasswordForm.CheckPassword" type="password" show-password></el-input>
           </el-form-item>
           <el-form-item class="SubmitButtonFormItem" label-width="0">
             <el-button type="primary" class="SubmitButton" @click="SubmitButtonClicked()">提交修改</el-button>
@@ -42,7 +42,7 @@ export default {
   data() {
     var PasswordMainRule = (rule, value, callback) => {
       if (!PasswordReg.test(value)) {
-        callback(new Error("密码必须为8到20以内的字母或数字或下划线组合！"));
+        callback(new Error("密码必须为8到12以内的字母或数字或下划线组合！"));
       } else {
         callback();
       }
@@ -149,7 +149,7 @@ export default {
 };
 </script>
 
-<style  lang="less" scoped>
+<style lang="less" scoped>
 .el-container {
   height: 100%;
   margin: 0;

@@ -26,10 +26,10 @@ export default {
   },
   methods: {
     SubmitButtonClicked() {
-      this.$emit("SetDisplayMark", "SetPersonalInfoComponent");
+      this.$emit("SetDisplayMark2", "SetPersonalInfoComponent");
     },
     SetLogoButtonClicked() {
-      this.$emit("SetDisplayMark", "SetLogoComponent");
+      this.$emit("SetDisplayMark2", "SetLogoComponent");
     }
   },
   props: [
@@ -47,7 +47,7 @@ export default {
 };
 </script>
 
-<style  lang="less" scoped>
+<style lang="less" scoped>
 .el-container {
   height: 100%;
   margin: 0;

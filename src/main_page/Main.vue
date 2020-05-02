@@ -153,6 +153,7 @@ export default {
 
   created() {
     this.UserID = getCookie(UserIDCookieKey);
+    setCookie(UserLogoPathCookieKey, UserDefaultLogoPath);
     this.GetPersonalLogo();
     this.GetPersonalInfo();
   }

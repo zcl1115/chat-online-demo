@@ -66,8 +66,6 @@ export default {
       if (!file) {
         return;
       }
-      console.log("file:", file);
-
       var IsFileTypeLegal = false;
       var IsFileSizeLegal = file.size <= LegalImageSize;
 
@@ -75,9 +73,6 @@ export default {
       if (Temp >= 0) {
         IsFileTypeLegal = true;
       }
-
-      console.log("IsFileTypeLegal", IsFileTypeLegal);
-      console.log("IsFileSizeLegal", IsFileSizeLegal);
 
       if (!IsFileTypeLegal || !IsFileSizeLegal) {
         this.$refs.UploadLogoRef.clearFiles();
@@ -111,13 +106,11 @@ export default {
 
       this.$message({
         showClose: true,
-        message: "头像修改成功",
+        message: "头像修改成功！",
         type: "success"
       });
 
       var NewLogoURL = URL.createObjectURL(file.raw);
-      console.log("NewLogoURL", NewLogoURL);
-
       this.UploadMark = false;
 
       this.$emit("UpdatePersonalInfoInVue", { UserLogoPath: NewLogoURL });
@@ -134,7 +127,7 @@ export default {
       if (!this.UploadMark) {
         this.$message({
           showClose: true,
-          message: "未选择图片，请上传图片！",
+          message: "未选择图片！",
           type: "error"
         });
         return;

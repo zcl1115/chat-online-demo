@@ -17,7 +17,7 @@
           <label class="FormLabel" :class="{FontDark: IsDarkModeProp}">昵称：</label>
           <el-input v-model="PersonlInfoForm.NewName"></el-input>
         </el-form-item>
-        <el-form-item label="" prop="NewIntroduction">
+        <el-form-item label prop="NewIntroduction">
           <label class="FormLabel" :class="{FontDark: IsDarkModeProp}">简介：</label>
           <el-input v-model="PersonlInfoForm.NewIntroduction"></el-input>
         </el-form-item>
@@ -36,8 +36,8 @@ export default {
   data() {
     return {
       PersonlInfoForm: {
-        NewName: "",
-        NewIntroduction: ""
+        NewName: this.UserNameProp,
+        NewIntroduction: this.UserIntroductionProp
       },
 
       PersonlInfoFormRules: {
@@ -69,7 +69,7 @@ export default {
       ) {
         this.$message({
           showClose: true,
-          message: "请输入新的个人信息！",
+          message: "请输入新的昵称或简介！",
           type: "error"
         });
         return;
@@ -90,7 +90,9 @@ export default {
         if (this.PersonlInfoForm.NewName !== this.UserNameProp) {
           Temp.NewName = this.PersonlInfoForm.NewName;
         }
-        if (this.PersonlInfoForm.NewIntroduction !== this.UserIntroductionProp) {
+        if (
+          this.PersonlInfoForm.NewIntroduction !== this.UserIntroductionProp
+        ) {
           Temp.NewIntroduction = this.PersonlInfoForm.NewIntroduction;
         }
 
@@ -100,7 +102,7 @@ export default {
           if (!response.data.Status) {
             this.$message({
               showClose: true,
-              message: "errer SubmitButtonClicked()",
+              message: "信息修改失败，请重试！",
               type: "error"
             });
             return;
@@ -108,7 +110,7 @@ export default {
 
           this.$message({
             showClose: true,
-            message: "信息修改成功",
+            message: "信息修改成功！",
             type: "success"
           });
 
@@ -127,19 +129,13 @@ export default {
   ],
 
   beforeCreate() {},
-  created() {
-    this.PersonlInfoForm.NewName = this.UserNameProp;
-    this.PersonlInfoForm.NewIntroduction = this.UserIntroductionProp;
-  },
+  created() {},
   beforeMount() {},
-  mounted() {
-    this.UploadMark = false;
-  },
-  updated() {}
+  mounted() {}
 };
 </script>
 
-<style  lang="less" scoped>
+<style lang="less" scoped>
 .el-container {
   height: 100%;
   margin: 0;
