@@ -2,12 +2,17 @@
     <div class="login_border">
       <img :src="logoURL">
       <div>
-        <el-input placeholder="请输入用户名" v-model="account" clearable class="input_style"></el-input>
-        <span v-if="error.account" class="err-msg">{{error.account}}</span>
-      </div>
-      <div>
-        <el-input placeholder="请输入密码" v-model="pwd" show-password class="input_style"></el-input>
-        <span v-if="error.pwd" class="err-msg">{{error.pwd}}</span>
+        <el-form
+                :model="message"
+                :rules="LoginFormRules"
+        >
+          <el-form-item  prop="account">
+            <el-input placeholder="请输入账号" v-model="message.account" clearable class="input_style"></el-input>
+          </el-form-item>
+          <el-form-item  prop="pwd">
+            <el-input placeholder="请输入密码" v-model="message.pwd" show-password class="input_style"></el-input>
+          </el-form-item>
+        </el-form>
       </div>
       <div>
         <el-button type="primary" @click="login()" class="login_style">登录</el-button>
@@ -19,55 +24,72 @@
 </template>
 
 <script>
+  const PasswordReg = /^\w{8,12}$/;
   import {setCookie} from "../components/cookieUtil";
   export default {
     name: "Login",
     data(){
+      var PasswordMainRule = (rule, value, callback) => {
+        if (!PasswordReg.test(value)) {
+          callback(new Error("密码必须为8到20以内的字母或数字或下划线组合！"));
+        } else {
+          callback();
+        }
+      };
       return {
-        account: '',
-        pwd : '',
-        error : {
+        logoURL:require("../assets/logo.png"),
+        message: {
           account: '',
-          pwd : ''
+          pwd : '',
         },
-        logoURL:require("../assets/logo.png")
+        LoginFormRules: {
+          account: [
+            { required: true, message: "账号必填！", trigger: "blur" }
+          ],
+          pwd: [
+            { required: true, message: "密码必填！", trigger: "blur" },
+            { validator: PasswordMainRule, trigger: "blur" }
+          ]
+        }
       }
     },
-    // sockets:{
-    //   //这里是监听connect事件
-    //   connect: function(){
-    //     // 获取每台客服端生成的id
-    //     this.websocketid = this.$socket.id;
-    //     console.log('链接服务器');
-    //   },
-    //   // 监听断开连接，函数
-    //   disconnect(){
-    //     console.log('断开服务器连接');
-    //   },
-    //   // 服务端指定有msg监听的客服端，可接对应发来的收消息，data服务端传的消息
-    //   msg(data){
-    //
-    //   }
-    // },
     methods:{
       login(){
+        if (this.message.account===''||this.message.pwd===''){
+          this.$message({
+            showClose: true,
+            message: "请输入账号密码！",
+            type: "error"
+          });
+          return ;
+        }
         this.axios.post("api/login",this.qs.stringify({
-          account: this.account,
-          pass: this.pwd
+          account: this.message.account,
+          pass: this.message.pwd
         })).then((response)=>{
           let res=response.data;
           if(res.status==='0'){
             setCookie('username',res.name);
-            setCookie('user_account',this.account);
+            setCookie('user_account',this.message.account);
             setCookie('user_img_path',res.img_path);
             window.location.href="chat.html";
-          }else if (res.status==='1'){
-            this.error.pwd='';
-            this.error.account="账号不存在";
-          }
-          else{
-            this.error.account='';
-            this.error.pwd="密码错误";
+          }else{
+            if (res.status==='1'){
+              this.$message({
+                showClose: true,
+                message: "账号不存在！",
+                type: "error"
+              });
+              return ;
+            }
+            else{
+              this.$message({
+                showClose: true,
+                message: "密码错误！",
+                type: "error"
+              });
+              return ;
+            }
           }
         })
       },

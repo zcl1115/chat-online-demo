@@ -11,20 +11,23 @@
       </form>
     </div>
     <div>
-      <el-input placeholder="请输入账号(6到20位的字母数字组合)" v-model="users.account" clearable class="sign_up_input_style"></el-input>
-      <span v-if="judgeUser" class="err-msg">请输入合适的用户名</span>
-    </div>
-    <div>
-      <el-input placeholder="请输入昵称(20位以内,非空)" v-model="users.name" clearable class="sign_up_input_style"></el-input>
-      <span v-if="judgeName" class="err-msg">请输入昵称</span>
-    </div>
-    <div>
-      <el-input placeholder="请输入密码(8到12位的字母数字组合)" v-model="users.password" show-password class="sign_up_input_style"></el-input>
-      <span v-if="judgePas" class="err-msg">请输入符合规范的密码</span>
-    </div>
-    <div>
-      <el-input placeholder="请再次确认密码" v-model="users.passwords" show-password class="sign_up_input_style"></el-input>
-      <span v-if="judgePass" class="err-msg">两次输入请保持一致</span>
+      <el-form
+              :model="users"
+              :rules="Sign_up_FormRules"
+      >
+        <el-form-item  prop="account">
+          <el-input placeholder="请输入账号(6到20位的字母数字组合)" v-model="users.account" clearable class="sign_up_input_style"></el-input>
+        </el-form-item>
+        <el-form-item  prop="name">
+          <el-input placeholder="请输入昵称(20位以内,非空)" v-model="users.name" clearable class="sign_up_input_style"></el-input>
+        </el-form-item>
+        <el-form-item  prop="password">
+          <el-input placeholder="请输入密码(8到12位的字母数字组合)" v-model="users.password" show-password class="sign_up_input_style"></el-input>
+        </el-form-item>
+        <el-form-item  prop="passwords">
+          <el-input placeholder="请再次确认密码" v-model="users.passwords" show-password class="sign_up_input_style"></el-input>
+        </el-form-item>
+      </el-form>
     </div>
     <div>
       <el-button type="primary" @click="sign_up" class="logon_style">注册</el-button>
@@ -33,34 +36,81 @@
 </template>
 
 <script>
+  const PasswordReg = /^\w{8,12}$/;
   import {setCookie} from "../components/cookieUtil";
 
   export default{
     name:'signUp',
     data(){
+      var PasswordMainRule = (rule, value, callback) => {
+        if (!PasswordReg.test(value)) {
+          callback(new Error("密码必须为8到20以内的字母或数字或下划线组合！"));
+        } else {
+          callback();
+        }
+      };
+      var PasswordsRule = (rule, value, callback) => {
+        if (value !== this.users.password) {
+          callback(new Error("确认密码必须与新密码相同！"));
+        } else {
+          callback();
+        }
+      };
       return{
-        judgeUser:false,
-        judgePas:false,
-        judgePass:false,
-        judgeName:false,
         users:{
-          account:'',
-          name:'',
-          password:'',
-          passwords:'',
+          account:"",
+          name:"",
+          password:"",
+          passwords:"",
           photo:null,
+        },
+        Sign_up_FormRules: {
+          account: [
+            { required: true, message: "账号必填！", trigger: "blur" },
+            {
+              min: 6,
+              max: 20,
+              message: "账号长度必须在6到20以内！",
+              trigger: "blur"
+            }
+          ],
+          name: [
+            { required: true, message: "昵称必填！", trigger: "blur" },
+            {
+              min: 1,
+              max: 20,
+              message: "昵称长度必须在20以内！",
+              trigger: "blur"
+            }
+          ],
+          password: [
+            { required: true, message: "密码必填！", trigger: "blur" },
+            { validator: PasswordMainRule, trigger: "blur" }
+          ],
+          passwords: [
+            { required: true, message: "确认密码必填！", trigger: "blur" },
+            { validator: PasswordMainRule, trigger: "blur" },
+            { validator: PasswordsRule, trigger: "blur" }
+          ],
         }
       }
     },
     methods: {
       sign_up: function () {
+        if (this.users.photo===null||this.users.account===""||this.users.name===""||this.users.password===""||this.users.passwords===""){
+          this.$message({
+            showClose: true,
+            message: "请填写完整信息！",
+            type: "error"
+          });
+          return ;
+        }
         var format = new FormData();
         for (var key in this.users) {  //读取data中所要上传的内容循环append到fordata中
           if (key) {
             format.append(key, this.users[key])
           }
         }
-        console.log(format);
         this.axios.post("api/sign_up",format,{
           headers:{
             'Content-Type':'multipart/form-data'
@@ -68,12 +118,20 @@
         }).then((response)=>{
           let res=response.data;
           if(res.status==='0'){
-            alert("注册成功!");
+            this.$message({
+              showClose: true,
+              message: "注册成功！",
+              type: "success"
+            });
             setCookie('username',this.user.name);
             setCookie('user_account',this.user.account);
             window.location.href="chat.html";
           }else if (res.status==='1'){
-            this.error.account="账号已存在";
+            this.$message({
+              showClose: true,
+              message: "该账号已存在！",
+              type: "error"
+            });
           }
         })
       },
@@ -97,7 +155,7 @@
   .sign_up_border{
     width: 280px;
     text-align: center;
-    margin-top: 200px;
+    margin-top: 150px;
     margin-left: 35vw;
   }
   .show_img{
