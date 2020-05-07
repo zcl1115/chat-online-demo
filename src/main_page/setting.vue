@@ -189,7 +189,6 @@ export default {
     //this.UserID = getCookie(UserIDCookieKey);
     //this.UserName = getCookie(UserNameCookieKey);
     //this.UserIntroduction = getCookie(UserIntroductionCookieKey);
-
     //this.SetLoginStatus(LoginMark);
     //this.GetPersonalInfo();
     //this.GetPersonalLogo();
@@ -210,7 +209,8 @@ export default {
   color: #333;
   height: 100%;
 
-  .el-menu-item.is-active, .el-menu-item:focus {
+  .el-menu-item.is-active,
+  .el-menu-item:focus {
     background-color: #fff;
     color: #000;
   }
@@ -255,7 +255,8 @@ export default {
       color: rgb(240, 240, 240);
     }
 
-    .MenuItem2Dark.is-active, .MenuItem2Dark:focus {
+    .MenuItem2Dark.is-active,
+    .MenuItem2Dark:focus {
       background-color: rgb(71, 100, 129);
       color: rgb(250, 250, 250);
     }
@@ -274,7 +275,8 @@ export default {
     color: rgb(220, 220, 220);
   }
 
-  .MenuItemDark.is-active, .MenuItemDark:focus {
+  .MenuItemDark.is-active,
+  .MenuItemDark:focus {
     background-color: rgb(65, 91, 118);
     color: rgb(240, 240, 240);
   }

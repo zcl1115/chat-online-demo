@@ -39,20 +39,20 @@ function DB_helper() {
 
         var status = 0;
         if (this.isAcoountExist(account, function (isExist) {
-                if (isExist) {
-                    status = 1;
+            if (isExist) {
+                status = 1;
+                if (cb != null) return cb(status);
+            } else {
+                status = 0;
+                connection.query(sql, SqlParams, function (err, result) {
+                    if (err) {
+                        console.log('[INSERT ERROR] - ', err.message);
+                        return;
+                    }
                     if (cb != null) return cb(status);
-                } else {
-                    status = 0;
-                    connection.query(sql, SqlParams, function (err, result) {
-                        if (err) {
-                            console.log('[INSERT ERROR] - ', err.message);
-                            return;
-                        }
-                        if (cb != null) return cb(status);
-                    });
-                }
-            }));
+                });
+            }
+        }));
     };
     this.isOnline = function (account, cb) {
         var sql = 'SELECT online_status FROM user where account = ?';

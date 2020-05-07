@@ -1,6 +1,6 @@
 
 //设置cookie
-export function setCookie(key,value) {
+export function setCookie(key, value) {
     var exdate = new Date(); //获取时间
     exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * 36500); //保存的天数，我这里写的是100年
     //字符串拼接cookie
@@ -27,7 +27,7 @@ export function DeleteCookie(key) {
     var exp = new Date();
     exp.setTime(exp.getTime() - 1);
     var c = getCookie(key);
-    if (c != null){
+    if (c != null) {
         document.cookie = key + "=" + c + ";expires=" + exp.toGMTString();
     }
 }

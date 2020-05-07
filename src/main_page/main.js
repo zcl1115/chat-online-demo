@@ -14,8 +14,8 @@ Vue.use(new VueSocketIO({
 }));
 
 Vue.use(ElementUI);
-Vue.prototype.axios=axios;
-Vue.prototype.qs=qs;
+Vue.prototype.axios = axios;
+Vue.prototype.qs = qs;
 Vue.config.productionTip = false;
 
 

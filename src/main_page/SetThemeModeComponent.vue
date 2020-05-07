@@ -77,5 +77,4 @@ export default {
     background-color: rgba(78, 81, 158, 100%);
   }
 }
-
 </style>

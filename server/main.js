@@ -29,7 +29,7 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-console.log("listening on "+port);
+console.log("listening on " + port);
 /**
  * Normalize a port into a number, string, or false.
  */

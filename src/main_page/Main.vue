@@ -127,7 +127,7 @@ export default {
       if (val.NewUserLogoPath != undefined) {
         this.UserLogoPath = val.NewUserLogoPath;
       }
-      if(val.IsDarkMode != undefined) {
+      if (val.IsDarkMode != undefined) {
         this.IsDarkMode = val.IsDarkMode;
       }
     }
@@ -186,7 +186,7 @@ export default {
     background-color: #fff;
     color: #000;
   }
-  
+
   .el-menu-item:hover {
     background-color: rgb(250, 250, 250);
   }
