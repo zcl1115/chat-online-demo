@@ -312,16 +312,16 @@ function DB_helper() {
             }
         })
     }
-     this.getContacts = function (account, cb) {
+    this.getContacts = function (account, cb) {
         var sql = 'select account,name,img_path,personal_profile from user where account in (select contact_account from contact where user_account =?);';
         connection.query(sql, [account], function (err, results) {
             if (err) {
                 console.log(err.message);
             }
-            else{
+            else {
 
-                cb(results);}
-
+                cb(results);
+            }
         });
     }
 }

@@ -8,7 +8,7 @@
       <div class="contact_list">
         <ul
           v-for="item in get_contacts"
-          v-bind:key="item"
+          v-bind:key="item.account"
           v-on:click="Select_friend(item.name,item.account,item.img_path,item.personal_profile)"
           class="contact"
         >
