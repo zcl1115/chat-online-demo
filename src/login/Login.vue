@@ -1,21 +1,20 @@
 <template>
-  <div class="login_border">
-    <img :src="logoURL" />
-    <div>
+  <div class="main">
+    <div class="logo_part">
+      <img src="icons/dove.svg" style="width:40px;height:40px" />
+      <span>咕咕报</span>
+    </div>
+    <div class="form_container">
       <el-form :model="message" :rules="LoginFormRules">
-        <el-form-item prop="account">
-          <el-input placeholder="请输入账号" v-model="message.account" clearable class="input_style"></el-input>
+        <el-form-item prop="account" class="input_style">
+          <el-input placeholder="请输入账号" v-model="message.account" clearable></el-input>
         </el-form-item>
-        <el-form-item prop="pwd">
-          <el-input placeholder="请输入密码" v-model="message.pwd" show-password class="input_style"></el-input>
+        <el-form-item prop="pwd" class="input_style">
+          <el-input placeholder="请输入密码" v-model="message.pwd" show-password></el-input>
         </el-form-item>
       </el-form>
-    </div>
-    <div>
       <el-button type="primary" @click="login()" class="login_style">登录</el-button>
-    </div>
-    <div>
-      <el-button type="text" @click="sign_up" class="sign_up_style">没有账号？马上注册</el-button>
+      <el-button type="text" @click="sign_up" class="sign_up_style">注册</el-button>
     </div>
   </div>
 </template>
@@ -34,7 +33,6 @@ export default {
       }
     };
     return {
-      logoURL: require("../assets/logo.png"),
       message: {
         account: "",
         pwd: ""
@@ -100,21 +98,59 @@ export default {
 </script>
 
 <style>
-.login_border {
-  width: 200px;
-  margin-top: 250px;
-  margin-left: 38vw;
+html {
+  height: 100%;
 }
+
+body {
+  background-color: #f7f7f7;
+}
+
+.main {
+  text-align: center;
+  margin-top: 150px;
+}
+
+.logo_part {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 10px;
+}
+
+img + span {
+  padding-left: 8px;
+}
+
+.form_container {
+  background-color: white;
+  width: 350px;
+  height: 250px;
+  margin: auto;
+  border-radius: 5px;
+  margin-top: 10px;
+  padding-top: 40px;
+}
+
 .input_style {
-  width: 200px;
-  margin-bottom: 10px;
+  width: 270px;
+  margin: 10px auto;
+  padding-bottom: 10px;
 }
 .login_style {
-  margin-top: 5px;
-  width: 200px;
+  width: 270px;
+  margin-bottom: 10px !important;
+  background-color: #4e519e !important;
+  border: #4e519e !important;
 }
 .sign_up_style {
-  margin-top: 5px;
-  width: 200px;
+  width: 270px;
+  color: #c9c5c5 !important;
+  text-decoration: underline;
+  text-underline-position: under;
+}
+
+.el-button + .el-button {
+  margin-left: 0px !important;
 }
 </style>
