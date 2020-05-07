@@ -32,7 +32,7 @@ function DB_helper() {
         });
     };
     this.signUp = function (account, password, name, img_url, personal_profile, online_status, cb) {
-        var sql = 'INSERT INTO USER ' +
+        var sql = 'INSERT INTO user ' +
             '(account, password, name, img_path, personal_profile, online_status ) ' +
             'values(?, ?, ?, ?, ?, ?);';
         var SqlParams = [account, password, name, img_url, personal_profile, online_status];

@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `contact1` default-character-set=gbk(
    `name` VARCHAR(20) NOT NULL,
    PRIMARY KEY ( `user_account`, `contact_account`)
 );
-insert into contact (user_account, contact_account, name) values("zzh","zzh","×Ô¼º");
+insert into contact (user_account, contact_account, name) values("zzh","zzh","ï¿½Ô¼ï¿½");
 insert into contact (user_account, contact_account, name) values("zzh","zcl","");
 
 SELECT * FROM (SELECT * FROM user  RIGHT JOIN contact  ON user.account = contact.user_account) sub where sub.account ="zzh";

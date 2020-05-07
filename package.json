@@ -21,6 +21,7 @@
     "morgan": "^1.10.0",
     "multiparty": "^4.2.1",
     "mysql": "^2.18.1",
+    "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "vue": "^2.6.11",
     "vue-resource": "^1.5.1",
@@ -36,7 +37,20 @@
     "eslint-plugin-vue": "^6.2.2",
     "vue-template-compiler": "^2.6.11"
   },
-  "eslintConfig": {},
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
   "browserslist": [
     "> 1%",
     "last 2 versions"
