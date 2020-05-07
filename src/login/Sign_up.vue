@@ -57,10 +57,10 @@
             class="sign_up_input_style"
           ></el-input>
         </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="sign_up" class="logon_style">注册</el-button>
+        </el-form-item>
       </el-form>
-    </div>
-    <div>
-      <el-button type="primary" @click="sign_up" class="logon_style">注册</el-button>
     </div>
   </div>
 </template>
@@ -74,6 +74,7 @@ export default {
   data() {
     var PasswordMainRule = (rule, value, callback) => {
       if (!PasswordReg.test(value)) {
+        this.has_error=true;
         callback(new Error("密码必须为8到20以内的字母或数字或下划线组合！"));
       } else {
         callback();
@@ -81,6 +82,7 @@ export default {
     };
     var PasswordsRule = (rule, value, callback) => {
       if (value !== this.users.password) {
+        this.has_error=true;
         callback(new Error("确认密码必须与新密码相同！"));
       } else {
         callback();
@@ -94,6 +96,7 @@ export default {
         passwords: "",
         photo: null
       },
+      has_error: false,
       Sign_up_FormRules: {
         account: [
           { required: true, message: "账号必填！", trigger: "blur" },
@@ -127,6 +130,9 @@ export default {
   },
   methods: {
     sign_up: function() {
+      if (this.has_error){
+        return;
+      }
       if (
         this.users.photo === null ||
         this.users.account === "" ||
@@ -162,8 +168,8 @@ export default {
               message: "注册成功！",
               type: "success"
             });
-            setCookie("username", this.user.name);
-            setCookie("user_account", this.user.account);
+            setCookie("username", this.users.name);
+            setCookie("user_account", this.users.account);
             window.location.href = "chat.html";
           } else if (res.status === "1") {
             this.$message({
