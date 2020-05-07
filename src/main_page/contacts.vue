@@ -98,7 +98,7 @@
             user_account:user_account,time:time,contact_account:contact_account
           })).then((response) => {
           });
-          
+
 
         },
 
@@ -239,78 +239,7 @@
   }
   }
 
-  .BGCDark {
-    background-color: #3a5169;
-  }
-  .chat_area{
-    width: 75%;
-    height: 100%;
-    float: left;
-  }
-  .char_area_dark{
-    background-color: rgb(0, 0, 0);
-  }
 
-  .friend_name{
-    text-align: center;
-    width: 100%;
-    height: 6%;
-    box-shadow: 0px 2px 0px 0px #F2F2F2;
-  }
-  .friend_name_dark{
-    color: rgb(240, 240, 240);
-  }
-  .message_show{
-    width: 100%;
-    height: 67%;
-    overflow: auto;
-    overflow-x: hidden;
-  }
-  .input_message{
-    width: 100%;
-    height: 27%;
-    box-shadow: 0px -2px 0px 0px #F2F2F2;
-  }
-  .function_area{
-    width: 100%;
-    height: 15%;
-  }
-  .input_area{
-    margin-top: 2px;
-    margin-bottom: 2px;
-    width: 100%;
-    height: 50%;
-  }
-  .content{
-    border: none;
-    resize:none;
-    cursor: pointer;
-    padding-top: 5px;
-    font-family:"SimSun","Times New Roman",Georgia,Serif,serif;
-    width: 100%;
-    height: 100%;
-    line-height:10px;
-    font-size: 20px;
-  }
-  .content_dark{
-    background-color: rgb(0, 0, 0);
-    color: rgb(240, 240, 240);
-  }
-  .content:focus{
-    outline: none;
-  }
-  .send_area{
-    margin-top: 8px;
-    text-align: right;
-    float: right;
-    width: 100%;
-    height: 23%;
-  }
-  .icon{
-    margin-left: 5px;
-    width: 25px;
-    height: 25px
-  }
   .contact{
     width: 100%;
     height: 60px;
