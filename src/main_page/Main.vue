@@ -7,6 +7,7 @@
             <img :src="UserLogoPath" />
           </div>
           <el-menu-item
+            id="chat"
             index="1-1"
             @click="show_page = 'chatting'"
             :class="{MenuItemDark: IsDarkMode}"
@@ -32,9 +33,11 @@
       <component
         :is="show_page"
         :IsDarkMode="IsDarkMode"
+        :selected_contact="selected_contact"
         @UpdateModle="UpdateModle"
         @SetDisplayPage="SetDisplayPage"
         @UpdateDataInVue="UpdateDataInVue"
+        @skip_chatting="skip_chatting"
       ></component>
     </el-container>
   </div>
@@ -57,11 +60,11 @@ const UserIntroductionCookieKey = "UserIntroduction";
 export default {
   data() {
     return {
-      show_page: "chatting",
-
       UserID: "",
       UserLogoPath: UserDefaultLogoPath,
-      IsDarkMode: false
+      IsDarkMode: false,
+      selected_contact: "",
+      show_page: "chatting"
     };
   },
   methods: {
@@ -130,6 +133,10 @@ export default {
       if (val.IsDarkMode != undefined) {
         this.IsDarkMode = val.IsDarkMode;
       }
+    },
+    skip_chatting(val){
+      this.selected_contact=val.contact;
+      document.getElementById("chat").click();
     }
   },
   sockets: {

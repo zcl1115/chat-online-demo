@@ -3,7 +3,6 @@ var express = require('express');
 var router = express.Router();
 var http = require('http');
 var fs = require('fs');
-var async = require('async');
 var server = http.createServer(function (req, res) {
 }).listen(3001);//创建http服务
 

@@ -17,7 +17,7 @@ const SQLConfig2 = {
 
 function DB_helper() {
     var mysql = require('mysql');
-    var connection = mysql.createConnection(SQLConfig2);
+    var connection = mysql.createConnection(SQLConfig);
     connection.connect();
     this.isAcoountExist = function (account, cb) {
         var sql = 'SELECT count(*) AS exist FROM user where account = ?';
@@ -32,7 +32,7 @@ function DB_helper() {
         });
     };
     this.signUp = function (account, password, name, img_url, personal_profile, online_status, cb) {
-        var sql = 'INSERT INTO user ' +
+        var sql = 'INSERT INTO USER ' +
             '(account, password, name, img_path, personal_profile, online_status ) ' +
             'values(?, ?, ?, ?, ?, ?);';
         var SqlParams = [account, password, name, img_url, personal_profile, online_status];
@@ -312,16 +312,16 @@ function DB_helper() {
             }
         })
     }
-    this.getContacts = function (account, cb) {
+     this.getContacts = function (account, cb) {
         var sql = 'select account,name,img_path,personal_profile from user where account in (select contact_account from contact where user_account =?);';
         connection.query(sql, [account], function (err, results) {
             if (err) {
                 console.log(err.message);
             }
-            else {
+            else{
 
-                cb(results);
-            }
+                cb(results);}
+
         });
     }
 }

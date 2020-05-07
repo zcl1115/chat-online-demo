@@ -134,6 +134,9 @@ export default {
   props: {
     IsDarkMode: {
       type: Boolean
+    },
+    selected_contact: {
+      type: String
     }
   },
   created() {
@@ -177,7 +180,6 @@ export default {
       this.img_path = getCookie("UserLogoPath");
       this.contacts = name;
       this.contact_account = account;
-      console.log(this.contact_account);
       this.isShow = true;
       this.contact_img = img_path;
       this.unread_contacts.splice(this.unread_contacts.indexOf(account), 1);
@@ -218,7 +220,21 @@ export default {
             let b1 = new Date(btime).getTime();
             return b1 - a1;
           });
-          // console.log(this.recent_contacts_list);
+
+          if (this.selected_contact){
+            let t;
+            for (t in this.recent_contacts_list) {
+              if (this.selected_contact===this.recent_contacts_list[t].contact){
+                this.img_path = getCookie("UserLogoPath");
+                this.contacts = this.recent_contacts_list[t].name;
+                this.contact_account = this.selected_contact;
+                this.isShow = true;
+                this.contact_img = this.recent_contacts_list[t].img_path;
+                this.unread_contacts.splice(this.unread_contacts.indexOf(this.selected_contact), 1);
+                break;
+              }
+            }
+          }
         });
     },
     send_message() {
