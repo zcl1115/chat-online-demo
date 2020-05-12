@@ -33,10 +33,9 @@
         <!--          {{contact_account}}-->
       </div>
       <!--eslint-disable-next-line-->
-      <div class="message_show">
+      <div class="message_show" v-if="!history_show">
         <div class="message_box" v-for="(message, index) in messages" :key="index">
           <div v-if="message.to === contact_account && message.from === account">
-            <!--            <img :src="recent_contacts_list[isactive].img_path" class="contactor_avatar">-->
             <div class="btalk">
               <div class="avatar_box">
                 <img :src="img_path" class="contactor_avatar" />
@@ -70,6 +69,13 @@
           </div>
         </div>
       </div>
+      <component
+              :is="chat_history_show"
+              :IsDarkMode="IsDarkMode"
+              :contact="contact_account"
+              :img_path="contact_img"
+              :account="account"
+      ></component>
       <div class="input_message">
         <div class="function_area" style>
           <img
@@ -81,6 +87,11 @@
             class="icon"
             src="../assets/upload.svg"
             onclick="document.getElementById('upload_clicked').click();"
+          />
+          <img
+                  class="icon"
+                  src="../assets/history.svg"
+                  v-on:click="show_history()"
           />
           <input type="file" class="upload" id="upload_clicked" v-show="false" @change="uploadFile" />
           <emoji_picker @emoji_clicked="emoji_clicked" :inputData="emoji_picker_isShow"></emoji_picker>
@@ -107,10 +118,12 @@
 import { getCookie } from "../components/cookieUtil";
 import emoji_picker from "../components/emoji_picker";
 import FileSaver from "file-saver";
+import chat_history from "./chat_history.vue";
 
 export default {
   components: {
-    emoji_picker
+    emoji_picker,
+    chat_history
   },
   data() {
     return {
@@ -128,7 +141,9 @@ export default {
       file_selector_isShow: false,
       cur_file: "",
       fileData: "",
-      search_name: ""
+      search_name: "",
+      history_show: false,
+      chat_history_show: ""
     };
   },
   props: {
@@ -301,6 +316,14 @@ export default {
         to: message.to,
         file_name: message.content
       });
+    },
+    show_history(){
+      if (this.history_show){
+        this.chat_history_show = "";
+      }else{
+        this.chat_history_show = "chat_history";
+      }
+      this.history_show = !this.history_show;
     }
   },
   computed: {
@@ -354,9 +377,7 @@ export default {
   overflow: auto;
   overflow-x: hidden;
 }
-/*.recent_contacts_dark{*/
 
-/*}*/
 .chat_area {
   width: 75%;
   height: 100%;
@@ -381,6 +402,7 @@ export default {
   overflow: auto;
   overflow-x: hidden;
 }
+
 .input_message {
   width: 100%;
   height: 27%;
