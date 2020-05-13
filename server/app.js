@@ -6,6 +6,7 @@ var DB_helper = require("./db/DB_helper");
 
 // db_helper
 global.db_helper = new DB_helper();
+global.db_helper.createTables();  //create tables
 global.db_helper.setAllOffline(); // when server starts all users must be offline
 
 

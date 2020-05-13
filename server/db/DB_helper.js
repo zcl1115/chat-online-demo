@@ -17,8 +17,13 @@ const SQLConfig2 = {
 
 function DB_helper() {
     var mysql = require('mysql');
-    var connection = mysql.createConnection(SQLConfig);
-    connection.connect();
+    var connection = mysql.createConnection(SQLConfig2);
+    connection.connect(function(err){
+        if(err){
+            console.log("connection failed!");
+            throw(err)
+        }
+    });
     this.isAcoountExist = function (account, cb) {
         var sql = 'SELECT count(*) AS exist FROM user where account = ?';
         var SqlParams = [account];
@@ -87,7 +92,98 @@ function DB_helper() {
             if (cb != null) return cb(result);
         });
     };
+    this.createTables=function () {
+        var sql="CREATE TABLE IF NOT EXISTS `user`(\n" +
+            "   `account` VARCHAR(20) NOT NULL,\n" +
+            "   `password` VARCHAR(12) NOT NULL,\n" +
+            "   `name` VARCHAR(20) NOT NULL,\n" +
+            "   `img_path` TEXT,\n" +
+            "   `personal_profile` VARCHAR(64) DEFAULT '还没有简介哦!',\n" +
+            "   `online_status` int DEFAULT 0, \n" +
+            "   PRIMARY KEY ( `account` )\n" +
+            ");";
+        connection.query(sql,function (err) {
+            if(err){
+                console.log("[CREATE TABLE ERROR - ]",err.message);
+                return;
+            }
+        })
+        sql="CREATE TABLE IF NOT EXISTS `recent_chat`(\n" +
+            "   `account` VARCHAR(20) NOT NULL,\n" +
+            "   `chat_time` DATETIME,\n" +
+            "   `contact` VARCHAR(20) NOT NULL,\n" +
+            "   PRIMARY KEY ( `account` , `contact`),\n" +
+            "   FOREIGN KEY (`account`) REFERENCES `user`(`account`) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+            "   FOREIGN KEY (`contact`) REFERENCES `user`(`account`) ON DELETE CASCADE ON UPDATE CASCADE\n" +
+            ");";
+        connection.query(sql,function (err) {
+            if(err){
+                console.log("[CREATE TABLE ERROR - ]",err.message);
+                return;
+            }
+        })
+        sql="CREATE TABLE IF NOT EXISTS `chat_history`(\n" +
+            "   `chat_id` int NOT NULL AUTO_INCREMENT,\n" +
+            "   `account` VARCHAR(20) NOT NULL,\n" +
+            "   `start_time` DATE,\n" +
+            "   `end_time` DATE,\n" +
+            "   `save_path` TEXT,\n" +
+            "   PRIMARY KEY ( `chat_id` )\n" +
+            ");";
+        connection.query(sql,function (err) {
+            if(err){
+                console.log("[CREATE TABLE ERROR - ]",err.message);
+                return;
+            }
+        })
+        sql="CREATE TABLE IF NOT EXISTS `offline_chat`(\n" +
+            "   `account_from` VARCHAR(20) NOT NULL,\n" +
+            "   `account_to` VARCHAR(20) NOT NULL,\n" +
+            "   `time` DATETIME,\n" +
+            "   `type` int default 0,\n" +
+            "   `message` TEXT character set utf8mb4,\n" +
+            "   FOREIGN KEY (`account_from`) REFERENCES `user`(`account`) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+            "   FOREIGN KEY (`account_to`) REFERENCES `user`(`account`) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+            "   PRIMARY KEY ( `account_from`, `account_to`, `time` )\n" +
+            ");";
+        connection.query(sql,function (err) {
+            if(err){
+                console.log("[CREATE TABLE ERROR - ]",err.message);
+                return;
+            }
+        })
+        sql="CREATE TABLE IF NOT EXISTS `contact`(\n" +
+            "   `user_account` VARCHAR(20) NOT NULL,\n" +
+            "   `contact_account` VARCHAR(20) NOT NULL,\n" +
+            "   `name` VARCHAR(20) NOT NULL,\n" +
+            "   PRIMARY KEY ( `user_account`, `contact_account`)\n" +
+            ");";
+        connection.query(sql,function (err) {
+            if(err){
+                console.log("[CREATE TABLE ERROR - ]",err.message);
+                return;
+            }
+        })
+        sql="CREATE TABLE IF NOT EXISTS `request`(\n" +
+            "   `request_id` VARCHAR(10) NOT NULL,\n" +
+            "   `account` VARCHAR(20) NOT NULL,\n" +
+            "   `contact_account` VARCHAR(20) NOT NULL,\n" +
+            "   `content` VARCHAR(64) DEFAULT '空',\n" +
+            "   `time` DATETIME, \n" +
+            "   PRIMARY KEY ( `request_id`),\n" +
+            "   FOREIGN KEY (`account`) REFERENCES `user`(`account`) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+            "   FOREIGN KEY (`contact_account`) REFERENCES `user`(`account`) ON DELETE CASCADE ON UPDATE CASCADE\n" +
+            ");";
+        connection.query(sql,function (err) {
+            if(err){
+                console.log("[CREATE TABLE ERROR - ]",err.message);
+                return;
+            }
+        })
+
+    }
     this.setAllOffline = function (account, cb) {
+
         var modSql = 'UPDATE user SET online_status = 0';
         connection.query(modSql, null, function (err, result) {
             if (err) {
@@ -312,7 +408,7 @@ function DB_helper() {
             }
         })
     }
-     this.getContacts = function (account, cb) {
+    this.getContacts = function (account, cb) {
         var sql = 'select account,name,img_path,personal_profile from user where account in (select contact_account from contact where user_account =?);';
         connection.query(sql, [account], function (err, results) {
             if (err) {
