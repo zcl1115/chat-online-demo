@@ -89,6 +89,23 @@ io.on('connection', function (socket) {
     db_helper.updateRecentList(account, time, str.to, null);
     db_helper.updateRecentList(str.to, time, account, null);
   });
+  
+//发送申请
+  socket.on('sendApplication', function (str) {
+    var time = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
+    console.log("(sendApplication) account: " + account + ' to ' +str.to + ' message: ' + str.message + 'time: ' +  time);
+    // Online
+    if(online_users[str.to] !== undefined){
+      console.log("online");
+      online_users[str.to].emit('application',{'from':account, 'to': str.to, 'type': -1, 'content':str.message, 'time': time});
+    }else{
+      // Offline operation
+      console.log("offline");
+      db_helper.storeOfflineMessage(account, str.to, -1, str.message, time);
+    }
+
+
+  });
 
   // sendFile event
   socket.on('sendFile', function (str) {
