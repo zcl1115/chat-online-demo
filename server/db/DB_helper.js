@@ -420,5 +420,47 @@ function DB_helper() {
 
         });
     }
+     this.getUser = function (account, cb) {
+        var sql = 'select account,name,img_path,personal_profile from user where account =?;';
+        connection.query(sql, [account], function (err, results) {
+            if (err) {
+                console.log(err.message);
+            }
+            else{
+
+                cb(results);}
+
+        });
+    }
+    this.isContact = function (user_account,contact_account, cb) {
+        var sql = 'select contact_account from contact where user_account =?and contact_account=?;';
+        let SQLParam=[user_account,contact_account];
+        connection.query(sql, SQLParam, function (err, results) {
+            if (err) {
+                console.log(err.message);
+            }
+            else{
+                var status=results.length;
+                cb(status);
+
+            }
+
+        });
+    }
+    this.addContact = function (user_account,contact_account,name,cb) {
+         var sql = 'INSERT INTO contact ' +
+            '(user_account,contact_account,name) ' +
+            'values(?, ?, ?);';
+
+        let SQLParam=[user_account,contact_account,name];
+        connection.query(sql, SQLParam, function (err, results) {
+            if (err) {
+                console.log(err.message);
+            }
+            else{
+                cb(results);
+            }
+        });
+    }
 }
 module.exports = DB_helper;
