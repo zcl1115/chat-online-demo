@@ -7,9 +7,9 @@
                         <div class="avatar_box">
                             <img :src="use_img" class="contactor_avatar" />
                         </div>
-                        <span class="message" v-if="message.type === '0'">{{message.message}}</span>
+                        <span class="message" v-if="message.type === '0'">{{message.content}}</span>
                         <span class="message" v-if="message.type === '1'">
-                            <a class="file_name">{{message.message}}</a>
+                            <a class="file_name">{{message.content}}</a>
                             <img class="file_icon" src="../assets/download.png" v-on:click="download(message)" />
                         </span>
                         <br />
@@ -23,10 +23,10 @@
                         <div class="avatar_box">
                             <img :src="img_path" class="contactor_avatar" />
                         </div>
-                        <span class="message" v-if="message.type === '0'">{{message.message}}</span>
+                        <span class="message" v-if="message.type === '0'">{{message.content}}</span>
                         <span class="message" v-if="message.type === '1'">
                             <img class="file_icon" src="../assets/download.png" v-on:click="download(message)" />
-                            <a class="file_name">{{message.message}}</a>
+                            <a class="file_name">{{message.content}}</a>
                         </span>
                         <br />
                         <br />
@@ -293,7 +293,16 @@
                         message: '已取消删除'
                     });
                 });
-            }
+            },
+            download(message) {
+                console.log("child's download method called");
+                console.log(message);
+                this.$socket.emit("getFile", {
+                    from: message.from,
+                    to: message.to,
+                    file_name: message.content
+                });
+            },
         }
     };
 </script>

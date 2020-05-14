@@ -135,7 +135,7 @@ export default {
       recent_contacts_list: [],
       isShow: false,
       contact_img: "",
-      messages: [],
+      //messages: [],
       unread_contacts: [],
       emoji_picker_isShow: false,
       file_selector_isShow: false,
@@ -152,7 +152,8 @@ export default {
     },
     selected_contact: {
       type: String
-    }
+    },
+    messages: [],
   },
   created() {
     this.account = getCookie("user_account");
@@ -161,6 +162,7 @@ export default {
   mounted() {
     this.sockets.subscribe("message", data => {
       this.messages.push(data);
+      this.$emit("UpdateMessage", { messages: this.messages });
       this.unread_contacts.push(data.from);
 
       var i = this.get_index(data.from);
@@ -185,6 +187,14 @@ export default {
       FileSaver.saveAs(blob, data.file_name);
       // var blob = new Blob(["Hello, world!"], {type: "text/plain;charset=utf-8"});
       // FileSaver.saveAs(blob, "hello world.txt");
+    });
+    this.sockets.subscribe("FileExpired", data => {
+      console.log("called");
+      this.$message({
+        showClose: true,
+        message: data.file_name + "已失效",
+        type: "error"
+      });
     });
     this.sockets.subscribe("login", data => {
       console.log(data);
@@ -265,6 +275,7 @@ export default {
         type: 0,
         content: message
       });
+      this.$emit("UpdateMessage", { messages: this.messages });
       document.getElementById("message").value = "";
       // console.log(this.messages);
     },

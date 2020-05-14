@@ -34,10 +34,12 @@
         :is="show_page"
         :IsDarkMode="IsDarkMode"
         :selected_contact="selected_contact"
+        :messages = "messages"
         @UpdateModle="UpdateModle"
         @SetDisplayPage="SetDisplayPage"
         @UpdateDataInVue="UpdateDataInVue"
         @skip_chatting="skip_chatting"
+        @UpdateMessage="UpdateMessage"
       ></component>
     </el-container>
   </div>
@@ -64,7 +66,8 @@ export default {
       UserLogoPath: UserDefaultLogoPath,
       IsDarkMode: false,
       selected_contact: "",
-      show_page: "chatting"
+      show_page: "chatting",
+      messages: [],
     };
   },
   methods: {
@@ -137,6 +140,9 @@ export default {
     skip_chatting(val){
       this.selected_contact=val.contact;
       document.getElementById("chat").click();
+    },
+    UpdateMessage(data){
+      this.messages = data.messages;
     }
   },
   sockets: {
