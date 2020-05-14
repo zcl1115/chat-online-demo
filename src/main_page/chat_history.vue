@@ -51,8 +51,8 @@
             <span style="width:100px">
                 <i class="el-icon-loading" v-if="load_show"></i><i v-if="load_show">查询中</i>
             </span>
-            <el-button icon="el-icon-search" style="margin-left:5px" @click="search_chat_history()" circle></el-button>
-            <el-button icon="el-icon-search" style="margin-left:5px" round @click="advanced_search = !advanced_search">高级搜索</el-button>
+            <el-button :class="{dark_button: IsDarkMode}" icon="el-icon-search" style="margin-left:5px" @click="search_chat_history()" circle></el-button>
+            <el-button :class="{dark_button: IsDarkMode}" icon="el-icon-search" style="margin-left:5px" round @click="advanced_search = !advanced_search">高级搜索</el-button>
         </div>
         <div class="select_function_area" v-if="advanced_search">
             <el-date-picker
@@ -71,6 +71,7 @@
                     :picker-options="end_pickerOptions">
             </el-date-picker>
             <el-input
+                    :class="{dark_search: IsDarkMode}"
                     style="margin-left:5px"
                     placeholder="请输入搜索关键字"
                     prefix-icon="el-icon-search"
@@ -80,8 +81,8 @@
             <span style="width:100px">
                 <i class="el-icon-loading" v-if="load_show"></i><i v-if="load_show">查询中</i>
             </span>
-            <el-button style="margin-left:5px" icon="el-icon-search" @click="search_key_history" circle></el-button>
-            <el-button style="float: right" icon="el-icon-close" circle @click="advanced_search = !advanced_search"></el-button>
+            <el-button :class="{dark_button: IsDarkMode}" style="margin-left:5px" icon="el-icon-search" @click="search_key_history" circle></el-button>
+            <el-button :class="{dark_button: IsDarkMode}" style="float: right" icon="el-icon-close" circle @click="advanced_search = !advanced_search"></el-button>
         </div>
     </div>
 </template>
@@ -328,7 +329,7 @@
     }
 
     .message_box {
-        /*width: 50%;*/
+        margin-top: 2px;
     }
 
     .content {
@@ -349,7 +350,11 @@
     .content:focus {
         outline: none;
     }
-
+    .dark_button{
+        background-color: rgb(44, 62, 80);
+        color: rgb(220, 220, 220);
+        border-color: rgb(44, 62, 80);
+    }
     .round_icon {
         width: 40px;
         height: 40px;
@@ -382,6 +387,10 @@
 
     .contact_dark {
         color: rgb(240, 240, 240);
+    }
+
+    .friend_name_dark{
+        color: rgb(220, 220, 220);
     }
 
     .icon {

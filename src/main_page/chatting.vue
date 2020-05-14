@@ -355,8 +355,8 @@ export default {
 </script>
 <style>
 .dark_search .el-input__inner {
-  background-color: rgb(0, 0, 0);
-  color: rgb(240, 240, 240);
+  background-color: rgb(44, 62, 80);
+  color: rgb(220, 220, 220);
 }
 </style>
 <style  lang="less" scoped>
@@ -365,7 +365,7 @@ export default {
   margin: 0;
 }
 .el_dark {
-  background-color: rgb(0, 0, 0);
+  background-color: #3a5169;
 }
 .MiddleAside {
   background-color: rgb(247, 247, 247);
@@ -373,7 +373,7 @@ export default {
 }
 
 .MiddleAsideDark {
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(44, 62, 80);
 }
 
 .search_area {
@@ -394,8 +394,8 @@ export default {
   height: 100%;
   float: left;
 }
-.char_area_dark {
-  background-color: rgb(0, 0, 0);
+.chat_area_dark {
+  background-color: #3a5169;
 }
 
 .friend_name {
@@ -407,6 +407,7 @@ export default {
 .friend_name_dark {
   color: rgb(240, 240, 240);
 }
+
 .message_show {
   width: 100%;
   height: 67%;
@@ -441,7 +442,7 @@ export default {
   font-size: 20px;
 }
 .content_dark {
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(65, 91, 118);
   color: rgb(240, 240, 240);
 }
 .content:focus {
@@ -485,7 +486,8 @@ export default {
 }
 
 .contact_dark {
-  color: rgb(240, 240, 240);
+  background-color: rgb(55, 79, 102);
+  color: rgb(220, 220, 220);
 }
 
 .icon {
@@ -507,11 +509,11 @@ p {
   background-color: white;
 }
 .addclassdark {
-  background-color: #1a1a1a;
-  color: rgb(250, 250, 250);
+  background-color: rgb(65, 91, 118);
+  color: rgb(240, 240, 240);
 }
 .message_box {
-  /*width: 50%;*/
+  margin-top: 2px;
 }
 
 .atalk {
