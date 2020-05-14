@@ -306,8 +306,8 @@
 </script>
 <style>
   .dark_search .el-input__inner {
-    background-color: rgb(0, 0, 0);
-    color: rgb(240, 240, 240);
+      background-color: rgb(44, 62, 80);
+      color: rgb(220, 220, 220);
   }
 </style>
 
