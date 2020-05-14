@@ -36,9 +36,9 @@
       </div>
       <el-form label-position="right" label-width="80px">
         <el-form-item class="SubmitButtonFormItem" label-width="0">
-          <el-button type="primary" class="SubmitButton" @click="Show_send_message()"v-if="!isShow_add_user&&isShow_personal">发送信息</el-button>
+          <el-button type="primary" class="SubmitButton" @click="Show_send_message()" v-if="!isShow_add_user&&isShow_personal">发送信息</el-button>
 
-          <el-button type="primary" class="SubmitButton" @click="Show_send_application()"v-if="isShow_add_user&&isShow_personal">添加好友</el-button>
+          <el-button type="primary" class="SubmitButton" @click="Show_send_application()" v-if="isShow_add_user&&isShow_personal">添加好友</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -54,7 +54,7 @@
     </div>
 
   <div class="application_list" v-if="isShow_new_friend_list">
-    <ul v-for="(item,index) in new_friend"   v-on:click="Select_new_friend(item.name,item.account,item.img_path,index)" class="application">
+    <ul v-for="(item,index) in new_friend"  v-bind:key="item.account" v-on:click="Select_new_friend(item.name,item.account,item.img_path,index)" class="application">
       <img :src="item.img_path">
         <p><span class="application_name">{{item.name}}</span>请求添加您为好友</p>
 
@@ -128,7 +128,6 @@
 
             console.log(response.data);
             var nf=response.data;
-            let i;
 
               var FileLength = nf[0].img_path.data.length;
               var Array1 = new ArrayBuffer(FileLength);
@@ -178,6 +177,7 @@
 
         },
         Select_friend(name,account,img_path,personal_profile){
+          this.isShow_ok=false;
           this.search_account=account;
           this.search_name=name;
           this.search_img_path=img_path;
@@ -277,14 +277,17 @@
           this.axios.post("api/friend/add_contact", this.qs.stringify({
             user_account: this.account,contact_account:this.search_account,name:this.search_name
           })).then((response) => {
+              console.log(response.data);
           });
 
 
           this.axios.post("api/friend/add_contact", this.qs.stringify({
             user_account: this.search_account,contact_account:this.account,name:this.name
           })).then((response) => {
+              console.log(response.data);
           });
 
+          this.init_contacts();
 
         },
         Refuse_friend(){
