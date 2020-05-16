@@ -36,9 +36,9 @@
       </div>
       <el-form label-position="right" label-width="80px">
         <el-form-item class="SubmitButtonFormItem" label-width="0">
-          <el-button type="primary" class="SubmitButton" @click="Show_send_message()"v-if="!isShow_add_user&&isShow_personal">发送信息</el-button>
+          <el-button type="primary" class="SubmitButton" @click="Show_send_message()" v-if="!isShow_add_user&&isShow_personal">发送信息</el-button>
 
-          <el-button type="primary" class="SubmitButton" @click="Show_send_application()"v-if="isShow_add_user&&isShow_personal">添加好友</el-button>
+          <el-button type="primary" class="SubmitButton" @click="Show_send_application()" v-if="isShow_add_user&&isShow_personal">添加好友</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -54,7 +54,7 @@
     </div>
 
   <div class="application_list" v-if="isShow_new_friend_list">
-    <ul v-for="(item,index) in new_friend"   v-on:click="Select_new_friend(item.name,item.account,item.img_path,item.content,item.status,item.personal_profile,index)" class="application">
+    <ul v-for="(item,index) in new_friend" v-bind:key="index" v-on:click="Select_new_friend(item.name,item.account,item.img_path,item.content,item.status,item.personal_profile,index)" class="application">
       <img :src="item.img_path">
         <p><span class="application_name">{{item.name}}</span>请求添加您为好友    </p>
 
@@ -283,16 +283,22 @@
           this.axios.post("api/friend/change_status", this.qs.stringify({
              user_account: this.account,contact_account:this.search_account,status:1
            })).then((response) => {
+             // Just to prevent eslint error
+             console.log(response);
            });
           this.axios.post("api/friend/add_contact", this.qs.stringify({
             user_account: this.account,contact_account:this.search_account,name:this.search_name
           })).then((response) => {
+            // Just to prevent eslint error
+            console.log(response);
           });
 
 
           this.axios.post("api/friend/add_contact", this.qs.stringify({
             user_account: this.search_account,contact_account:this.account,name:this.name
           })).then((response) => {
+            // Just to prevent eslint error
+            console.log(response);
           });
 
 
