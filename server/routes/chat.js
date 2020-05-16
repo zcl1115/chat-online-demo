@@ -14,36 +14,6 @@ console.log('Server running ');
 var io = require('socket.io').listen(server);
 
 var online_users = {}; // records online users'socket
-
-function store_chat_history(account_from, account_to, type, message) {
-  let path;
-  //存放消息记录
-  if (!fs.existsSync('./ChatHistory/' + account_from + " " + account_to) &&
-      !fs.existsSync('./ChatHistory/' + account_to + " " + account_from)) {
-    fs.mkdirSync('./ChatHistory/' + account_from + " " + account_to);
-  }
-
-  if (fs.existsSync('./ChatHistory/' + account_from + " " + account_to)) {
-    path = './ChatHistory/' + account_from + " " + account_to;
-  }
-
-  if (fs.existsSync('./ChatHistory/' + account_to + " " + account_from)) {
-    path = './ChatHistory/' + account_to + " " + account_from;
-  }
-
-  let chat_date = moment(Date.now()).format('YYYY-MM-DD');
-  let chat_time = moment(Date.now()).format('HH:mm:ss');
-  //文件夹命名为用户a账号 用户b账号,则三个标志位分别为a对该信息的删除情况,b对该信息的删除情况,该信息是消息还是文件
-  let message_stored = "0 " + "0 " + parseInt(type) + " " + chat_time + " " + account_from + " " + account_to + " " + message + '\n';
-  fs.writeFile(path + '/' + chat_date + '.txt', message_stored, {'flag': 'a'}, function (error) {
-    if (error) {
-      console.log('存储失败')
-    } else {
-      console.log('存储成功')
-    }
-  });
-};
-
 io.on('connection', function (socket) {
   console.log("A user connected");
   var account = null;
@@ -75,8 +45,35 @@ io.on('connection', function (socket) {
     let time = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
     console.log("(sendMessage) account: " + account + ' to ' + str.to + ' message: ' + str.message + 'time: ' + time);
 
-    // store chat history in server
-    store_chat_history(account,str.to,0,str.message);
+    let path;
+    //存放消息记录
+    if (!fs.existsSync('./ChatHistory/' + account + " " + str.to) &&
+        !fs.existsSync('./ChatHistory/' + str.to + " " + account))
+    {
+      fs.mkdirSync('./ChatHistory/' + account + " " + str.to);
+    }
+
+    if (fs.existsSync('./ChatHistory/' + account + " " + str.to))
+    {
+      path = './ChatHistory/' + account + " " + str.to;
+    }
+
+    if (fs.existsSync('./ChatHistory/' + str.to + " " + account))
+    {
+      path = './ChatHistory/' + str.to + " " + account;
+    }
+
+    let chat_date = moment(Date.now()).format('YYYY-MM-DD');
+    let chat_time = moment(Date.now()).format('HH:mm:ss');
+    //文件夹命名为用户a账号 用户b账号,则三个标志位分别为a对该信息的删除情况,b对该信息的删除情况,该信息是消息还是文件
+    let message = "0 " + "0 " + "0 " + chat_time + " " + account + " " + str.to + " " + str.message + '\n';
+    fs.writeFile(path + '/' + chat_date + '.txt', message, { 'flag': 'a' }, function (error) {
+      if (error) {
+        console.log('存储失败')
+      } else {
+        console.log('存储成功')
+      }
+    });
 
     // Online
     if (online_users[str.to] !== undefined) {
@@ -93,18 +90,18 @@ io.on('connection', function (socket) {
     db_helper.updateRecentList(str.to, time, account, null);
   });
 
-  //发送申请
+//发送申请
   socket.on('sendApplication', function (str) {
     var time = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
     console.log("(sendApplication) account: " + account + ' to ' +str.to + ' message: ' + str.message + 'time: ' +  time);
     // Online
-    if(online_users[str.to] !== undefined){
-      console.log("online");
-      online_users[str.to].emit('application',{'from':account, 'to': str.to, 'type': -1, 'content':str.message, 'time': time});
-    }else{
-      // Offline operation
-      console.log("offline");
-      db_helper.storeOfflineMessage(account, str.to, -1, str.message, time);
+    if(str.to!==undefined){
+      var status=db_helper.addRequest(account,str.to,str.message,time,function (result) {
+        console.log("发送成功");
+      });
+    }
+    else{
+      console.log("sendapp error!!!!");
     }
   });
 
@@ -125,9 +122,6 @@ io.on('connection', function (socket) {
       }
     });
 
-    // store chat history in server
-    store_chat_history(account,str.to,1,str.file_name);
-
     // Online
     if (online_users[str.to] !== undefined) {
       console.log("online");
@@ -147,12 +141,7 @@ io.on('connection', function (socket) {
   // getFile event
   socket.on('getFile', function (str) {
     console.log("getFile called");
-    let path = "./files/" + str.from + "/" + str.to + "/" + str.file_name;
-    if(!fs.existsSync(path)){
-      console.log("expire: " + path);
-      online_users[account].emit('FileExpired',{'file_name' :str.file_name});
-    }
-    else fs.readFile(path, (err, data) => {
+    fs.readFile("./files/" + str.from + "/" + str.to + "/" + str.file_name, (err, data) => {
       if (err) throw err;
       online_users[account].emit('getFile', { 'from': str.from, 'to': str.from, 'arraybuffer': data.buffer, 'file_name': str.file_name });
     });
@@ -229,7 +218,7 @@ router.post('/search', function (req, res, next) {
         time: date + " " + b[3],
         from: b[4],
         to: b[5],
-        content: b[6]
+        message: b[6]
       })
     }
   });
@@ -293,7 +282,7 @@ router.post('/search_key', function (req, res, next) {
             time: date_list[date] + " " + b[3],
             from: b[4],
             to: b[5],
-            content: b[6]
+            message: b[6]
           });
         }
       }

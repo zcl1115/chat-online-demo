@@ -36,9 +36,9 @@
       </div>
       <el-form label-position="right" label-width="80px">
         <el-form-item class="SubmitButtonFormItem" label-width="0">
-          <el-button type="primary" class="SubmitButton" @click="Show_send_message()" v-if="!isShow_add_user&&isShow_personal">发送信息</el-button>
+          <el-button type="primary" class="SubmitButton" @click="Show_send_message()"v-if="!isShow_add_user&&isShow_personal">发送信息</el-button>
 
-          <el-button type="primary" class="SubmitButton" @click="Show_send_application()" v-if="isShow_add_user&&isShow_personal">添加好友</el-button>
+          <el-button type="primary" class="SubmitButton" @click="Show_send_application()"v-if="isShow_add_user&&isShow_personal">添加好友</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -54,9 +54,9 @@
     </div>
 
   <div class="application_list" v-if="isShow_new_friend_list">
-    <ul v-for="(item,index) in new_friend"  v-bind:key="item.account" v-on:click="Select_new_friend(item.name,item.account,item.img_path,index)" class="application">
+    <ul v-for="(item,index) in new_friend"   v-on:click="Select_new_friend(item.name,item.account,item.img_path,item.content,item.status,item.personal_profile,index)" class="application">
       <img :src="item.img_path">
-        <p><span class="application_name">{{item.name}}</span>请求添加您为好友</p>
+        <p><span class="application_name">{{item.name}}</span>请求添加您为好友    </p>
 
     </ul>
   </div>
@@ -64,7 +64,7 @@
   <h2>好友申请</h2>
     <img :src="search_img_path">
     <p class="a_name">{{search_name}}</p>
-<p class="a_msg">{{application_msg[Index].content}}</p>
+<p class="a_msg">{{search_content}}</p>
   <el-button type="primary" v-on:click="Add_friend()" class="add_submit">同意</el-button><el-button type="primary" v-on:click="Refuse_friend()" class="refuse_submit">拒绝</el-button>
 
 </div>
@@ -92,7 +92,6 @@
         isShow_personal:false,
          add_account:'',
         isShow_application:false,
-
         isShow_ok:false,
         isShow_add_user:false,
         isShow_new_friend_list:false,
@@ -117,35 +116,9 @@
        this.init_name();
      },
      mounted(){
-      this.sockets.subscribe('application', (data) => {
-
-          this.application_msg.push(data);
-          this.axios.post("api/friend/get_user", this.qs.stringify({
-            account: data.from
-          })).then((response) => {
-
-
-
-            console.log(response.data);
-            var nf=response.data;
-
-              var FileLength = nf[0].img_path.data.length;
-              var Array1 = new ArrayBuffer(FileLength);
-              var Array2 = new Uint8Array(Array1);
-
-              for (var j = 0; j < FileLength; j++) {
-                Array2[j] = nf[0].img_path.data[j];
-              }
-              var FileBlob = new Blob([Array2], { type: "" });
-              nf[0].img_path = URL.createObjectURL(FileBlob);
-
-            this.new_friend.push(nf[0]);
-
-          });
-        });
-
     },
       methods:{
+
       init_name(){
           this.axios.post("api/friend/get_user", this.qs.stringify({
             account: this.account
@@ -177,12 +150,12 @@
 
         },
         Select_friend(name,account,img_path,personal_profile){
-          this.isShow_ok=false;
           this.search_account=account;
           this.search_name=name;
           this.search_img_path=img_path;
           this.search_personal_profile=personal_profile;
           this.isShow_personal=true;
+          this.isShow_ok=false;
         },
         Show_send_message(){
 
@@ -195,7 +168,7 @@
             console.log(response);
             this.$emit("skip_chatting",{contact:this.search_account});
           });
-
+          this.isShow_ok=false;
 
         },
          Search_user(){
@@ -250,23 +223,56 @@
 
           },
         Show_new_friend(){
+          var acoount=this.account
+          this.axios.post("api/friend/get_app", this.qs.stringify({
+            account: acoount
+          })).then((response) => {
+            this.new_friend=[];
+            console.log(response.data);
+            var nf=response.data;
+            for(var i=0;i<nf.length;i++)
+            {
+                var FileLength = nf[i].img_path.data.length;
+                var Array1 = new ArrayBuffer(FileLength);
+                var Array2 = new Uint8Array(Array1);
+                for (var j = 0; j < FileLength; j++) {
+                   Array2[j] = nf[i].img_path.data[j];
+                }
+                var FileBlob = new Blob([Array2], { type: "" });
+                nf[i].img_path = URL.createObjectURL(FileBlob);
+                this.new_friend.push(nf[i]);
+            }
+          });
           this.isShow_personal=false;
           this.isShow_application=false;
           this.isShow_ok=false;
           this.isShow_new_friend_list=true;
           this.isShow_new_application=false;
         },
-        Select_new_friend(name,account,img_path,index){
-          this.Index=index;
-          this.search_account=account;
-          this.search_name=name;
-          this.search_img_path=img_path;
+        Select_new_friend(name,account,img_path,content,status,personal_profile,index){
+            if(status=="添加成功"){
+                this.isShow_new_application=false;
+                this.isShow_personal=false;
+                this.isShow_application=false;
+                this.isShow_ok=false;
+                this.isShow_new_friend_list=false;
+                this.Select_friend(name,account,img_path,personal_profile);
+            }
+            else{
+                this.Index=index;
+                this.search_account=account;
+                this.search_name=name;
+                this.search_img_path=img_path;
+                this.search_content=content;
+                this.isShow_new_application=true;
+                this.isShow_personal=false;
+                this.isShow_application=false;
+                this.isShow_ok=false;
+                this.isShow_new_friend_list=false;
+            }
 
-          this.isShow_new_application=true;
-          this.isShow_personal=false;
-          this.isShow_application=false;
-          this.isShow_ok=false;
-          this.isShow_new_friend_list=false;
+
+
         },
         Add_friend(){
           this.isShow_personal=false;
@@ -274,20 +280,21 @@
           this.isShow_ok=true;
           this.isShow_new_friend_list=false;
           this.isShow_new_application=false;
+          this.axios.post("api/friend/change_status", this.qs.stringify({
+             user_account: this.account,contact_account:this.search_account,status:1
+           })).then((response) => {
+           });
           this.axios.post("api/friend/add_contact", this.qs.stringify({
             user_account: this.account,contact_account:this.search_account,name:this.search_name
           })).then((response) => {
-              console.log(response.data);
           });
 
 
           this.axios.post("api/friend/add_contact", this.qs.stringify({
             user_account: this.search_account,contact_account:this.account,name:this.name
           })).then((response) => {
-              console.log(response.data);
           });
 
-          this.init_contacts();
 
         },
         Refuse_friend(){
@@ -306,8 +313,8 @@
 </script>
 <style>
   .dark_search .el-input__inner {
-      background-color: rgb(44, 62, 80);
-      color: rgb(220, 220, 220);
+    background-color: rgb(0, 0, 0);
+    color: rgb(240, 240, 240);
   }
 </style>
 

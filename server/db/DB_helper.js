@@ -165,12 +165,12 @@ function DB_helper() {
             }
         })
         sql="CREATE TABLE IF NOT EXISTS `request`(\n" +
-            "   `request_id` VARCHAR(10) NOT NULL,\n" +
+            "   `request_id` INT PRIMARY KEY AUTO_INCREMENT,\n" +
             "   `account` VARCHAR(20) NOT NULL,\n" +
             "   `contact_account` VARCHAR(20) NOT NULL,\n" +
             "   `content` VARCHAR(64) DEFAULT '空',\n" +
             "   `time` DATETIME, \n" +
-            "   PRIMARY KEY ( `request_id`),\n" +
+            "   `status` int default 0,\n"+
             "   FOREIGN KEY (`account`) REFERENCES `user`(`account`) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
             "   FOREIGN KEY (`contact_account`) REFERENCES `user`(`account`) ON DELETE CASCADE ON UPDATE CASCADE\n" +
             ");";
@@ -423,11 +423,11 @@ function DB_helper() {
      this.getUser = function (account, cb) {
         var sql = 'select account,name,img_path,personal_profile from user where account =?;';
         connection.query(sql, [account], function (err, results) {
+            console.log(results);
             if (err) {
                 console.log(err.message);
             }
             else{
-
                 cb(results);}
 
         });
@@ -461,6 +461,58 @@ function DB_helper() {
                 cb(results);
             }
         });
+    }
+    //发送好友申请
+    this.addRequest=function (account,contact_account,content,time,cb) {
+        var sql ="INSERT INTO request"+
+            '(account,contact_account,content,time,status)'+
+            'value(?,?,?,?,?)';
+        let SQLParam=[account,contact_account,content,time,0];
+        var status=0;
+        connection.query(sql, SQLParam, function (err, results) {
+            if (err) {
+                console.log(err.message);
+                status=-1;
+                cb(status);
+            }
+            else
+            {
+                cb(status);
+            }
+        });
+
+
+    }
+    //获取申请列表
+    this.getApplicationList=function (account,cb) {
+        //发给acoount的
+        var sql="select user.name,user.account,user.personal_profile,request.content,request.status " +
+            "from request left join user on request.account=user.account where contact_account =?";
+        let SQLParam=[account];
+        connection.query(sql, SQLParam, function (err, results) {
+            if (err) {
+                console.log(err.message);
+            }
+            else{
+                cb(results);
+            }
+        });
+
+    }
+    //改变状态
+    this.changeApplicationList=function (account,contact_account,status,cb) {
+        //发给acoount的
+        var sql="UPDATE request SET status=? WHERE account=? AND contact_account=?;";
+        let SQLParam=[status,account,contact_account];
+        connection.query(sql, SQLParam, function (err, results) {
+            if (err) {
+                console.log(err.message);
+            }
+            else{
+                cb(results);
+            }
+        });
+
     }
 }
 module.exports = DB_helper;
