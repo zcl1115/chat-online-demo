@@ -1,61 +1,41 @@
 <template>
-  <div class="sign_up_border">
-    <div>
-      <img class="show_img" id="img" />
+  <div class="main_signup">
+    <img src="icons/close.svg" style="width:30px;height:30px" id="close-btn" @click="backToLogin" />
+    <div class="logo_part">
+      <img src="icons/dove.svg" style="width:40px;height:40px" />
+      <span>咕咕报</span>
     </div>
-    <div>
-      <form name="form" id="form" method="post" enctype="multipart/form-data">
-        <input
-          type="file"
-          name="upload"
-          id="upload"
-          style="display: none;"
-          @change="onfilechange"
-          ref="img"
-          multiple="multiple"
-          accept="image/*"
-        />
-        <el-input
-          class="img_upload"
-          type="button"
-          value="上传头像"
-          onclick="document.form.upload.click()"
-        ></el-input>
-      </form>
-    </div>
-    <div>
+    <div class="form_container_signup">
+      <div class="img_container">
+        <img src="blank.png" id="profile" @click="propagate" />
+        <i class="el-icon-camera-solid upload_icon"></i>
+      </div>
+      <div>
+        <form name="form" id="form" method="post" enctype="multipart/form-data">
+          <input
+            type="file"
+            name="upload"
+            id="upload"
+            style="display: none;"
+            @change="onfilechange"
+            ref="img"
+            multiple="multiple"
+            accept="image/*"
+          />
+        </form>
+      </div>
       <el-form :model="users" :rules="Sign_up_FormRules">
-        <el-form-item prop="account">
-          <el-input
-            placeholder="请输入账号(6到20位的字母数字组合)"
-            v-model="users.account"
-            clearable
-            class="sign_up_input_style"
-          ></el-input>
+        <el-form-item prop="account" class="input_style_signup">
+          <el-input placeholder="请输入账号(6-20位的字母数字组合)" v-model="users.account" clearable></el-input>
         </el-form-item>
-        <el-form-item prop="name">
-          <el-input
-            placeholder="请输入昵称(20位以内,非空)"
-            v-model="users.name"
-            clearable
-            class="sign_up_input_style"
-          ></el-input>
+        <el-form-item prop="name" class="input_style_signup">
+          <el-input placeholder="请输入昵称(20位以内)" v-model="users.name" clearable></el-input>
         </el-form-item>
-        <el-form-item prop="password">
-          <el-input
-            placeholder="请输入密码(8到12位的字母数字组合)"
-            v-model="users.password"
-            show-password
-            class="sign_up_input_style"
-          ></el-input>
+        <el-form-item prop="password" class="input_style_signup">
+          <el-input placeholder="请输入密码(8-12位的字母数字组合)" v-model="users.password" show-password></el-input>
         </el-form-item>
-        <el-form-item prop="passwords">
-          <el-input
-            placeholder="请再次确认密码"
-            v-model="users.passwords"
-            show-password
-            class="sign_up_input_style"
-          ></el-input>
+        <el-form-item prop="passwords" class="input_style_signup">
+          <el-input placeholder="请再次确认密码" v-model="users.passwords" show-password></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="sign_up" class="logon_style">注册</el-button>
@@ -74,7 +54,7 @@ export default {
   data() {
     var PasswordMainRule = (rule, value, callback) => {
       if (!PasswordReg.test(value)) {
-        this.has_error=true;
+        this.has_error = true;
         callback(new Error("密码必须为8到20以内的字母或数字或下划线组合！"));
       } else {
         callback();
@@ -82,7 +62,7 @@ export default {
     };
     var PasswordsRule = (rule, value, callback) => {
       if (value !== this.users.password) {
-        this.has_error=true;
+        this.has_error = true;
         callback(new Error("确认密码必须与新密码相同！"));
       } else {
         callback();
@@ -130,7 +110,7 @@ export default {
   },
   methods: {
     sign_up: function() {
-      if (this.has_error){
+      if (this.has_error) {
         return;
       }
       if (
@@ -189,34 +169,93 @@ export default {
       var reader = new FileReader();
       reader.readAsDataURL(file.files[0]);
       reader.onload = function() {
-        document.querySelector("img").src = this.result;
+        document.querySelector("#profile").src = this.result;
       };
+    },
+    propagate: function() {
+      document.getElementById("upload").click();
+    },
+    backToLogin: function() {
+      window.location.href = "";
     }
   }
 };
 </script>
 
 <style>
-.sign_up_border {
-  width: 280px;
+html {
+  height: 100%;
+}
+
+body {
+  background-color: #f7f7f7;
+}
+
+.main_signup {
   text-align: center;
-  margin-top: 150px;
-  margin-left: 35vw;
+  margin-top: 90px;
 }
-.show_img {
-  height: 150px;
-  width: 150px;
+
+.form_container_signup {
+  background-color: white;
+  width: 350px;
+  height: 430px;
+  margin: auto;
+  border-radius: 5px;
+  margin-top: 10px;
+  padding-top: 20px;
+  box-shadow: 2px 2px rgb(233, 233, 233);
 }
-.img_upload {
-  margin-bottom: 5px;
-  width: 50px;
+
+.img_container {
+  position: relative;
 }
-.sign_up_input_style {
-  width: 280px;
-  margin-bottom: 10px;
+
+.upload_icon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #4e519e;
+  font-size: 1.5em;
+  opacity: 0;
 }
+
+#profile {
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+#profile:hover {
+  opacity: 0.4;
+  cursor: pointer;
+}
+
+#profile:hover + .upload_icon {
+  opacity: 1;
+}
+
+.input_style_signup {
+  width: 270px !important;
+  margin: 10px auto;
+  padding-bottom: 5px;
+}
+
 .logon_style {
-  margin-top: 5px;
-  width: 200px;
+  width: 270px;
+  background-color: #4e519e !important;
+  border: #4e519e !important;
+}
+
+#close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+#close-btn:hover {
+  cursor: pointer;
 }
 </style>
