@@ -18,7 +18,7 @@ module.exports = {
     pages: {
         login: {
             // page 的入口
-            entry: "src/login/main.js",
+            entry: "src/views/main.js",
             // 模板来源
             template: "public/index.html",
             // 在 dist/index.html 的输出
@@ -48,6 +48,6 @@ module.exports = {
         // 模板会被推导为 `public/subpage.html`
         // 并且如果找不到的话，就回退到 `public/index.html`。
         // 输出文件名会被推导为 `subpage.html`。
-        subpage: "src/login/main.js"
+        subpage: "src/views/main.js"
     }
 }

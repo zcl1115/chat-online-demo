@@ -13,8 +13,8 @@
           <el-input placeholder="请输入密码" v-model="message.pwd" show-password></el-input>
         </el-form-item>
       </el-form>
-      <el-button type="primary" @click="login()" class="login_style">登录</el-button>
-      <el-button type="text" @click="sign_up" class="sign_up_style">注册</el-button>
+      <el-button type="primary" @click="login" class="login_style">登录</el-button>
+      <el-button type="text" @click="signup" class="signup_style">注册</el-button>
     </div>
   </div>
 </template>
@@ -90,8 +90,8 @@ export default {
           }
         });
     },
-    sign_up() {
-      this.$router.push({ path: "/Sign_up" });
+    signup() {
+      this.$router.push({ path: "/Signup" });
     }
   }
 };
@@ -146,7 +146,7 @@ img + span {
   border: #4e519e !important;
 }
 
-.sign_up_style {
+.signup_style {
   width: 270px;
   color: #c9c5c5 !important;
   text-decoration: underline;

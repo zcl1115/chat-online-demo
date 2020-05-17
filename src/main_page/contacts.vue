@@ -81,7 +81,6 @@
   export default {
     data(){
       return {
-        logoURL:require("../assets/logo.png"),
         search_account:'',
         search_name:'',
         search_img_path:'',

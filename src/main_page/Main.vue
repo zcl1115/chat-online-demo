@@ -51,7 +51,7 @@ import setting from "./setting.vue";
 import contacts from "./contacts.vue";
 import { getCookie, setCookie } from "../components/cookieUtil";
 
-const UserDefaultLogoPath = require("../assets/img/DefaultLogo.png");
+const UserDefaultLogoPath = "images/blank.png";
 const GetPersonalInfoURL = "api/setting/GetPersonalInfo";
 const GetPersonalLogoURL = "api/setting/GetPersonalLogo";
 const UserIDCookieKey = "user_account";
@@ -215,22 +215,22 @@ export default {
   }
 
   .LeftAsideMenuDark {
-    background-color: #1d2935;
+    background-color: #0B0B0B;
   }
 
   .MenuItemDark:hover {
-    background-color: rgb(55, 79, 102);
+    background-color: rgb(24, 24, 24);
     color: rgb(220, 220, 220);
   }
 
   .MenuItemDark.is-active {
-    background-color: rgb(65, 91, 118);
+    background-color: #1A1A1A;
     color: rgb(240, 240, 240);
   }
 }
 
 .LeftAsideDark {
-  background-color: #1d2935;
+  background-color: #0B0B0B;
 }
 
 .UserLogoDiv {
@@ -251,6 +251,6 @@ export default {
 }
 
 .UserLogoDivDark {
-  background-color: #1d2935;
+  background-color: #0B0B0B;
 }
 </style>

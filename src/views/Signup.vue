@@ -7,7 +7,7 @@
     </div>
     <div class="form_container_signup">
       <div class="img_container">
-        <img src="blank.png" id="profile" @click="propagate" />
+        <img src="images/blank.png" id="profile" @click="propagate" />
         <i class="el-icon-camera-solid upload_icon"></i>
       </div>
       <div>
@@ -24,7 +24,7 @@
           />
         </form>
       </div>
-      <el-form :model="users" :rules="Sign_up_FormRules">
+      <el-form :model="users" :rules="Signup_FormRules">
         <el-form-item prop="account" class="input_style_signup">
           <el-input placeholder="请输入账号(6-20位的字母数字组合)" v-model="users.account" clearable></el-input>
         </el-form-item>
@@ -38,7 +38,7 @@
           <el-input placeholder="请再次确认密码" v-model="users.passwords" show-password></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="sign_up" class="logon_style">注册</el-button>
+          <el-button type="primary" @click="signup" class="logon_style">注册</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -77,7 +77,7 @@ export default {
         photo: null
       },
       has_error: false,
-      Sign_up_FormRules: {
+      Signup_FormRules: {
         account: [
           { required: true, message: "账号必填！", trigger: "blur" },
           {
@@ -109,7 +109,7 @@ export default {
     };
   },
   methods: {
-    sign_up: function() {
+    signup: function() {
       if (this.has_error) {
         return;
       }
@@ -135,7 +135,7 @@ export default {
         }
       }
       this.axios
-        .post("api/sign_up", format, {
+        .post("api/signup", format, {
           headers: {
             "Content-Type": "multipart/form-data"
           }

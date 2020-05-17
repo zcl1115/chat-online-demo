@@ -20,7 +20,7 @@
           <img :src="people.img_path" class="round_icon" />
           <a class="contact_name">{{people.name}}</a>
           <img
-            src="../assets/point.png"
+            src="images/point.png"
             class="notice"
             v-if="unread_contacts.indexOf(people.contact) !== -1 && contact_account !== people.contact"
           />
@@ -43,7 +43,7 @@
               <span class="message" v-if="message.type === 0">{{message.content}}</span>
               <span class="message" v-if="message.type === 1">
                 <a class="file_name">{{message.content}}</a>
-                <img class="file_icon" src="../assets/download.png" v-on:click="download(message)" />
+                <img class="file_icon" src="icons/download.svg" v-on:click="download(message)" />
               </span>
               <br />
               <br />
@@ -58,7 +58,7 @@
               </div>
               <span class="message" v-if="message.type === 0">{{message.content}}</span>
               <span class="message" v-if="message.type === 1">
-                <img class="file_icon" src="../assets/download.png" v-on:click="download(message)" />
+                <img class="file_icon" src="icons/download.svg" v-on:click="download(message)" />
                 <a class="file_name">{{message.content}}</a>
               </span>
               <br />
@@ -80,17 +80,17 @@
         <div class="function_area" style>
           <img
             class="icon"
-            src="../assets/emoji.svg"
+            src="icons/emoji.svg"
             v-on:click="emoji_picker_isShow = !emoji_picker_isShow"
           />
           <img
             class="icon"
-            src="../assets/upload.svg"
+            src="icons/upload.svg"
             onclick="document.getElementById('upload_clicked').click();"
           />
           <img
                   class="icon"
-                  src="../assets/history.svg"
+                  src="icons/history.svg"
                   v-on:click="show_history()"
           />
           <input type="file" class="upload" id="upload_clicked" v-show="false" @change="uploadFile" />
@@ -116,7 +116,7 @@
 
 <script>
 import { getCookie } from "../components/cookieUtil";
-import emoji_picker from "../components/emoji_picker";
+import emoji_picker from "../components/EmojiPicker";
 import FileSaver from "file-saver";
 import chat_history from "./chat_history.vue";
 
@@ -129,7 +129,6 @@ export default {
     return {
       account: "",
       img_path: "",
-      logoURL: require("../assets/logo.png"),
       contacts: "",
       contact_account: "",
       recent_contacts_list: [],
@@ -355,7 +354,7 @@ export default {
 </script>
 <style>
 .dark_search .el-input__inner {
-  background-color: rgb(44, 62, 80);
+  background-color: #131313;
   color: rgb(220, 220, 220);
 }
 </style>
@@ -365,7 +364,7 @@ export default {
   margin: 0;
 }
 .el_dark {
-  background-color: #3a5169;
+  background-color: #1A1A1A;
 }
 .MiddleAside {
   background-color: rgb(247, 247, 247);
@@ -373,7 +372,7 @@ export default {
 }
 
 .MiddleAsideDark {
-  background-color: rgb(44, 62, 80);
+  background-color: #131313;
 }
 
 .search_area {
@@ -395,7 +394,7 @@ export default {
   float: left;
 }
 .chat_area_dark {
-  background-color: #3a5169;
+  background-color: #1A1A1A;
 }
 
 .friend_name {
@@ -442,7 +441,7 @@ export default {
   font-size: 20px;
 }
 .content_dark {
-  background-color: rgb(65, 91, 118);
+  background-color: #1A1A1A;
   color: rgb(240, 240, 240);
 }
 .content:focus {
@@ -486,7 +485,7 @@ export default {
 }
 
 .contact_dark {
-  background-color: rgb(55, 79, 102);
+  background-color: rgb(24, 24, 24);
   color: rgb(220, 220, 220);
 }
 
@@ -509,7 +508,7 @@ p {
   background-color: white;
 }
 .addclassdark {
-  background-color: rgb(65, 91, 118);
+  background-color: #1A1A1A;
   color: rgb(240, 240, 240);
 }
 .message_box {

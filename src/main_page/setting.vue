@@ -246,12 +246,12 @@ export default {
     }
 
     .MenuItem2Dark {
-      background-color: rgb(60, 84, 108);
+      background-color: #1A1A1A;
       color: rgb(220, 220, 220);
     }
 
     .MenuItem2Dark:hover {
-      background-color: rgb(68, 96, 128);
+      background-color: #4E519E;
       color: rgb(240, 240, 240);
     }
 
@@ -263,7 +263,7 @@ export default {
   }
 
   .MiddleAsideMenuDark {
-    background-color: rgb(44, 62, 80);
+    background-color: #131313;
   }
 
   .MenuItemDark {
@@ -271,13 +271,13 @@ export default {
   }
 
   .MenuItemDark:hover {
-    background-color: rgb(55, 79, 102);
+    background-color: rgb(24, 24, 24);
     color: rgb(220, 220, 220);
   }
 
   .MenuItemDark.is-active,
   .MenuItemDark:focus {
-    background-color: rgb(65, 91, 118);
+    background-color: #1A1A1A;
     color: rgb(240, 240, 240);
   }
 }
@@ -301,6 +301,6 @@ export default {
 }
 
 .MiddleAsideDark {
-  background-color: rgb(44, 62, 80);
+  background-color: #131313;
 }
 </style>

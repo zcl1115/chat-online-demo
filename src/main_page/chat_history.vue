@@ -10,7 +10,7 @@
                         <span class="message" v-if="message.type === '0'">{{message.content}}</span>
                         <span class="message" v-if="message.type === '1'">
                             <a class="file_name">{{message.content}}</a>
-                            <img class="file_icon" src="../assets/download.png" v-on:click="download(message)" />
+                            <img class="file_icon" src="icons/download.svg" v-on:click="download(message)" />
                         </span>
                         <br />
                         <br />
@@ -25,7 +25,7 @@
                         </div>
                         <span class="message" v-if="message.type === '0'">{{message.content}}</span>
                         <span class="message" v-if="message.type === '1'">
-                            <img class="file_icon" src="../assets/download.png" v-on:click="download(message)" />
+                            <img class="file_icon" src="icons/download.svg" v-on:click="download(message)" />
                             <a class="file_name">{{message.content}}</a>
                         </span>
                         <br />
@@ -351,9 +351,9 @@
         outline: none;
     }
     .dark_button{
-        background-color: rgb(44, 62, 80);
+        background-color: #131313;
         color: rgb(220, 220, 220);
-        border-color: rgb(44, 62, 80);
+        border-color: #131313;
     }
     .round_icon {
         width: 40px;
