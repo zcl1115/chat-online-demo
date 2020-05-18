@@ -486,7 +486,7 @@ function DB_helper() {
     //获取申请列表
     this.getApplicationList=function (account,cb) {
         //发给acoount的
-        var sql="select user.name,user.account,user.personal_profile,request.content,request.status " +
+        var sql="select user.name,user.account,user.personal_profile,request.content,request.status,request.request_id " +
             "from request left join user on request.account=user.account where contact_account =?";
         let SQLParam=[account];
         connection.query(sql, SQLParam, function (err, results) {
@@ -499,12 +499,56 @@ function DB_helper() {
         });
 
     }
+
+
     //改变状态
     this.changeApplicationList=function (account,contact_account,status,cb) {
         //发给acoount的
-        var sql="UPDATE request SET status=? WHERE account=? AND contact_account=?;";
+        var sql="UPDATE request SET status=? WHERE account=? AND contact_account=? AND status=0;";
         let SQLParam=[status,account,contact_account];
         connection.query(sql, SQLParam, function (err, results) {
+            if (err) {
+                console.log(err.message);
+            }
+            else{
+                cb(results);
+            }
+        });
+
+    }
+
+    this.changeRefuseApplication=function (id,status,cb) {
+
+        var sql="UPDATE request SET status=? WHERE request_id=?;";
+        let SQLParam=[status,id];
+        connection.query(sql, SQLParam, function (err, results) {
+            if (err) {
+                console.log(err.message);
+            }
+            else{
+                cb(results);
+            }
+        });
+
+    }
+    this.delContact=function (account,contact_account,cb) {
+        //发给acoount的
+        var sql="DELETE FROM contact WHERE user_account=? and contact_account=?";
+        var sql1="UPDATE request SET status=3 WHERE account=? AND contact_account=? AND status!=2";
+        let SQLParam=[account,contact_account];
+        let SQLParam1=[contact_account,account];
+        connection.query(sql, SQLParam, function (err, results) {
+            if (err) {
+                console.log(err.message);
+            }
+        });
+        connection.query(sql, SQLParam1, function (err, results) {
+            if (err) {
+                console.log(err.message);
+            }
+
+        });
+        connection.query(sql1, SQLParam1, function (err, results) {
             if (err) {
                 console.log(err.message);
             }

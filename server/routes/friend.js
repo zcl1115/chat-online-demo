@@ -47,18 +47,22 @@ router.post('/get_app', function(req, res, next){
             tem.account=result[i].account;
             tem.personal_profile=result[i].personal_profile;
             tem.content=result[i].content;
+            tem.id=result[i].request_id;
             if(result[i].status==0)
                 tem.status="待处理";
             else if(result[i].status==1)
                 tem.status="添加成功";
-            else if(result[i].status==0)
+            else if(result[i].status==2)
                 tem.status="已拒绝";
+            else if(result[i].status==3)
+                tem.status="已过期";
             var FilePath = LogoSavePathBase +result[i].account;
             let data = fs.readFileSync(FilePath, (err, data) => {
             });
             tem.img_path = data;
             list.push(tem);
         }
+        list.reverse();
         res.json(list);
     })
 
@@ -70,7 +74,13 @@ router.post('/change_status', function(req, res, next){
     })
 
 });
+router.post('/change_refuse_status', function(req, res, next){
+    //var i=req.body
+    db_helper.changeRefuseApplication( req.body.request_id,2,function (result) {
 
+    })
+
+});
 router.post('/is_contact', function(req, res, next){
     db_helper.isContact(req.body.user_account,req.body.contact_account, function (status) {
         if(status===0){
@@ -95,4 +105,13 @@ router.post('/add_contact', function(req, res, next){
 
 });
 
+router.post('/del_contact', function(req, res, next){
+
+    var a=req.body.account;
+    var b=req.body.contact_account;
+    db_helper.delContact(req.body.account,req.body.contact_account, function (results) {
+        res.json(results.affectedRows);
+    });
+
+});
 module.exports = router;

@@ -35,11 +35,15 @@
         <div class="UserIntroductionDiv">简介：{{ search_personal_profile }}</div>
       </div>
       <el-form label-position="right" label-width="80px">
+      <el-row>
         <el-form-item class="SubmitButtonFormItem" label-width="0">
+          <el-button type="primary" @click="Del_contact()"v-if="!isShow_add_user&&isShow_personal">删除好友</el-button>
           <el-button type="primary" class="SubmitButton" @click="Show_send_message()"v-if="!isShow_add_user&&isShow_personal">发送信息</el-button>
-
           <el-button type="primary" class="SubmitButton" @click="Show_send_application()"v-if="isShow_add_user&&isShow_personal">添加好友</el-button>
         </el-form-item>
+        </el-row>
+
+
       </el-form>
     </div>
  <div v-if="isShow_application" class="send_application">
@@ -54,7 +58,7 @@
     </div>
 
   <div class="application_list" v-if="isShow_new_friend_list">
-    <ul v-for="(item,index) in new_friend"   v-on:click="Select_new_friend(item.name,item.account,item.img_path,item.content,item.status,item.personal_profile,index)" class="application">
+    <ul v-for="(item,index) in new_friend"   v-on:click="Select_new_friend(item.name,item.account,item.img_path,item.content,item.status,item.personal_profile,item.id,index)" class="application">
       <img :src="item.img_path">
         <p><span class="application_name">{{item.name}}</span>请求添加您为好友    </p>
 
@@ -65,8 +69,8 @@
     <img :src="search_img_path">
     <p class="a_name">{{search_name}}</p>
 <p class="a_msg">{{search_content}}</p>
-  <el-button type="primary" v-on:click="Add_friend()" class="add_submit">同意</el-button><el-button type="primary" v-on:click="Refuse_friend()" class="refuse_submit">拒绝</el-button>
-
+  <el-button type="primary" v-on:click="Add_friend()" class="add_submit" v-if="isShow_application_button">同意</el-button><el-button type="primary" v-on:click="Refuse_friend()" class="refuse_submit" v-if="isShow_application_button">拒绝</el-button>
+  <p v-else="isShow_application_button">{{this.request_status}}</p>
 </div>
 
 
@@ -86,6 +90,8 @@
         search_name:'',
         search_img_path:'',
         search_personal_profile:'',
+        request_id:'',
+        request_status:'',
         account:'',
          name:'',
         get_contacts:[],
@@ -98,6 +104,7 @@
         application_msg:[],
         new_friend:[],
         isShow_new_application:false,
+        isShow_application_button:false,
         Index:0,
 
       }
@@ -155,6 +162,7 @@
           this.search_img_path=img_path;
           this.search_personal_profile=personal_profile;
           this.isShow_personal=true;
+          this.isShow_new_application=false;
           this.isShow_ok=false;
         },
         Show_send_message(){
@@ -220,12 +228,11 @@
           this.isShow_ok=true;
           this.isShow_new_friend_list=false;
           this.isShow_new_application=false;
-
           },
         Show_new_friend(){
-          var acoount=this.account
+          var account=this.account
           this.axios.post("api/friend/get_app", this.qs.stringify({
-            account: acoount
+            account: account
           })).then((response) => {
             this.new_friend=[];
             console.log(response.data);
@@ -249,7 +256,21 @@
           this.isShow_new_friend_list=true;
           this.isShow_new_application=false;
         },
-        Select_new_friend(name,account,img_path,content,status,personal_profile,index){
+        Del_contact(){
+          var account=this.account
+          var contact_account=this.search_account
+          this.axios.post("api/friend/del_contact", this.qs.stringify({
+            account:account, contact_account:contact_account
+          })).then((response) => {
+            this.reload();
+          });
+          this.isShow_personal=false;
+          this.isShow_application=false;
+          this.isShow_ok=true;
+          this.isShow_new_friend_list=false;
+          this.isShow_new_application=false;
+        },
+        Select_new_friend(name,account,img_path,content,status,personal_profile,id,index){
             if(status=="添加成功"){
                 this.isShow_new_application=false;
                 this.isShow_personal=false;
@@ -258,12 +279,30 @@
                 this.isShow_new_friend_list=false;
                 this.Select_friend(name,account,img_path,personal_profile);
             }
+            else if(status=="待处理"){
+                this.Index=index;
+                this.search_account=account;
+                this.search_name=name;
+                this.request_id=id;
+                this.request_status=status;
+                this.search_img_path=img_path;
+                this.search_content=content;
+                this.isShow_application_button=true;
+                this.isShow_new_application=true;
+                this.isShow_personal=false;
+                this.isShow_application=false;
+                this.isShow_ok=false;
+                this.isShow_new_friend_list=false;
+            }
             else{
                 this.Index=index;
                 this.search_account=account;
                 this.search_name=name;
+                this.request_id=id;
+                this.request_status=status;
                 this.search_img_path=img_path;
                 this.search_content=content;
+                this.isShow_application_button=false;
                 this.isShow_new_application=true;
                 this.isShow_personal=false;
                 this.isShow_application=false;
@@ -295,7 +334,6 @@
           })).then((response) => {
           });
 
-
         },
         Refuse_friend(){
           this.isShow_personal=false;
@@ -303,6 +341,11 @@
           this.isShow_ok=true;
           this.isShow_new_friend_list=false;
           this.isShow_new_application=false;
+          this.axios.post("api/friend/change_refuse_status", this.qs.stringify({
+           request_id:this.request_id
+           })).then((response) => {
+             });
+
         },
 
 
