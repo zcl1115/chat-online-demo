@@ -267,7 +267,7 @@ function DB_helper() {
         });
     };
     this.getRecentList = function (account, cb) {
-        var sql = 'select recent_chat.contact,user.name,user.img_path,recent_chat.chat_time from user,recent_chat where recent_chat.contact=user.account and recent_chat.account=?';
+       var sql = 'select recent_chat.contact,contact.name,user.img_path,recent_chat.chat_time from user,recent_chat,contact where recent_chat.contact=user.account and recent_chat.contact=contact.contact_account and recent_chat.account=?';
         connection.query(sql, [account], function (err, results) {
             if (err) {
                 console.log(err.message);
@@ -421,7 +421,7 @@ function DB_helper() {
         });
     };
     this.getContacts = function (account, cb) {
-        var sql = 'select account,name,img_path,personal_profile from user where account in (select contact_account from contact where user_account =?);';
+        var sql = 'select account,user.name as u_name,img_path,personal_profile,contact.name as f_name from user,contact where contact.user_account=?and user.account=contact.contact_account;';
         connection.query(sql, [account], function (err, results) {
             if (err) {
                 console.log(err.message);
@@ -431,7 +431,7 @@ function DB_helper() {
         });
     };
      this.getUser = function (account, cb) {
-        var sql = 'select account,name,img_path,personal_profile from user where account =?;';
+         var sql = 'select account,name as f_name,name as u_name,img_path,personal_profile from user where account =?;';
         connection.query(sql, [account], function (err, results) {
             console.log(results);
             if (err) {
@@ -560,5 +560,16 @@ function DB_helper() {
         });
 
     }
-};
+    this.getContact = function (user_account,str, cb) {
+        var sql = 'select account,user.name as u_name,img_path,personal_profile,contact.name as f_name from user,contact where contact.user_account=?and user.account=contact.contact_account and (contact.name=? or user.name=? or user.account=?);';
+        let SQLParam=[user_account,str,str,str];
+        connection.query(sql, SQLParam, function (err, results) {
+            if (err) {
+                console.log(err.message);
+            }
+            else{
+                cb(results);}
+        });
+    }
+}
 module.exports = DB_helper;
