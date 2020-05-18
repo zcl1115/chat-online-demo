@@ -5,12 +5,14 @@
         <el-input class="search_key"
                   placeholder="搜索联系人"
                   suffix-icon="el-icon-search"
+                  v-model="search_str"
+                  @keyup.enter.native="Search_contact()"
                  >
         </el-input>
         <el-input
                 class="search_key"
                   placeholder="添加好友"
-                  suffix-icon=""
+                  suffix-icon="el-icon-search"
                    v-model="add_account"
                 @keyup.enter.native="Search_user()"
                >
@@ -18,9 +20,9 @@
       </div>
       <div v-on:click="Show_new_friend()" class="new_friend">好友申请</div>
      <div class="contact_list">
-       <ul v-for="item in get_contacts" v-bind:key="item.account" v-on:click="Select_friend(item.name,item.account,item.img_path,item.personal_profile)" class="contact">
+       <ul v-for="item in get_contacts" v-bind:key="item.account" v-on:click="Select_friend(item.f_name,item.u_name,item.account,item.img_path,item.personal_profile)" class="contact">
          <img :src="item.img_path" class="round_icon">
-         <a class="contact_name">{{item.name}}</a>
+         <a class="contact_name">{{item.f_name}}</a>
        </ul>
      </div>
     </el-aside>
@@ -32,14 +34,16 @@
       <div class="InfoDiv" :class="{InfoDivDark: IsDarkModeProp}">
         <div class="UserIDDiv">帐号：{{search_account}}</div>
         <div class="UserNameDiv">昵称：{{search_name}}</div>
+        <div class="UserNameDiv" v-if="!isShow_add_user&&isShow_personal">备注：{{search_f_name}}</div>
         <div class="UserIntroductionDiv">简介：{{ search_personal_profile }}</div>
       </div>
       <el-form label-position="right" label-width="80px">
       <el-row>
         <el-form-item class="SubmitButtonFormItem" label-width="0">
           <el-button type="primary" @click="Del_contact()" v-if="!isShow_add_user&&isShow_personal">删除好友</el-button>
-          <el-button type="primary" class="SubmitButton" @click="Show_send_message()" v-if="!isShow_add_user&&isShow_personal">发送信息</el-button>
-          <el-button type="primary" class="SubmitButton" @click="Show_send_application()" v-if="isShow_add_user&&isShow_personal">添加好友</el-button>
+          <el-button type="primary" class="SubmitButton_send" @click="Show_send_message()" v-if="!isShow_add_user&&isShow_personal">发送信息</el-button>
+          <el-button type="primary" class="SubmitButton_add" @click="Show_send_application()" v-if="isShow_add_user&&isShow_personal">添加好友</el-button>
+          <el-button type="primary" class="SubmitButton_delete"@click="Del_contact()" v-if="!isShow_add_user&&isShow_personal">删除好友</el-button>
         </el-form-item>
         </el-row>
 
@@ -105,6 +109,8 @@
         isShow_new_application:false,
         isShow_application_button:false,
         Index:0,
+        search_f_name:'',
+          search_str:'',
 
       }
     },
@@ -156,14 +162,15 @@
           });
 
         },
-        Select_friend(name,account,img_path,personal_profile){
+       Select_friend(f_name,u_name,account,img_path,personal_profile){
           this.search_account=account;
-          this.search_name=name;
+          this.search_name=u_name;
           this.search_img_path=img_path;
           this.search_personal_profile=personal_profile;
           this.isShow_personal=true;
           this.isShow_new_application=false;
           this.isShow_ok=false;
+          this.search_f_name=f_name;
         },
         Show_send_message(){
 
@@ -359,6 +366,28 @@
              });
 
         },
+        Search_contact(){
+              var str=this.search_str;
+              this.axios.post("api/friend/get_contact", this.qs.stringify({
+                  user_account: this.account, str:str
+              })).then((response) => {
+                  console.log(response.data);
+                  this.get_contacts=response.data;
+                  let i;
+                  for (i in this.get_contacts) {
+                      var FileLength = this.get_contacts[i].img_path.data.length;
+                      var Array1 = new ArrayBuffer(FileLength);
+                      var Array2 = new Uint8Array(Array1);
+
+                      for (var j = 0; j < FileLength; j++) {
+                          Array2[j] = this.get_contacts[i].img_path.data[j];
+                      }
+                      var FileBlob = new Blob([Array2], { type: "" });
+                      this.get_contacts[i].img_path = URL.createObjectURL(FileBlob);
+                  }
+              });
+
+          },
 
 
   },
@@ -479,14 +508,27 @@
   .SubmitButtonFormItem {
     margin: 0;
 
-  .SubmitButton {
+ .SubmitButton_send {
     background-color: rgb(78, 81, 158);
     position: absolute;
-    left: 50%;
+    left: 25%;
     transform: translate(-50%);
     border: none;
   }
-
+  .SubmitButton_delete {
+      background-color: rgb(78, 81, 158);
+      position: absolute;
+      transform: translate(-50%);
+      left: 75%;
+      border: none;
+  }
+  .SubmitButton_add {
+      background-color: rgb(78, 81, 158);
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%);
+      border: none;
+  }
   .SetLogoButton {
     background-color: rgb(78, 81, 158);
     position: absolute;
