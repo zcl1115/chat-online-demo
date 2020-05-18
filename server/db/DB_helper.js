@@ -267,7 +267,7 @@ function DB_helper() {
         });
     };
     this.getRecentList = function (account, cb) {
-       var sql = 'select recent_chat.contact,contact.name,user.img_path,recent_chat.chat_time from user,recent_chat,contact where recent_chat.contact=user.account and recent_chat.contact=contact.contact_account and recent_chat.account=?';
+       var sql = 'select recent_chat.contact,user.name,user.img_path,recent_chat.chat_time from user,recent_chat where recent_chat.contact=user.account and recent_chat.account=?';
         connection.query(sql, [account], function (err, results) {
             if (err) {
                 console.log(err.message);
