@@ -37,9 +37,9 @@
       <el-form label-position="right" label-width="80px">
       <el-row>
         <el-form-item class="SubmitButtonFormItem" label-width="0">
-          <el-button type="primary" @click="Del_contact()"v-if="!isShow_add_user&&isShow_personal">删除好友</el-button>
-          <el-button type="primary" class="SubmitButton" @click="Show_send_message()"v-if="!isShow_add_user&&isShow_personal">发送信息</el-button>
-          <el-button type="primary" class="SubmitButton" @click="Show_send_application()"v-if="isShow_add_user&&isShow_personal">添加好友</el-button>
+          <el-button type="primary" @click="Del_contact()" v-if="!isShow_add_user&&isShow_personal">删除好友</el-button>
+          <el-button type="primary" class="SubmitButton" @click="Show_send_message()" v-if="!isShow_add_user&&isShow_personal">发送信息</el-button>
+          <el-button type="primary" class="SubmitButton" @click="Show_send_application()" v-if="isShow_add_user&&isShow_personal">添加好友</el-button>
         </el-form-item>
         </el-row>
 
