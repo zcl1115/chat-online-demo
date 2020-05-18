@@ -1,20 +1,20 @@
 <template>
-  <div class="main">
+  <div class="main_login">
     <div class="logo_part">
       <img src="icons/dove.svg" style="width:40px;height:40px" />
       <span>咕咕报</span>
     </div>
-    <div class="form_container">
+    <div class="form_container_login">
       <el-form :model="message" :rules="LoginFormRules">
-        <el-form-item prop="account" class="input_style">
+        <el-form-item prop="account" class="input_style_login">
           <el-input placeholder="请输入账号" v-model="message.account" clearable></el-input>
         </el-form-item>
-        <el-form-item prop="pwd" class="input_style">
+        <el-form-item prop="pwd" class="input_style_login">
           <el-input placeholder="请输入密码" v-model="message.pwd" show-password></el-input>
         </el-form-item>
       </el-form>
-      <el-button type="primary" @click="login()" class="login_style">登录</el-button>
-      <el-button type="text" @click="sign_up" class="sign_up_style">注册</el-button>
+      <el-button type="primary" @click="login" class="login_style">登录</el-button>
+      <el-button type="text" @click="signup" class="signup_style">注册</el-button>
     </div>
   </div>
 </template>
@@ -90,8 +90,8 @@ export default {
           }
         });
     },
-    sign_up() {
-      this.$router.push({ path: "/Sign_up" });
+    signup() {
+      this.$router.push({ path: "/Signup" });
     }
   }
 };
@@ -106,7 +106,7 @@ body {
   background-color: #f7f7f7;
 }
 
-.main {
+.main_login {
   text-align: center;
   margin-top: 150px;
 }
@@ -122,7 +122,7 @@ img + span {
   padding-left: 8px;
 }
 
-.form_container {
+.form_container_login {
   background-color: white;
   width: 350px;
   height: 250px;
@@ -130,20 +130,23 @@ img + span {
   border-radius: 5px;
   margin-top: 10px;
   padding-top: 40px;
+  box-shadow: 2px 2px rgb(233, 233, 233);
 }
 
-.input_style {
+.input_style_login {
   width: 270px;
   margin: 10px auto;
   padding-bottom: 10px;
 }
+
 .login_style {
   width: 270px;
   margin-bottom: 10px !important;
   background-color: #4e519e !important;
   border: #4e519e !important;
 }
-.sign_up_style {
+
+.signup_style {
   width: 270px;
   color: #c9c5c5 !important;
   text-decoration: underline;

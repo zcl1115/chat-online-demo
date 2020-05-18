@@ -116,6 +116,6 @@ export default {
 }
 
 .BGCDark {
-  background-color: #3a5169;
+  background-color: #1A1A1A;
 }
 </style>

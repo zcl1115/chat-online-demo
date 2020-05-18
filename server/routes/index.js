@@ -32,7 +32,7 @@ router.post('/login', function (req, res) {
     }
   });
 });
-router.post('/sign_up', function (req, res) {
+router.post('/signup', function (req, res) {
   var uploadDir = './UserLogos/';
   var form = new formidable.IncomingForm();
   form.encoding = 'utf-8';

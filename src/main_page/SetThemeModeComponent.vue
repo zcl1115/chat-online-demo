@@ -11,14 +11,14 @@
           :class="{ButtonDark: IsDarkModeProp}"
           @click="ModeButtonClicked(false)"
         >
-          <img src="../assets/img/DayMode.svg" />
+          <img src="images/light-theme.png" />
         </el-button>
         <el-button
           class="ModeButton"
           @click="ModeButtonClicked(true)"
           :class="{ButtonDark: IsDarkModeProp}"
         >
-          <img src="../assets/img/DarkMode.svg" />
+          <img src="images/dark-theme.png" />
         </el-button>
       </el-container>
     </div>

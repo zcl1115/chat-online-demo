@@ -1,0 +1,7 @@
+# Git doesn't permit EMPTY folder to be listed.
+# gitignore file here is a hack way to keep this EMPTY folder.
+
+# Ignore everything in this directory
+*
+# Except this file
+!.gitignore

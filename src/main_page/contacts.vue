@@ -58,7 +58,7 @@
     </div>
 
   <div class="application_list" v-if="isShow_new_friend_list">
-    <ul v-for="(item,index) in new_friend"   v-on:click="Select_new_friend(item.name,item.account,item.img_path,item.content,item.status,item.personal_profile,item.id,index)" class="application">
+    <ul v-for="(item,index) in new_friend" v-bind:key="index" v-on:click="Select_new_friend(item.name,item.account,item.img_path,item.content,item.status,item.personal_profile,item.id,index)" class="application">
       <img :src="item.img_path">
         <p><span class="application_name">{{item.name}}</span>请求添加您为好友    </p>
 
@@ -85,7 +85,6 @@
   export default {
     data(){
       return {
-        logoURL:require("../assets/logo.png"),
         search_account:'',
         search_name:'',
         search_img_path:'',
@@ -329,15 +328,21 @@
           this.axios.post("api/friend/change_status", this.qs.stringify({
              user_account: this.account,contact_account:this.search_account,status:1
            })).then((response) => {
+             // Just to prevent eslint error
+             console.log(response);
            });
           this.axios.post("api/friend/add_contact", this.qs.stringify({
             user_account: this.account,contact_account:this.search_account,name:this.search_name
           })).then((response) => {
+            // Just to prevent eslint error
+            console.log(response);
           });
 
           this.axios.post("api/friend/add_contact", this.qs.stringify({
             user_account: this.search_account,contact_account:this.account,name:this.name
           })).then((response) => {
+            // Just to prevent eslint error
+            console.log(response);
           });
 
           this.init_contacts();
