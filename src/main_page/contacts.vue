@@ -123,6 +123,7 @@
        this.init_name();
      },
      mounted(){
+
     },
       methods:{
 
@@ -262,13 +263,19 @@
           this.axios.post("api/friend/del_contact", this.qs.stringify({
             account:account, contact_account:contact_account
           })).then((response) => {
-            this.reload();
+              this.init_contacts();
+              this.isShow_personal=false;
+              this.isShow_application=false;
+              this.isShow_ok=true;
+              this.isShow_new_friend_list=false;
+              this.isShow_new_application=false;
           });
-          this.isShow_personal=false;
-          this.isShow_application=false;
-          this.isShow_ok=true;
-          this.isShow_new_friend_list=false;
-          this.isShow_new_application=false;
+          this.axios.post("api/friend/del_History", this.qs.stringify({
+              account:account, contact_account:contact_account
+            })).then((response) => {
+
+            });
+
         },
         Select_new_friend(name,account,img_path,content,status,personal_profile,id,index){
             if(status=="添加成功"){
@@ -328,12 +335,12 @@
           })).then((response) => {
           });
 
-
           this.axios.post("api/friend/add_contact", this.qs.stringify({
             user_account: this.search_account,contact_account:this.account,name:this.name
           })).then((response) => {
           });
 
+          this.init_contacts();
         },
         Refuse_friend(){
           this.isShow_personal=false;

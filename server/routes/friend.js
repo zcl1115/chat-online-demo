@@ -107,11 +107,56 @@ router.post('/add_contact', function(req, res, next){
 
 router.post('/del_contact', function(req, res, next){
 
-    var a=req.body.account;
-    var b=req.body.contact_account;
     db_helper.delContact(req.body.account,req.body.contact_account, function (results) {
         res.json(results.affectedRows);
     });
 
 });
+
+router.post('/del_History', function(req, res, next){
+    db_helper.delRecentList(req.body.account,req.body.contact_account, function (results) {
+
+    });
+
+    var path='./ChatHistory/' + req.body.account + " " + req.body.contact_account;
+    if (fs.existsSync(path))
+    {
+        if (fs.statSync(path).isDirectory()) {
+            files = fs.readdirSync(path);
+            files.forEach(function (file, index) {
+                var curPath = path + "/" + file;
+                if (fs.statSync(curPath).isDirectory()) {
+                    deleteFolder(curPath);
+                } else {
+                    fs.unlinkSync(curPath);
+                }
+            });
+            fs.rmdirSync(path);
+        } else {
+            fs.unlinkSync(path);
+        }
+    }
+    path='./ChatHistory/' + req.body.contact_account + " " + req.body.account;
+    if (fs.existsSync(path))
+    {
+        if (fs.statSync(path).isDirectory()) {
+            files = fs.readdirSync(path);
+            files.forEach(function (file, index) {
+                var curPath = path + "/" + file;
+                if (fs.statSync(curPath).isDirectory()) {
+                    deleteFolder(curPath);
+                } else {
+                    fs.unlinkSync(curPath);
+                }
+            });
+            fs.rmdirSync(path);
+        } else {
+            fs.unlinkSync(path);
+        }
+    }
+
+
+});
 module.exports = router;
+
+

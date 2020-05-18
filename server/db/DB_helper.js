@@ -287,6 +287,20 @@ function DB_helper() {
             if (cb != null) return cb(result);
         });
     }
+    this.delRecentList = function (account, contact_account, cb) {
+        var modSql = 'DELETE FROM recent_chat WHERE (account=? AND contact=?) OR (account=? AND contact=?);';
+        var modSqlParams = [account,contact_account,contact_account,account];
+        connection.query(modSql, modSqlParams, function (err, result) {
+            if (err) {
+                console.log(err.message);
+            }
+            else{
+                if (cb != null) return cb(result);
+            }
+
+        });
+    }
+
     this.storeOfflineMessage = function (account_from, account_to, type, message, time, cb) {
         var sql = 'INSERT INTO offline_chat ' +
             '(account_from, account_to, type, message, time) ' +
