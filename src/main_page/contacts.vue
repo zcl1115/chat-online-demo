@@ -290,7 +290,7 @@
                 this.isShow_application=false;
                 this.isShow_ok=false;
                 this.isShow_new_friend_list=false;
-                this.Select_friend(name,account,img_path,personal_profile);
+                this.Select_friend(name,name,account,img_path,personal_profile);
             }
             else if(status=="待处理"){
                 this.Index=index;
