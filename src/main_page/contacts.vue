@@ -170,6 +170,7 @@
           this.isShow_personal=true;
           this.isShow_new_application=false;
           this.isShow_ok=false;
+           this.isShow_new_friend_list=false;
           this.search_f_name=f_name;
         },
         Show_send_message(){
