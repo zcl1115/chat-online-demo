@@ -171,6 +171,15 @@ router.post('/del_History', function(req, res, next){
 
 
 });
+
+router.post('/change_remark', function(req, res, next){
+    db_helper.changeRemark(req.body.contact_account,req.body.account,req.body.str, function (results) {
+        res.json(results.affectedRows);
+    });
+
+
+
+});
 module.exports = router;
 
 

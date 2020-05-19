@@ -34,16 +34,23 @@
       <div class="InfoDiv" :class="{InfoDivDark: IsDarkModeProp}">
         <div class="UserIDDiv">帐号：{{search_account}}</div>
         <div class="UserNameDiv">昵称：{{search_name}}</div>
-        <div class="UserNameDiv" v-if="!isShow_add_user&&isShow_personal">备注：{{search_f_name}}</div>
+        <div class="UserNameDiv" v-if="!change_remark&&!isShow_add_user&&isShow_personal">备注：{{search_f_name}}
+        <el-button type="primary" @click="Change_remark_status()">修改备注</el-button></div>
+        <div class="UserNameDiv" v-if="change_remark&&!isShow_add_user&&isShow_personal">
+          <el-input class="remark_key"
+            v-model="search_f_name"
+            @keyup.enter.native="Change_remark()"
+           >
+          </el-input>
+         </div>
         <div class="UserIntroductionDiv">简介：{{ search_personal_profile }}</div>
       </div>
       <el-form label-position="right" label-width="80px">
       <el-row>
         <el-form-item class="SubmitButtonFormItem" label-width="0">
-          <el-button type="primary" @click="Del_contact()" v-if="!isShow_add_user&&isShow_personal">删除好友</el-button>
           <el-button type="primary" class="SubmitButton_send" @click="Show_send_message()" v-if="!isShow_add_user&&isShow_personal">发送信息</el-button>
           <el-button type="primary" class="SubmitButton_add" @click="Show_send_application()" v-if="isShow_add_user&&isShow_personal">添加好友</el-button>
-          <el-button type="primary" class="SubmitButton_delete"@click="Del_contact()" v-if="!isShow_add_user&&isShow_personal">删除好友</el-button>
+          <el-button type="primary" class="SubmitButton_delete" @click="Del_contact()" v-if="!isShow_add_user&&isShow_personal">删除好友</el-button>
         </el-form-item>
         </el-row>
 
@@ -74,7 +81,7 @@
     <p class="a_name">{{search_name}}</p>
 <p class="a_msg">{{search_content}}</p>
   <el-button type="primary" v-on:click="Add_friend()" class="add_submit" v-if="isShow_application_button">同意</el-button><el-button type="primary" v-on:click="Refuse_friend()" class="refuse_submit" v-if="isShow_application_button">拒绝</el-button>
-  <p v-else="isShow_application_button">{{this.request_status}}</p>
+  <p v-else>{{this.request_status}}</p>
 </div>
 
 
@@ -110,7 +117,8 @@
         isShow_application_button:false,
         Index:0,
         search_f_name:'',
-          search_str:'',
+        search_str:'',
+        change_remark:false,
 
       }
     },
@@ -141,9 +149,8 @@
           });
         },
         init_contacts(){
-          var id=this.account;
           this.axios.post("api/friend/get_contacts", this.qs.stringify({
-            account: id
+            account: this.account
           })).then((response) => {
             console.log(response.data);
             this.get_contacts=response.data;
@@ -174,7 +181,6 @@
           this.search_f_name=f_name;
         },
         Show_send_message(){
-
           var time = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
           var user_account=this.account;
           var contact_account=this.search_account;
@@ -238,9 +244,8 @@
           this.isShow_new_application=false;
           },
         Show_new_friend(){
-          var account=this.account
           this.axios.post("api/friend/get_app", this.qs.stringify({
-            account: account
+            account: this.account
           })).then((response) => {
             this.new_friend=[];
             console.log(response.data);
@@ -265,11 +270,9 @@
           this.isShow_new_application=false;
         },
         Del_contact(){
-          var account=this.account
-          var contact_account=this.search_account
           this.axios.post("api/friend/del_contact", this.qs.stringify({
-            account:account, contact_account:contact_account
-          })).then((response) => {
+            account:this.account, contact_account:this.search_account
+          })).then(() => {
               this.init_contacts();
               this.isShow_personal=false;
               this.isShow_application=false;
@@ -278,8 +281,8 @@
               this.isShow_new_application=false;
           });
           this.axios.post("api/friend/del_History", this.qs.stringify({
-              account:account, contact_account:contact_account
-            })).then((response) => {
+              account:this.account, contact_account:this.search_account
+            })).then(() => {
 
             });
 
@@ -345,7 +348,6 @@
             // Just to prevent eslint error
             console.log(response);
           });
-
           this.axios.post("api/friend/add_contact", this.qs.stringify({
             user_account: this.search_account,contact_account:this.account,name:this.name
           })).then((response) => {
@@ -363,14 +365,13 @@
           this.isShow_new_application=false;
           this.axios.post("api/friend/change_refuse_status", this.qs.stringify({
            request_id:this.request_id
-           })).then((response) => {
+           })).then(() => {
              });
 
         },
         Search_contact(){
-              var str=this.search_str;
               this.axios.post("api/friend/get_contact", this.qs.stringify({
-                  user_account: this.account, str:str
+                  user_account: this.account, str:this.search_str
               })).then((response) => {
                   console.log(response.data);
                   this.get_contacts=response.data;
@@ -389,6 +390,19 @@
               });
 
           },
+          Change_remark_status(){
+              this.change_remark=true;
+          },
+          Change_remark(){
+            this.axios.post("api/friend/change_remark", this.qs.stringify({
+                  account:this.account, contact_account:this.search_account,str:this.search_f_name
+              })).then(() => {
+                this.change_remark=false;
+                this.init_contacts();
+              });
+          }
+
+
 
 
   },

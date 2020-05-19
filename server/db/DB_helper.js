@@ -571,5 +571,16 @@ function DB_helper() {
                 cb(results);}
         });
     }
+    this.changeRemark=function (contact_account,account,str, cb) {
+        var sql = 'UPDATE contact SET name=? WHERE user_account=? AND contact_account=?';
+        let SQLParam=[str,account,contact_account];
+        connection.query(sql, SQLParam, function (err, results) {
+            if (err) {
+                console.log(err.message);
+            }
+            else{
+                cb(results);}
+        });
+    }
 }
 module.exports = DB_helper;
