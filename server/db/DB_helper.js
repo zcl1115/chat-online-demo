@@ -551,6 +551,12 @@ function DB_helper() {
             }
 
         });
+        connection.query(sql1, SQLParam, function (err, results) {
+            if (err) {
+                console.log(err.message);
+            }
+
+        });
         connection.query(sql1, SQLParam1, function (err, results) {
             if (err) {
                 console.log(err.message);
