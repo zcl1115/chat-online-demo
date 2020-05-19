@@ -145,7 +145,7 @@
             account: this.account
           })).then((response) => {
             var temp=response.data;
-            this.name=temp[0].name;
+            this.name=temp[0].u_name;
           });
         },
         init_contacts(){
