@@ -88,6 +88,22 @@ router.post('/change_status', function(req, res, next){
     })
 
 });
+router.post('/get_status', function(req, res, next){
+
+    db_helper.getAplicationStatus( req.body.id,function (result) {
+        if(result[0].status==0)
+            result[0].status="待处理";
+        else if(result[0].status==1)
+            result[0].status="添加成功";
+        else if(result[0].status==2)
+            result[0].status="已拒绝";
+        else if(result[0].status==3)
+            result[0].status="已过期";
+        res.json(result);
+        console.log("aa");
+    })
+
+});
 router.post('/change_refuse_status', function(req, res, next){
     //var i=req.body
     db_helper.changeRefuseApplication( req.body.request_id,2,function (result) {

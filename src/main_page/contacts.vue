@@ -69,7 +69,7 @@
     </div>
 
   <div class="application_list" v-if="isShow_new_friend_list">
-    <ul v-for="(item,index) in new_friend" v-bind:key="index" v-on:click="Select_new_friend(item.name,item.account,item.img_path,item.content,item.status,item.personal_profile,item.id,index)" class="application">
+    <ul v-for="(item,index) in new_friend" v-bind:key="index" v-on:click="Select_new_friend(item.name,item.account,item.img_path,item.content,item.personal_profile,item.id,index)" class="application">
       <img :src="item.img_path">
         <p><span class="application_name">{{item.name}}</span>请求添加您为好友    </p>
 
@@ -243,8 +243,8 @@
           this.isShow_new_friend_list=false;
           this.isShow_new_application=false;
           },
-        Show_new_friend(){
-          this.axios.post("api/friend/get_app", this.qs.stringify({
+          init_applicationlist(){
+            this.axios.post("api/friend/get_app", this.qs.stringify({
             account: this.account
           })).then((response) => {
             this.new_friend=[];
@@ -263,6 +263,9 @@
                 this.new_friend.push(nf[i]);
             }
           });
+          },
+        Show_new_friend(){
+          this.init_applicationlist();
           this.isShow_personal=false;
           this.isShow_application=false;
           this.isShow_ok=false;
@@ -287,45 +290,58 @@
             });
 
         },
-        Select_new_friend(name,account,img_path,content,status,personal_profile,id,index){
-            if(status=="添加成功"){
-                this.isShow_new_application=false;
-                this.isShow_personal=false;
-                this.isShow_application=false;
-                this.isShow_ok=false;
-                this.isShow_new_friend_list=false;
-                this.Select_friend(name,name,account,img_path,personal_profile);
-            }
-            else if(status=="待处理"){
-                this.Index=index;
-                this.search_account=account;
-                this.search_name=name;
-                this.request_id=id;
-                this.request_status=status;
-                this.search_img_path=img_path;
-                this.search_content=content;
-                this.isShow_application_button=true;
-                this.isShow_new_application=true;
-                this.isShow_personal=false;
-                this.isShow_application=false;
-                this.isShow_ok=false;
-                this.isShow_new_friend_list=false;
-            }
-            else{
-                this.Index=index;
-                this.search_account=account;
-                this.search_name=name;
-                this.request_id=id;
-                this.request_status=status;
-                this.search_img_path=img_path;
-                this.search_content=content;
-                this.isShow_application_button=false;
-                this.isShow_new_application=true;
-                this.isShow_personal=false;
-                this.isShow_application=false;
-                this.isShow_ok=false;
-                this.isShow_new_friend_list=false;
-            }
+        Select_new_friend(name,account,img_path,content,personal_profile,id,index){
+            var status="";
+            this.axios.post("api/friend/get_status", this.qs.stringify({
+              id:id
+            })).then((response) => {
+               console.log(response.data);
+               var re=response.data;
+               status=re[0].status;
+               console.log(status);
+               if(status=="添加成功"){
+               this.isShow_new_application=false;
+               this.isShow_personal=false;
+               this.isShow_application=false;
+               this.isShow_ok=false;
+               this.isShow_new_friend_list=false;
+               this.isShow_add_user=false;
+               this.Select_friend(name,name,account,img_path,personal_profile);
+           }
+           else if(status=="待处理"){
+               this.Index=index;
+               this.search_account=account;
+               this.search_name=name;
+               this.request_id=id;
+               this.request_status=status;
+               this.search_img_path=img_path;
+               this.search_content=content;
+               this.isShow_application_button=true;
+               this.isShow_new_application=true;
+               this.isShow_personal=false;
+               this.isShow_application=false;
+               this.isShow_ok=false;
+               this.isShow_new_friend_list=false;
+               this.isShow_add_user=false;
+           }
+           else{
+               this.Index=index;
+               this.search_account=account;
+               this.search_name=name;
+               this.request_id=id;
+               this.request_status=status;
+               this.search_img_path=img_path;
+               this.search_content=content;
+               this.isShow_application_button=false;
+               this.isShow_new_application=true;
+               this.isShow_personal=false;
+               this.isShow_application=false;
+               this.isShow_ok=false;
+               this.isShow_new_friend_list=false;
+               this.isShow_add_user=false;
+           }
+           });
+
 
 
 
@@ -341,6 +357,12 @@
            })).then((response) => {
              // Just to prevent eslint error
              console.log(response);
+           });
+           this.axios.post("api/friend/change_status", this.qs.stringify({
+            contact_account: this.account,user_account:this.search_account,status:1
+           })).then((response) => {
+            // Just to prevent eslint error
+            console.log(response);
            });
           this.axios.post("api/friend/add_contact", this.qs.stringify({
             user_account: this.account,contact_account:this.search_account,name:this.search_name

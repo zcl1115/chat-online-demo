@@ -504,11 +504,26 @@ function DB_helper() {
             }
         });
     };
+
     //改变状态
     this.changeApplicationList=function (account,contact_account,status,cb) {
         //发给acoount的
         var sql="UPDATE request SET status=? WHERE account=? AND contact_account=? AND status=0;";
         let SQLParam=[status,account,contact_account];
+        connection.query(sql, SQLParam, function (err, results) {
+            if (err) {
+                console.log(err.message);
+            }
+            else{
+                cb(results);
+            }
+        });
+
+    };
+    this.getAplicationStatus=function (id,cb) {
+        //发给acoount的
+        var sql="select status from request where request_id=?;";
+        let SQLParam=[id];
         connection.query(sql, SQLParam, function (err, results) {
             if (err) {
                 console.log(err.message);
