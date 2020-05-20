@@ -35,7 +35,12 @@
         <div class="UserIDDiv">帐号：{{search_account}}</div>
         <div class="UserNameDiv">昵称：{{search_name}}</div>
         <div class="UserNameDiv" v-if="!change_remark&&!isShow_add_user&&isShow_personal">备注：{{search_f_name}}
-        <el-button type="primary" @click="Change_remark_status()">修改备注</el-button></div>
+        <img
+            class="icon"
+            src="icons/change.svg"
+            @click="Change_remark_status()"
+          />
+        </div>
         <div class="UserNameDiv" v-if="change_remark&&!isShow_add_user&&isShow_personal">
           <el-input class="remark_key"
             v-model="search_f_name"
@@ -140,7 +145,7 @@
     },
       methods:{
 
-      init_name(){
+        init_name(){
           this.axios.post("api/friend/get_user", this.qs.stringify({
             account: this.account
           })).then((response) => {
@@ -148,6 +153,7 @@
             this.name=temp[0].u_name;
           });
         },
+
         init_contacts(){
           this.axios.post("api/friend/get_contacts", this.qs.stringify({
             account: this.account
@@ -167,9 +173,9 @@
               this.get_contacts[i].img_path = URL.createObjectURL(FileBlob);
             }
           });
-
         },
-       Select_friend(f_name,u_name,account,img_path,personal_profile){
+
+        Select_friend(f_name,u_name,account,img_path,personal_profile){
           this.search_account=account;
           this.search_name=u_name;
           this.search_img_path=img_path;
@@ -179,7 +185,10 @@
           this.isShow_ok=false;
            this.isShow_new_friend_list=false;
           this.search_f_name=f_name;
+          this.change_remark=false;
+
         },
+
         Show_send_message(){
           var time = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
           var user_account=this.account;
@@ -191,9 +200,9 @@
             this.$emit("skip_chatting",{contact:this.search_account});
           });
           this.isShow_ok=false;
-
         },
-         Search_user(){
+
+        Search_user(){
           this.search_account=this.add_account;
           var id=this.search_account;
           this.axios.post("api/friend/get_user", this.qs.stringify({
@@ -214,7 +223,7 @@
               this.get_contacts[i].img_path = URL.createObjectURL(FileBlob);
             }
 
-          });
+         });
           this.axios.post("api/friend/is_contact", this.qs.stringify({
             user_account: this.account,contact_account:id
           })).then((response) => {
@@ -226,6 +235,7 @@
           this.isShow_new_friend_list=false;
           this.isShow_new_application=false;
         },
+
         Show_send_application() {
           this.isShow_personal=false;
           this.isShow_application=true;
@@ -234,6 +244,7 @@
           this.isShow_new_application=false;
 
         },
+
         Send_application(){
           var message = document.getElementById("add_message").value;
           this.$socket.emit('sendApplication', {'to': this.search_account, 'message': message});
@@ -263,7 +274,8 @@
                 this.new_friend.push(nf[i]);
             }
           });
-          },
+        },
+
         Show_new_friend(){
           this.init_applicationlist();
           this.isShow_personal=false;
@@ -272,6 +284,7 @@
           this.isShow_new_friend_list=true;
           this.isShow_new_application=false;
         },
+
         Del_contact(){
           this.axios.post("api/friend/del_contact", this.qs.stringify({
             account:this.account, contact_account:this.search_account
@@ -290,6 +303,7 @@
             });
 
         },
+
         Select_new_friend(name,account,img_path,content,personal_profile,id,index){
             var status="";
             this.axios.post("api/friend/get_status", this.qs.stringify({
@@ -341,11 +355,8 @@
                this.isShow_add_user=false;
            }
            });
-
-
-
-
         },
+
         Add_friend(){
           this.isShow_personal=false;
           this.isShow_application=false;
@@ -379,6 +390,7 @@
 
           this.init_contacts();
         },
+
         Refuse_friend(){
           this.isShow_personal=false;
           this.isShow_application=false;
@@ -389,8 +401,8 @@
            request_id:this.request_id
            })).then(() => {
              });
-
         },
+
         Search_contact(){
               this.axios.post("api/friend/get_contact", this.qs.stringify({
                   user_account: this.account, str:this.search_str
@@ -411,21 +423,20 @@
                   }
               });
 
-          },
-          Change_remark_status(){
-              this.change_remark=true;
-          },
-          Change_remark(){
-            this.axios.post("api/friend/change_remark", this.qs.stringify({
-                  account:this.account, contact_account:this.search_account,str:this.search_f_name
-              })).then(() => {
-                this.change_remark=false;
-                this.init_contacts();
-              });
-          }
+         },
 
+         Change_remark_status(){
+            this.change_remark=true;
+         },
 
-
+         Change_remark(){
+           this.axios.post("api/friend/change_remark", this.qs.stringify({
+                 account:this.account, contact_account:this.search_account,str:this.search_f_name
+             })).then(() => {
+               this.change_remark=false;
+               this.init_contacts();
+             });
+         }
 
   },
 
@@ -440,6 +451,11 @@
 </style>
 
 <style  lang="less" scoped>
+    .icon {
+      margin-left: 5px;
+      width: 25px;
+      height: 25px;
+    }
 
   .el-container {
     height: 100%;
@@ -574,6 +590,8 @@
     border: none;
     margin: 0;
   }
+
+
   }
 
 
@@ -721,7 +739,7 @@
         color: black;
         margin-left: 20%;
         border: black 1px solid;
-
     }
+
 
 </style>
