@@ -1,8 +1,8 @@
 <template>
   <div class="Body">
     <el-container>
-      <el-aside class="LeftAside" :class="{LeftAsideDark: IsDarkMode}" width="100px">
-        <el-menu class="LeftAsideMenu" :class="{LeftAsideMenuDark: IsDarkMode}">
+      <el-aside class="LeftAside" :class="{LeftAsideDark: IsDarkMode}" width="90px">
+        <el-menu class="LeftAsideMenu" :class="{LeftAsideMenuDark: IsDarkMode}" active-text-color="#4e519e">
           <div class="UserLogoDiv" :class="{UserLogoDivDark: IsDarkMode}">
             <img :src="UserLogoPath" />
           </div>
@@ -234,18 +234,13 @@ export default {
 }
 
 .UserLogoDiv {
-  height: 50px;
-  width: 50px;
-  border-radius: 50%;
-  position: relative;
-  left: 25%;
   margin-top: 40px;
   margin-bottom: 40px;
   background-color: rgb(242, 242, 242);
 
   img {
-    height: 100%;
-    width: 100%;
+    height: 60px;
+    width: 60px;
     border-radius: 50%;
   }
 }

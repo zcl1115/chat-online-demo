@@ -10,7 +10,7 @@ const SQLConfig2 = {
     host: 'localhost',
     user: 'rjgc',
     password: 'rjgc123',
-    database: 'seproject2',
+    database: 'seproject',
     timezone: "08:00",
     charset: 'UTF8MB4_GENERAL_CI'
 };

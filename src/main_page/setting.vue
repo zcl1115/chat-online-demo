@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-aside class="MiddleAside" :class="{MiddleAsideDark: IsDarkMode}" width="300px">
+    <el-aside class="MiddleAside" :class="{MiddleAsideDark: IsDarkMode}" width="280px">
       <el-menu
         class="MiddleAsideMenu"
         :class="{MiddleAsideMenuDark: IsDarkMode}"
@@ -202,14 +202,14 @@ export default {
   color: #333;
   height: 100%;
 
-  .el-menu-item.is-active,
+  .el-menu-item.is-active, .el-menu-item:hover {
+    color: black;
+    background-color: rgb(250, 250, 250);
+  }
+
   .el-menu-item:focus {
     background-color: #fff;
     color: #000;
-  }
-
-  .el-menu-item:hover {
-    background-color: rgb(250, 250, 250);
   }
 }
 
@@ -222,14 +222,17 @@ export default {
     border: none;
 
     .LogoutButton {
-      margin-top: 50px;
-      margin-bottom: 50px;
-      margin-left: 30px;
-      width: 240px;
-      height: 50px;
-      line-height: 50px;
+      margin: 50px auto;
+      width: 220px;
+      height: 44px;
+      line-height: 44px;
       background-color: #fff;
       border-radius: 5px;
+    }
+
+    .LogoutButton:hover {
+      color: white;
+      background-color: #4e519e;
     }
 
     .OtherSettingButtons {

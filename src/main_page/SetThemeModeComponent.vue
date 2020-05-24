@@ -1,26 +1,14 @@
 <template>
   <el-container :class="{BGCDark: IsDarkModeProp}">
     <div class="SetThemeModeDiv" :class="{BGCDark: IsDarkModeProp}">
-      <el-container
-        direction="horizontal"
-        class="ModeButtonsContainer"
-        :class="{BGCDark: IsDarkModeProp}"
-      >
-        <el-button
-          class="ModeButton"
-          :class="{ButtonDark: IsDarkModeProp}"
-          @click="ModeButtonClicked(false)"
-        >
-          <img src="images/light-theme.png" />
-        </el-button>
-        <el-button
-          class="ModeButton"
-          @click="ModeButtonClicked(true)"
-          :class="{ButtonDark: IsDarkModeProp}"
-        >
-          <img src="images/dark-theme.png" />
-        </el-button>
-      </el-container>
+      <el-button class="ModeButton" @click="ModeButtonClicked(false)">
+        <img class="icon" :class="{show: !IsDarkModeProp}" src="icons/check.svg" />
+        <img class="theme" src="images/light-theme.png" />
+      </el-button>
+      <el-button class="ModeButton" @click="ModeButtonClicked(true)">
+        <img class="icon" :class="{show: IsDarkModeProp}" src="icons/check.svg" />
+        <img class="theme" src="images/dark-theme.png" />
+      </el-button>
     </div>
   </el-container>
 </template>
@@ -42,39 +30,42 @@ export default {
 <style lang="less" scoped>
 .el-container {
   height: 100%;
-  margin: 0;
+  width: 100%;
 }
 
 .SetThemeModeDiv {
-  height: 400px;
   width: 600px;
-  position: relative;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  height: 200px;
+  margin: 200px auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 
   .ModeButton {
-    height: 150px;
-    width: 150px;
-    margin-left: 100px;
-    background-color: #fff;
+    position: relative;
+    height: 180px;
+    width: 180px;
+    padding: 0;
     border: none;
-    border-radius: 25px;
 
-    img {
-      height: 95%;
-      width: 95%;
+    .icon {
+      width: 50px;
+      height: 50px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
     }
-  }
 
-  .ButtonDark {
-    background-color: #1A1A1A;
-  }
+    .show {
+      opacity: 1;
+    }
 
-  .ModeButton:hover,
-  .ModeButton:active,
-  .ModeButton:focus {
-    background-color: rgb(78, 81, 158);
+    .theme {
+      height: 100%;
+      width: 100%;
+    }
   }
 }
 </style>
