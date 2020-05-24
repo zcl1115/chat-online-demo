@@ -10,7 +10,7 @@ const SQLConfig2 = {
     host: 'localhost',
     user: 'rjgc',
     password: 'rjgc123',
-    database: 'seproject',
+    database: 'seproject2',
     timezone: "08:00",
     charset: 'UTF8MB4_GENERAL_CI'
 };
@@ -404,9 +404,9 @@ function DB_helper() {
             }
         });
     };
-    this.SetLoginStatus = (InputData, cb) => {
-        let SQLString = 'update user set online_status = ? where account = ?';
-        let SQLParam = [InputData.LoginStatus, InputData.UserID];
+    this.Logout = (InputData, cb) => {
+        let SQLString = 'update user set online_status = 0 where account = ?';
+        let SQLParam = [InputData.UserID];
         let ReturnData = {
             Status: false
         };
