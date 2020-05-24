@@ -197,13 +197,5 @@ export default {
     transform: translate(-50%);
     border: none;
   }
-
-  .SubmitButton2 {
-    background-color: rgb(78, 81, 158);
-    position: relative;
-    left: 50%;
-    transform: translate(-50%);
-    border: none;
-  }
 }
 </style>

@@ -55,12 +55,11 @@ import { getCookie, DeleteCookie, setCookie } from "../components/cookieUtil";
 
 const GetPersonalInfoURL = "api/setting/GetPersonalInfo";
 const GetPersonalLogoURL = "api/setting/GetPersonalLogo";
-const SetLoginStatusURL = "api/setting/SetLoginStatus";
+const LogoutURL = "api/setting/Logout";
 const UserIDCookieKey = "user_account";
 const UserLogoPathCookieKey = "UserLogoPath";
 const UserNameCookieKey = "UserName";
 const UserIntroductionCookieKey = "UserIntroduction";
-const LogoutMark = false;
 
 export default {
   data() {
@@ -149,29 +148,23 @@ export default {
       }
     },
     LogoutButtonClicked() {
-      this.SetLoginStatus(LogoutMark);
-      DeleteCookie(UserIDCookieKey);
-
-      window.location.href = "login.html";
-    },
-    SetLoginStatus(val) {
       var SendObj = this.qs.stringify({
-        UserID: this.UserID,
-        LoginStatus: val
+        UserID: this.UserID
       });
 
-      this.axios.post(SetLoginStatusURL, SendObj).then(response => {
+      this.axios.post(LogoutURL, SendObj).then(response => {
         if (!response.data.Status) {
           this.$message({
             showClose: true,
-            message: "errer SetLoginStatus()",
+            message: "登出失败，请重试！",
             type: "error"
           });
 
           return;
         }
 
-        return;
+        DeleteCookie(UserIDCookieKey);
+        window.location.href = "login.html";
       });
     }
   },
@@ -246,18 +239,18 @@ export default {
     }
 
     .MenuItem2Dark {
-      background-color: #1A1A1A;
+      background-color: #1a1a1a;
       color: rgb(220, 220, 220);
     }
 
     .MenuItem2Dark:hover {
-      background-color: #4E519E;
+      background-color: #303133;
       color: rgb(240, 240, 240);
     }
 
     .MenuItem2Dark.is-active,
     .MenuItem2Dark:focus {
-      background-color: rgb(71, 100, 129);
+      background-color: #303133;
       color: rgb(250, 250, 250);
     }
   }
@@ -277,7 +270,7 @@ export default {
 
   .MenuItemDark.is-active,
   .MenuItemDark:focus {
-    background-color: #1A1A1A;
+    background-color: #1a1a1a;
     color: rgb(240, 240, 240);
   }
 }

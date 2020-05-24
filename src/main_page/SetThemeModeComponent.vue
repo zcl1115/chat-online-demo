@@ -62,19 +62,19 @@ export default {
     border-radius: 25px;
 
     img {
-      height: 100%;
-      width: 100%;
+      height: 95%;
+      width: 95%;
     }
   }
 
   .ButtonDark {
-    background-color: #2c3e50;
+    background-color: #1A1A1A;
   }
 
   .ModeButton:hover,
   .ModeButton:active,
   .ModeButton:focus {
-    background-color: rgba(78, 81, 158, 100%);
+    background-color: rgb(78, 81, 158);
   }
 }
 </style>
