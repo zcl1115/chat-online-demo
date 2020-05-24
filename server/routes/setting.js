@@ -4,7 +4,6 @@ const multiparty = require('multiparty');
 const fs = require('fs');
 
 const LogoSavePathBase = "./UserLogos/";
-//const LogoSavePathBase = "E://UserLogos/";
 
 router.post('/GetPersonalInfo', (req, res) => {
   let InputData = {
@@ -92,17 +91,12 @@ router.post('/NewLogo', (req, res) => {
   })
 })
 
-router.post('/SetLoginStatus', (req, res) => {
+router.post('/Logout', (req, res) => {
   let InputData = {
-    UserID: req.body.UserID,
-    LoginStatus: 0
+    UserID: req.body.UserID
   };
 
-  if (req.body.LoginStatus === "true") {
-    InputData.LoginStatus = 1;
-  }
-
-  db_helper.SetLoginStatus(InputData, (ReturnData) => {
+  db_helper.Logout(InputData, (ReturnData) => {
     res.json(ReturnData);
   })
 })
