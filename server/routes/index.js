@@ -56,11 +56,11 @@ router.post('/signup', function (req, res) {
           if (status === 0) {
             res.json({
               status: '0'
-            })
+            });
           } else {
             res.json({
               status: '1'
-            })
+            });
           }
         });
       }
@@ -76,7 +76,7 @@ router.post('/load_friends', function (req, res) {
     } else {
       res.json({
         status: 0,
-      })
+      });
     }
   });
 });

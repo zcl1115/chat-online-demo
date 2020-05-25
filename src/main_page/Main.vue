@@ -234,9 +234,11 @@ export default {
 }
 
 .UserLogoDiv {
-  margin-top: 40px;
-  margin-bottom: 40px;
+  height: 134px;
   background-color: rgb(242, 242, 242);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   img {
     height: 60px;

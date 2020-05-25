@@ -202,7 +202,8 @@ export default {
   color: #333;
   height: 100%;
 
-  .el-menu-item.is-active, .el-menu-item:hover {
+  .el-menu-item.is-active,
+  .el-menu-item:hover {
     color: black;
     background-color: rgb(250, 250, 250);
   }
@@ -224,15 +225,10 @@ export default {
     .LogoutButton {
       margin: 50px auto;
       width: 220px;
-      height: 44px;
-      line-height: 44px;
+      height: 34px;
+      line-height: 34px;
       background-color: #fff;
       border-radius: 5px;
-    }
-
-    .LogoutButton:hover {
-      color: white;
-      background-color: #4e519e;
     }
 
     .OtherSettingButtons {
@@ -256,6 +252,11 @@ export default {
       background-color: #303133;
       color: rgb(250, 250, 250);
     }
+
+    .LogoutButton:hover {
+      color: white;
+      background-color: #4e519e;
+    }
   }
 
   .MiddleAsideMenuDark {
@@ -275,24 +276,6 @@ export default {
   .MenuItemDark:focus {
     background-color: #1a1a1a;
     color: rgb(240, 240, 240);
-  }
-}
-
-.UserLogoDiv {
-  height: 50px;
-  width: 50px;
-  border-radius: 50%;
-  position: relative;
-  left: 50%;
-  transform: translate(-50%);
-  margin-top: 40px;
-  margin-bottom: 40px;
-  background-color: rgb(242, 242, 242);
-
-  img {
-    height: 100%;
-    width: 100%;
-    border-radius: 50%;
   }
 }
 

@@ -27,7 +27,7 @@ io.on('connection', function (socket) {
     // load friends' avatar
     db_helper.getImgPath(account, function (img_path) {
       socket.emit("login", { 'account': account, 'img_path': img_path });
-    })
+    });
     // load offline messages
     db_helper.getOfflineMessage(str.account, function (messages) {
       for (var i = 0; i < messages.length; i++) {
@@ -35,7 +35,7 @@ io.on('connection', function (socket) {
       }
       // clear stored offline messages
       db_helper.clearOfflineMessage(account);
-    })
+    });
 
 
   });
@@ -69,9 +69,9 @@ io.on('connection', function (socket) {
     let message = "0 " + "0 " + "0 " + chat_time + " " + account + " " + str.to + " " + str.message + '\n';
     fs.writeFile(path + '/' + chat_date + '.txt', message, { 'flag': 'a' }, function (error) {
       if (error) {
-        console.log('存储失败')
+        console.log('存储失败');
       } else {
-        console.log('存储成功')
+        console.log('存储成功');
       }
     });
 
@@ -116,9 +116,9 @@ io.on('connection', function (socket) {
     fs.writeFile('./files/' + account + '/' + str.to + '/' + str.file_name, str.arraybuffer, function (error) {
       if (error) {
         console.log(error);
-        console.log('存储失败')
+        console.log('存储失败');
       } else {
-        console.log('存储成功')
+        console.log('存储成功');
       }
     });
 
@@ -205,7 +205,7 @@ router.post('/search', function (req, res, next) {
   input.on('error',function(err){
     res.json({
       status: false
-    })
+    });
   });
   const rl = readline.createInterface({
     input: input
@@ -219,14 +219,14 @@ router.post('/search', function (req, res, next) {
         from: b[4],
         to: b[5],
         message: b[6]
-      })
+      });
     }
   });
   rl.on('close', (line) => {
     res.json({
       status: true,
       chat_history_list: list_map
-    })
+    });
   });
 
 });
@@ -294,12 +294,12 @@ router.post('/search_key', function (req, res, next) {
           res.json({
             //status: false,
             chat_history_list: list_map
-          })
+          });
         }else{
           res.json({
             //status: true,
             chat_history_list: list_map
-          })
+          });
         }
       }
     });
@@ -336,7 +336,7 @@ router.post('/delete', function (req, res, next) {
   input.on('error',function(err){
     res.json({
       status: false
-    })
+    });
   });
   const rl = readline.createInterface({
     input: input
@@ -355,7 +355,7 @@ router.post('/delete', function (req, res, next) {
     });
     res.json({
       status: true,
-    })
+    });
   });
 
 });

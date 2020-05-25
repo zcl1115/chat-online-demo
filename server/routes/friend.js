@@ -78,14 +78,14 @@ router.post('/get_app', function(req, res, next){
         }
         list.reverse();
         res.json(list);
-    })
+    });
 
 });
 router.post('/change_status', function(req, res, next){
     //var i=req.body
     db_helper.changeApplicationList( req.body.contact_account,req.body.user_account,req.body.status,function (result) {
 
-    })
+    });
 
 });
 router.post('/get_status', function(req, res, next){
@@ -101,14 +101,14 @@ router.post('/get_status', function(req, res, next){
             result[0].status="已过期";
         res.json(result);
         console.log("aa");
-    })
+    });
 
 });
 router.post('/change_refuse_status', function(req, res, next){
     //var i=req.body
     db_helper.changeRefuseApplication( req.body.request_id,2,function (result) {
 
-    })
+    });
 
 });
 router.post('/is_contact', function(req, res, next){
