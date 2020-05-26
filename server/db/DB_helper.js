@@ -17,7 +17,7 @@ const SQLConfig2 = {
 
 function DB_helper() {
     var mysql = require('mysql');
-    var connection = mysql.createConnection(SQLConfig);
+    var connection = mysql.createConnection(SQLConfig2);
     connection.connect(function(err){
         if(err){
             console.log("connection failed!");
@@ -205,7 +205,7 @@ function DB_helper() {
         });
     };
     this.signIn = function (account, password, cb) {
-        var sql = 'SELECT * FROM user where account = ?';
+        var sql = 'SELECT * FROM user WHERE account = ?';
         var SqlParams = [account, password];
         connection.query(sql, SqlParams, function (err, result) {
             console.log(result);
@@ -232,7 +232,7 @@ function DB_helper() {
         });
     };
     this.getImgPath = function (account, cb) {
-        var sql = 'SELECT img_path FROM user where account = ?';
+        var sql = 'SELECT img_path FROM user WHERE account = ?';
         var SqlParams = [account];
         connection.query(sql, SqlParams, function (err, result) {
             if (err) {
@@ -246,7 +246,7 @@ function DB_helper() {
         });
     };
     this.getFriends = function (account, cb) {
-        var sql = 'select account, name, img_path from user where account in (select contact_account from contact where user_account = ?);';
+        var sql = 'SELECT account, name, img_path FROM user WHERE account IN (SELECT contact_account FROM contact WHERE user_account = ?);';
         connection.query(sql, [account], function (err, results) {
             console.log(results);
             if (err) {
@@ -267,7 +267,7 @@ function DB_helper() {
         });
     };
     this.getRecentList = function (account, cb) {
-       var sql = 'select recent_chat.contact,contact.name,user.img_path,recent_chat.chat_time,user.online_status from user,recent_chat,contact\n' +
+       var sql = 'SELECT recent_chat.contact,contact.name,user.img_path,recent_chat.chat_time,user.online_status FROM user,recent_chat,contact\n' +
            'where recent_chat.contact=user.account and recent_chat.account=contact.user_account and recent_chat.contact=contact.contact_account and recent_chat.account=?; ';
         connection.query(sql, [account], function (err, results) {
             if (err) {
@@ -315,7 +315,7 @@ function DB_helper() {
         });
     };
     this.clearOfflineMessage = function (account, cb) {
-        var sql = 'delete from offline_chat where account_to = ?';
+        var sql = 'DELETE FROM offline_chat WHERE account_to = ?';
         connection.query(sql, [account], function (err, results) {
             if (err) {
                 console.log(err.message);
@@ -325,7 +325,7 @@ function DB_helper() {
         });
     };
     this.getOfflineMessage = function (account, cb) {
-        var sql = 'select * from offline_chat where account_to = ?';
+        var sql = 'SELECT * FROM offline_chat WHERE account_to = ?';
         connection.query(sql, [account], function (err, results) {
             if (err) {
                 console.log(err.message);
@@ -335,7 +335,7 @@ function DB_helper() {
         });
     };
     this.GetPersonalInfo = (InputData, cb) => {
-        let SQLString = 'select * from user where account = ?';
+        let SQLString = 'SELECT * FROM user WHERE account = ?';
         let SQLParam = [InputData.UserID];
         let ReturnData = {
             Status: false
@@ -354,7 +354,7 @@ function DB_helper() {
         });
     };
     this.SetPersonalInfo = (InputData, cb) => {
-        let SQLString = 'update user set ';
+        let SQLString = 'UPDATE user SET ';
         let SQLParam = [];
         let Mark = false;
         let ReturnData = {
@@ -388,7 +388,7 @@ function DB_helper() {
         });
     };
     this.SetPassword = (InputData, cb) => {
-        let SQLString = 'update user set password = ? where account = ?';
+        let SQLString = 'UPDATE user SET password = ? WHERE account = ?';
         let SQLParam = [InputData.NewPassword, InputData.UserID];
         let ReturnData = {
             Status: false
@@ -405,7 +405,7 @@ function DB_helper() {
         });
     };
     this.Logout = (InputData, cb) => {
-        let SQLString = 'update user set online_status = 0 where account = ?';
+        let SQLString = 'UPDATE user SET online_status = 0 WHERE account = ?';
         let SQLParam = [InputData.UserID];
         let ReturnData = {
             Status: false
@@ -422,7 +422,7 @@ function DB_helper() {
         });
     };
     this.getContacts = function (account, cb) {
-        var sql = 'select account,user.name as u_name,img_path,personal_profile,contact.name as f_name from user,contact where contact.user_account=?and user.account=contact.contact_account;';
+        var sql = 'SELECT account,user.name AS u_name,img_path,personal_profile,contact.name AS f_name FROM user,contact WHERE contact.user_account=?AND user.account=contact.contact_account;';
         connection.query(sql, [account], function (err, results) {
             if (err) {
                 console.log(err.message);
@@ -432,7 +432,7 @@ function DB_helper() {
         });
     };
      this.getUser = function (account, cb) {
-         var sql = 'select account,name as f_name,name as u_name,img_path,personal_profile from user where account =?;';
+         var sql = 'SELECT account,name AS f_name,name AS u_name,img_path,personal_profile FROM user WHERE account =?;';
         connection.query(sql, [account], function (err, results) {
             console.log(results);
             if (err) {
@@ -443,7 +443,7 @@ function DB_helper() {
         });
     };
     this.isContact = function (user_account,contact_account, cb) {
-        var sql = 'select contact_account from contact where user_account =?and contact_account=?;';
+        var sql = 'SELECT contact_account FROM contact WHERE user_account =?AND contact_account=?;';
         let SQLParam=[user_account,contact_account];
         connection.query(sql, SQLParam, function (err, results) {
             if (err) {
@@ -492,8 +492,8 @@ function DB_helper() {
     //获取申请列表
     this.getApplicationList=function (account,cb) {
         //发给acoount的
-        var sql="select user.name,user.account,user.personal_profile,request.content,request.status,request.request_id " +
-            "from request left join user on request.account=user.account where contact_account =?";
+        var sql="SELECT user.name,user.account,user.personal_profile,request.content,request.status,request.request_id " +
+            "FROM request LEFT JOIN user ON request.account=user.account WHERE contact_account =?";
         let SQLParam=[account];
         connection.query(sql, SQLParam, function (err, results) {
             if (err) {
@@ -522,7 +522,7 @@ function DB_helper() {
     };
     this.getAplicationStatus=function (id,cb) {
         //发给acoount的
-        var sql="select status from request where request_id=?;";
+        var sql="SELECT status FROM request WHERE request_id=?;";
         let SQLParam=[id];
         connection.query(sql, SQLParam, function (err, results) {
             if (err) {
@@ -583,7 +583,9 @@ function DB_helper() {
 
     }
     this.getContact = function (user_account,str, cb) {
-        var sql = 'select account,user.name as u_name,img_path,personal_profile,contact.name as f_name from user,contact where contact.user_account=?and user.account=contact.contact_account and (contact.name=? or user.name=? or user.account=?);';
+        var sql = 'Select account,user.name AS u_name,img_path,personal_profile,contact.name AS f_name ' +
+            'FROM user,contact ' +
+            'WHERE contact.user_account=?AND user.account=contact.contact_account AND (contact.name=? OR user.name=? OR user.account=?);';
         let SQLParam=[user_account,str,str,str];
         connection.query(sql, SQLParam, function (err, results) {
             if (err) {
