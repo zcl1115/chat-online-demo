@@ -9,7 +9,7 @@
           <el-menu-item
             id="chat"
             index="1-1"
-            @click="show_page = 'chatting'"
+            @click="showpage('chatting')"
             :class="{MenuItemDark: IsDarkMode}"
           >
             <i v-if="unread===0" class="el-icon-chat-round"></i>
@@ -119,6 +119,7 @@ export default {
         return b1 - a1;
       });
     });
+
   },
   methods: {
     SetDisplayPage(val) {
@@ -262,6 +263,11 @@ export default {
                   return b1 - a1;
                 });
               });
+    },
+
+    showpage(str){
+        this.init_recent_contacts();
+        this.show_page = str;
     },
   },
   sockets: {
