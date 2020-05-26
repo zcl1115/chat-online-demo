@@ -1,5 +1,6 @@
 <template>
     <div class="history_show">
+        <img src="icons/close.svg" style="width:30px;height:30px" id="close-btn" @click="backToLogin" />
         <div class="history_message_show">
             <div class="message_box" v-for="(message, index) in chat_history_list" :key="index" @contextmenu.prevent="mouseclick(index, message.time)">
                 <div v-if="message.to === contact && message.from === account">
@@ -7,9 +8,9 @@
                         <div class="avatar_box">
                             <img :src="use_img" class="contactor_avatar" />
                         </div>
-                        <span class="message" v-if="message.type === '0'">{{message.content}}</span>
+                        <span class="message" v-if="message.type === '0'">{{message.message}}</span>
                         <span class="message" v-if="message.type === '1'">
-                            <a class="file_name">{{message.content}}</a>
+                            <a class="file_name">{{message.message}}</a>
                             <img class="file_icon" src="icons/download.svg" v-on:click="download(message)" />
                         </span>
                         <br />
@@ -23,10 +24,10 @@
                         <div class="avatar_box">
                             <img :src="img_path" class="contactor_avatar" />
                         </div>
-                        <span class="message" v-if="message.type === '0'">{{message.content}}</span>
+                        <span class="message" v-if="message.type === '0'">{{message.message}}</span>
                         <span class="message" v-if="message.type === '1'">
                             <img class="file_icon" src="icons/download.svg" v-on:click="download(message)" />
-                            <a class="file_name">{{message.content}}</a>
+                            <a class="file_name">{{message.message}}</a>
                         </span>
                         <br />
                         <br />
@@ -239,7 +240,6 @@
                     .then(response => {
                         let status = response.data.status;
                         this.chat_history_list = response.data.chat_history_list;
-                        console.log(this.chat_history_list);
                         if (this.chat_history_list.length === 0){
                             this.$message({
                                 showClose: true,
@@ -296,14 +296,16 @@
                 });
             },
             download(message) {
-                console.log("child's download method called");
-                console.log(message);
                 this.$socket.emit("getFile", {
                     from: message.from,
                     to: message.to,
                     file_name: message.content
                 });
             },
+            backToLogin: function() {
+
+                this.$emit("UpdateFlag", { Flag: false });
+            }
         }
     };
 </script>
@@ -511,5 +513,14 @@
         float: right;
         width: 40px;
         height: 40px;
+    }
+    #close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    #close-btn:hover {
+        cursor: pointer;
     }
 </style>

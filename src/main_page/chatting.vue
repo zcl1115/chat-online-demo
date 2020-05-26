@@ -19,6 +19,8 @@
         >
           <img :src="people.img_path" class="round_icon" />
           <a class="contact_name">{{people.name}}</a>
+          <i v-if="people.online_status === 0" class="el-icon-error"></i>
+          <i v-if="people.online_status === 1" class="el-icon-success"></i>
           <img
             src="images/point.png"
             class="notice"
@@ -30,7 +32,6 @@
     <div class="chat_area" v-if="isShow" :class="{chat_area_dark: IsDarkMode}">
       <div class="friend_name" :class="{friend_name_dark: IsDarkMode}">
         {{contacts}}
-        <!--          {{contact_account}}-->
       </div>
       <!--eslint-disable-next-line-->
       <div class="message_show" v-if="!history_show">
@@ -75,6 +76,7 @@
               :contact="contact_account"
               :img_path="contact_img"
               :account="account"
+              @UpdateFlag="UpdateFlag"
       ></component>
       <div class="input_message">
         <div class="function_area" style>
@@ -131,11 +133,8 @@ export default {
       img_path: "",
       contacts: "",
       contact_account: "",
-      recent_contacts_list: [],
       isShow: false,
       contact_img: "",
-      //messages: [],
-      unread_contacts: [],
       emoji_picker_isShow: false,
       file_selector_isShow: false,
       cur_file: "",
@@ -152,34 +151,25 @@ export default {
     selected_contact: {
       type: String
     },
-    messages: [],
+    messages: {
+      type: Array
+    },
+    unread_contacts: {
+      type: Array
+    },
+    recent_contacts_list: {
+      type: Array
+    },
+    forbidden_word: {
+      type: Array
+    }
   },
   created() {
     this.account = getCookie("user_account");
-    this.init_recent_contacts();
+    if (this.selected_contact)this.Select_contact();
   },
   mounted() {
-    this.sockets.subscribe("message", data => {
-      this.messages.push(data);
-      this.$emit("UpdateMessage", { messages: this.messages });
-      this.unread_contacts.push(data.from);
-
-      var i = this.get_index(data.from);
-      let temp = this.recent_contacts_list[i];
-      temp.chat_time = data.time;
-      this.$set(this.recent_contacts_list, i, temp);
-      this.recent_contacts_list.sort((a, b) => {
-        let atime = a.chat_time;
-        let btime = b.chat_time;
-        atime = atime.replace(/-/g, "/");
-        btime = btime.replace(/-/g, "/");
-        let a1 = new Date(atime).getTime();
-        let b1 = new Date(btime).getTime();
-        return b1 - a1;
-      });
-    });
     this.sockets.subscribe("getFile", data => {
-      console.log("receive file");
       var blob = new Blob([data.arraybuffer], {
         type: "text/plain;charset=utf-8"
       });
@@ -188,7 +178,6 @@ export default {
       // FileSaver.saveAs(blob, "hello world.txt");
     });
     this.sockets.subscribe("FileExpired", data => {
-      console.log("called");
       this.$message({
         showClose: true,
         message: data.file_name + "已失效",
@@ -207,63 +196,23 @@ export default {
       this.isShow = true;
       this.contact_img = img_path;
       this.unread_contacts.splice(this.unread_contacts.indexOf(account), 1);
-    },
-    init_recent_contacts() {
-      var temp = getCookie("user_account");
-      this.axios
-        .post(
-          "api/chat/get_recent_list",
-          this.qs.stringify({
-            account: temp
-          })
-        )
-        .then(response => {
-          this.recent_contacts_list = response.data;
-          console.log(this.recent_contacts_list);
-          let i;
-          for (i in this.recent_contacts_list) {
-            var FileLength = this.recent_contacts_list[i].img_path.data.length;
-            var Array1 = new ArrayBuffer(FileLength);
-            var Array2 = new Uint8Array(Array1);
-
-            for (var j = 0; j < FileLength; j++) {
-              Array2[j] = this.recent_contacts_list[i].img_path.data[j];
-            }
-
-            var FileBlob = new Blob([Array2], { type: "" });
-            var UserLogoURL = URL.createObjectURL(FileBlob);
-            this.recent_contacts_list[i].img_path = UserLogoURL;
-          }
-
-          this.recent_contacts_list.sort((a, b) => {
-            let atime = a.chat_time;
-            let btime = b.chat_time;
-            atime = atime.replace(/-/g, "/");
-            btime = btime.replace(/-/g, "/");
-            let a1 = new Date(atime).getTime();
-            let b1 = new Date(btime).getTime();
-            return b1 - a1;
-          });
-
-          if (this.selected_contact){
-            let t;
-            for (t in this.recent_contacts_list) {
-              if (this.selected_contact===this.recent_contacts_list[t].contact){
-                this.img_path = getCookie("UserLogoPath");
-                this.contacts = this.recent_contacts_list[t].name;
-                this.contact_account = this.selected_contact;
-                this.isShow = true;
-                this.contact_img = this.recent_contacts_list[t].img_path;
-                this.unread_contacts.splice(this.unread_contacts.indexOf(this.selected_contact), 1);
-                break;
-              }
-            }
-          }
-        });
+      this.$emit("UpdateUnread", { contact: this.contact_account });
     },
     send_message() {
-      // console.log("send called");
       var message = document.getElementById("message").value;
+      for (let i in this.forbidden_word) {
+        let reg = new RegExp(this.forbidden_word[i],"g");
+        //判断内容中是否包括敏感词
+        if(message.indexOf(this.forbidden_word[i]) != -1){
+          let result = message.replace(reg,"**");
+          message = result;
+          this.$notify({
+            title: '警告',
+            message: '包含敏感词汇,已被替换,请注意!',
+            type: 'warning'
+          });
+        }
+      }
       this.$socket.emit("sendMessage", {
         to: this.contact_account,
         message: message
@@ -276,16 +225,6 @@ export default {
       });
       this.$emit("UpdateMessage", { messages: this.messages });
       document.getElementById("message").value = "";
-      // console.log(this.messages);
-    },
-    get_index(account) {
-      var i = 0;
-      for (; i < this.recent_contacts_list.length; i++) {
-        if (this.recent_contacts_list[i].contact === account) {
-          return i;
-        }
-      }
-      return -1;
     },
     emoji_clicked(emoji) {
       this.emoji_picker_isShow = false;
@@ -301,7 +240,6 @@ export default {
       }
       var self = this;
       let reader = new FileReader();
-      console.log(this.cur_file);
       reader.onload = function() {
         var arraybuffer = this.result;
         self.$socket.emit("sendFile", {
@@ -320,7 +258,6 @@ export default {
       reader.readAsArrayBuffer(this.cur_file);
     },
     download(message) {
-      console.log("download request called");
       this.$socket.emit("getFile", {
         from: message.from,
         to: message.to,
@@ -334,6 +271,26 @@ export default {
         this.chat_history_show = "chat_history";
       }
       this.history_show = !this.history_show;
+    },
+    UpdateFlag(val) {
+      this.chat_history_show = "";
+      this.history_show = val.Flag;
+    },
+    Select_contact(){
+      if (this.selected_contact){
+        let t;
+        for (t in this.recent_contacts_list) {
+          if (this.selected_contact===this.recent_contacts_list[t].contact){
+            this.img_path = getCookie("UserLogoPath");
+            this.contacts = this.recent_contacts_list[t].name;
+            this.contact_account = this.selected_contact;
+            this.isShow = true;
+            this.contact_img = this.recent_contacts_list[t].img_path;
+            this.unread_contacts.splice(this.unread_contacts.indexOf(this.selected_contact), 1);
+            break;
+          }
+        }
+      }
     }
   },
   computed: {
