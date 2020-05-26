@@ -17,7 +17,7 @@ const SQLConfig2 = {
 
 function DB_helper() {
     var mysql = require('mysql');
-    var connection = mysql.createConnection(SQLConfig2);
+    var connection = mysql.createConnection(SQLConfig);
     connection.connect(function(err){
         if(err){
             console.log("connection failed!");
@@ -267,7 +267,7 @@ function DB_helper() {
         });
     };
     this.getRecentList = function (account, cb) {
-       var sql = 'select recent_chat.contact,contact.name,user.img_path,recent_chat.chat_time from user,recent_chat,contact\n' +
+       var sql = 'select recent_chat.contact,contact.name,user.img_path,recent_chat.chat_time,user.online_status from user,recent_chat,contact\n' +
            'where recent_chat.contact=user.account and recent_chat.account=contact.user_account and recent_chat.contact=contact.contact_account and recent_chat.account=?; ';
         connection.query(sql, [account], function (err, results) {
             if (err) {
