@@ -95,6 +95,11 @@
                   src="icons/history.svg"
                   v-on:click="show_history()"
           />
+          <img
+                  class="icon"
+                  src="icons/word_cloud.svg"
+                  v-on:click="show_word_cloud()"
+          />
           <input type="file" class="upload" id="upload_clicked" v-show="false" @change="uploadFile" />
           <emoji_picker @emoji_clicked="emoji_clicked" :inputData="emoji_picker_isShow"></emoji_picker>
         </div>
@@ -119,11 +124,13 @@
 <script>
 import { getCookie } from "../components/cookieUtil";
 import emoji_picker from "../components/EmojiPicker";
+import word_cloud from "./WordCloud";
 import FileSaver from "file-saver";
 import chat_history from "./chat_history.vue";
 
 export default {
   components: {
+    word_cloud,
     emoji_picker,
     chat_history
   },
@@ -190,6 +197,8 @@ export default {
   },
   methods: {
     select_contact(name, account, img_path) {
+      this.chat_history_show = "";
+      this.history_show = false;
       this.img_path = getCookie("UserLogoPath");
       this.contacts = name;
       this.contact_account = account;
@@ -267,10 +276,20 @@ export default {
     show_history(){
       if (this.history_show){
         this.chat_history_show = "";
+        this.chat_history_show = "chat_history";
       }else{
         this.chat_history_show = "chat_history";
       }
-      this.history_show = !this.history_show;
+      this.history_show = true;
+    },
+    show_word_cloud(){
+      if (this.history_show){
+        this.chat_history_show = "";
+        this.chat_history_show = "word_cloud";
+      }else{
+        this.chat_history_show = "word_cloud";
+      }
+      this.history_show = true;
     },
     UpdateFlag(val) {
       this.chat_history_show = "";
