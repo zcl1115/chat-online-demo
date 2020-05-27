@@ -38,7 +38,14 @@ export default {
         pwd: ""
       },
       LoginFormRules: {
-        account: [{ required: true, message: "账号必填！", trigger: "blur" }],
+        account: [{ required: true, message: "账号必填！", trigger: "blur" },
+          {
+            min: 6,
+            max: 20,
+            message: "账号长度必须在6到20以内！",
+            trigger: "blur"
+          }
+          ],
         pwd: [
           { required: true, message: "密码必填！", trigger: "blur" },
           { validator: PasswordMainRule, trigger: "blur" }
