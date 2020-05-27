@@ -5,6 +5,7 @@ var http = require('http');
 var fs = require('fs');
 const readline = require('readline');
 const _path = require('path');
+var nodejieba = require("nodejieba");
 var server = http.createServer(function (req, res) {
 }).listen(3001);//创建http服务
 
@@ -406,4 +407,73 @@ router.post('/get_forbidden_word', function (req, res, next) {
     });
   });
 });
+
+router.post('/word_cloud', function (req, res, next) {
+  var flag_pos;
+  var account = req.body.account;
+  var contact = req.body.contact;
+  var date_list = new Array();
+  var end = new Date(Date.now()).getTime();
+  for (var i = 0;i < 30; end -= 3600 * 1000 * 24, i++){
+    let time = moment(new Date(end)).format('YYYY-MM-DD');
+    date_list.push(time);
+  }
+  let path = "";
+  // eslint-disable-next-line no-unused-vars
+  var message = "";
+  var list_map = new Array();
+
+  if (fs.existsSync('./ChatHistory/' + account + " " + contact))
+  {
+    path = './ChatHistory/' + account + " " + contact;
+    flag_pos = 0;
+  }
+
+  if (fs.existsSync('./ChatHistory/' + contact + " " + account))
+  {
+    path = './ChatHistory/' + contact + " " + account;
+    flag_pos = 1;
+  }
+  if (path === ""){
+    res.json({
+      word_data: list_map
+    });
+  }else {
+    //查询结果中是否有错误以及是否全部读取完成
+    var read_sum = date_list.length;
+    for (let date in date_list) {
+      let filepath = _path.join(path, date_list[date] + '.txt');
+      let input = fs.createReadStream(filepath);
+      input.on('error', function (err) {
+        read_sum--;
+      });
+      const rl = readline.createInterface({
+        input: input
+      });
+      rl.on('line', (line) => {
+        var b = ((line.toString()).split(" "));
+        if (b[flag_pos] === "0" && b[4] === account) {
+          message += b[6];
+        }
+      });
+      rl.on('close', (line) => {
+        read_sum--;
+        if (read_sum === 0) {
+          var topN = 12;
+          let worddata = nodejieba.extract(message, topN);
+          for (var i in worddata) {
+            list_map.push({
+              name: worddata[i].word,
+              value: Math.round(worddata[i].weight)
+            })
+          }
+          res.json({
+            word_data: list_map
+          });
+        }
+      });
+    }
+  }
+});
+
 module.exports = router;
