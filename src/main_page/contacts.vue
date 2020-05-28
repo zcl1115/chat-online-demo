@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-aside class="MiddleAside" width="280px">
+    <el-aside id="MiddleAside" width="280px">
       <div class="search_area">
         <input
           class="search_key"
@@ -37,15 +37,15 @@
         <div class="InfoDiv" :class="{InfoDivDark: IsDarkModeProp}">
           <div class="UserIDDiv">帐号：{{search_account}}</div>
           <div class="UserNameDiv">昵称：{{search_name}}</div>
-          <div class="UserNameDiv" v-if="!change_remark&&!isShow_add_user&&isShow_personal">
+          <div class="UserRemarkDiv" v-if="!change_remark&&!isShow_add_user&&isShow_personal">
             备注：{{search_f_name}}
             <img
-              class="icon"
-              src="icons/change.svg"
+              class="edit-icon"
+              src="icons/edit.svg"
               @click="Change_remark_status()"
             />
           </div>
-          <div class="UserNameDiv" v-if="change_remark&&!isShow_add_user&&isShow_personal">
+          <div class="UserRemarkDiv" v-if="change_remark&&!isShow_add_user&&isShow_personal">
             <el-input
               class="remark_key"
               v-model="search_f_name"
@@ -54,32 +54,26 @@
           </div>
           <div class="UserIntroductionDiv">简介：{{ search_personal_profile }}</div>
         </div>
-        <el-form label-position="right" label-width="80px">
-          <el-row>
-            <el-form-item class="SubmitButtonFormItem" label-width="0">
-              <el-button
-                type="primary"
-                class="SubmitButton_send"
-                @click="Show_send_message()"
-                v-if="!isShow_add_user&&isShow_personal"
-              >发送信息</el-button>
-              <el-button
-                type="primary"
-                class="SubmitButton_add"
-                @click="Show_send_application()"
-                v-if="isShow_add_user&&isShow_personal"
-              >添加好友</el-button>
-              <el-button
-                type="primary"
-                class="SubmitButton_delete"
-                @click="Del_contact()"
-                v-if="!isShow_add_user&&isShow_personal"
-              >删除好友</el-button>
-            </el-form-item>
-          </el-row>
-        </el-form>
+        <div class="SubmitButtonFormItem">
+          <el-button
+            class="SubmitButton_send"
+            @click="Show_send_message()"
+            v-if="!isShow_add_user&&isShow_personal"
+          >发送信息</el-button>
+          <el-button
+            class="SubmitButton_add"
+            @click="Show_send_application()"
+            v-if="isShow_add_user&&isShow_personal"
+          >添加好友</el-button>
+          <el-button
+            class="SubmitButton_delete"
+            @click="Del_contact()"
+            v-if="!isShow_add_user&&isShow_personal"
+          >删除好友</el-button>
+        </div>
       </div>
-      <div v-if="isShow_application" class="send_application">
+
+      <div class="send_application" v-if="isShow_application">
         <h2>验证信息</h2>
         <textarea id="add_message">
            Hello!
@@ -103,24 +97,27 @@
           </p>
         </ul>
       </div>
+
       <div class="application_area" v-if="isShow_new_application">
         <h2>好友申请</h2>
-        <img :src="search_img_path" />
-        <p class="a_name">{{search_name}}</p>
+        <div id="applyer-info">
+          <img :src="search_img_path" />
+          <span class="a_name">{{search_name}}</span>
+        </div>
         <p class="a_msg">{{search_content}}</p>
-        <el-button
-          type="primary"
-          v-on:click="Add_friend()"
-          class="add_submit"
-          v-if="isShow_application_button"
-        >同意</el-button>
-        <el-button
-          type="primary"
-          v-on:click="Refuse_friend()"
-          class="refuse_submit"
-          v-if="isShow_application_button"
-        >拒绝</el-button>
-        <p v-else>{{this.request_status}}</p>
+        <div id="operations">
+          <el-button
+            v-on:click="Add_friend()"
+            class="add_submit"
+            v-if="isShow_application_button"
+          >同意</el-button>
+          <el-button
+            v-on:click="Refuse_friend()"
+            class="refuse_submit"
+            v-if="isShow_application_button"
+          >拒绝</el-button>
+          <p v-else>{{this.request_status}}</p>
+        </div>
       </div>
     </div>
   </el-container>
@@ -568,71 +565,67 @@ export default {
 </script>
 
 <style  lang="less" scoped>
-.icon {
-  margin-left: 5px;
-  width: 25px;
-  height: 25px;
-}
-
-.MiddleAside {
-  background-color: rgb(247, 247, 247);
-}
-
-// Top buttons part of middle nav
-.search_area {
-  height: 134px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-
-  .search_key {
-    width: 220px;
-    height: 34px;
-    border: none;
-    padding-left: 10px;
-    border-radius: 5px;
-  }
-
-  .search_key:focus {
-    outline: none;
-  }
-
-  ::placeholder {
-    color: #c8ccd8;
-  }
-}
-
-// prevent default style of ul
+// prevent default style of ul, which appears at contact list and apply list
 ul {
   padding: 0;
   margin: 0;
 }
 
-// Contact list part of middle nav
-.contact {
-  height: 75px;
-  display: flex;
-  align-items: center;
-  padding-left: 25px;
-  cursor: pointer;
+// Middle part of layout
+#MiddleAside {
+  background-color: rgb(247, 247, 247);
 
-  .round_icon {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
+  // Top buttons part of middle nav
+  .search_area {
+    height: 134px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+    .search_key {
+      width: 220px;
+      height: 34px;
+      border: none;
+      padding-left: 10px;
+      border-radius: 5px;
+    }
+
+    .search_key:focus {
+      outline: none;
+    }
+
+    ::placeholder {
+      color: #c8ccd8;
+    }
   }
 
-  .contact_name {
-    margin-left: 15px;
+  // Contact list part of middle nav
+  .contact {
+    height: 75px;
+    display: flex;
+    align-items: center;
+    padding-left: 25px;
+    cursor: pointer;
+
+    .round_icon {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+    }
+
+    .contact_name {
+      margin-left: 15px;
+    }
+  }
+
+  // contact style when clicked
+  .addclass {
+    background: white;
   }
 }
 
-// contact style when clicked
-.addclass {
-  background: white;
-}
-
+// Right part of layout
 #rightPart {
   width: 100%;
   display: flex;
@@ -640,34 +633,55 @@ ul {
   justify-content: center;
 }
 
+// When right part is to show user info
 .ViewPersonalInfoDiv {
-  height: 400px;
   width: 300px;
-  .PersonalInfoLogoDiv {
-    height: 150px;
-    width: 150px;
-    position: relative;
-    left: 50%;
-    top: 25%;
-    transform: translate(-50%, -50%);
-    margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 
+  .PersonalInfoLogoDiv {
     img {
-      height: 100%;
-      width: 100%;
+      height: 150px;
+      width: 150px;
       border-radius: 50%;
     }
   }
 
   .InfoDiv {
-    margin: 20px 0;
-    text-align: center;
+    margin: 10px 0;
     font-size: 18px;
-    color: #303133;
 
     .UserIDDiv,
-    .UserNameDiv {
-      margin-bottom: 20px;
+    .UserNameDiv,
+    .UserRemarkDiv,
+    .UserIntroductionDiv {
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .edit-icon {
+      margin-left: 5px;
+      width: 23px;
+      height: 23px;
+    }
+  }
+
+  .SubmitButtonFormItem {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+
+    button {
+      background-color: rgb(78, 81, 158);
+      border: none;
+      color: white;
+    }
+
+    .el-button + .el-button {
+      margin-left: 0;
     }
   }
 
@@ -676,37 +690,88 @@ ul {
   }
 }
 
-.SubmitButtonFormItem {
-  margin: 0;
+// When right part is to show apply list info
+.application {
+  width: 350px;
+  border-bottom: #e1e4e7 1px solid;
+  display: flex;
+  align-items: center;
+  padding: 20px 10px;
+  cursor: pointer;
 
-  .SubmitButton_send {
-    background-color: rgb(78, 81, 158);
-    position: absolute;
-    left: 25%;
-    transform: translate(-50%);
-    border: none;
+  img {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
   }
-  .SubmitButton_delete {
-    background-color: rgb(78, 81, 158);
-    position: absolute;
-    transform: translate(-50%);
-    left: 75%;
-    border: none;
+
+  p {
+    color: #c8ccd8;
+    display: inline-block;
   }
-  .SubmitButton_add {
-    background-color: rgb(78, 81, 158);
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%);
-    border: none;
+
+  span {
+    color: black;
+    font-weight: bold;
+    margin: 0 10px;
   }
-  .SetLogoButton {
+}
+.application:first-child {
+  border-top: #e8ecf1 1px solid;
+}
+
+// When right part is to show apply detail info
+.application_area {
+  h2 {
+    text-align: center;
+  }
+
+  #applyer-info {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  img {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+  }
+
+  .a_name {
+    margin-top: 10px;
+  }
+
+  .a_msg {
+    width: 280px;
+    height: 120px;
+    margin: 25px 0;
+    overflow: auto;
+    padding: 10px;
+    border: #b3c0d1 1px solid;
+    border-radius: 5px;
+  }
+
+  #operations {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  button {
+    width: 96px;
+    border-radius: 5px;
+  }
+
+  .add_submit {
     background-color: rgb(78, 81, 158);
-    position: absolute;
-    left: 75%;
-    transform: translate(-50%);
-    border: none;
-    margin: 0;
+    border: rgb(78, 81, 158) 1px solid;
+    color: white;
+  }
+
+  .refuse_submit {
+    background-color: white;
+    color: black;
+    border: black 1px solid;
   }
 }
 
@@ -756,94 +821,5 @@ ul {
   padding: 0 25px;
   line-height: 40px;
   cursor: pointer;
-}
-
-.application {
-  width: 350px;
-  border-bottom: #e1e4e7 1px solid;
-  display: flex;
-  align-items: center;
-  padding: 20px 10px;
-  cursor: pointer;
-
-  img {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-  }
-
-  p {
-    color: #c8ccd8;
-    display: inline-block;
-  }
-
-  span {
-    color: black;
-    font-weight: bold;
-    margin: 0 10px;
-  }
-}
-
-.application:first-child {
-  border-top: #e8ecf1 1px solid;
-}
-
-.application_area {
-}
-
-.application_area h2 {
-  width: 100%;
-  text-align: center;
-}
-
-.application_area img {
-  width: 50px;
-  height: 50px;
-  display: flex;
-  border-radius: 50%;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  float: left;
-
-  left: 30%;
-}
-
-.application_area .a_name {
-  display: inline-block;
-  line-height: 100%;
-  font-size: 20px;
-  margin-left: 10px;
-}
-
-.application_area .a_msg {
-  width: 280px;
-  border: #b3c0d1 1px solid;
-
-  height: 120px;
-  overflow: auto;
-  padding: 10px;
-  font-size: 16px;
-}
-
-.application_area button {
-  width: 40%;
-  height: 40px;
-  margin-top: 10px;
-  font-size: 18px;
-  border-radius: 5px;
-}
-
-.application_area .add_submit {
-  background-color: rgb(78, 81, 158);
-  color: white;
-  float: left;
-}
-
-.application_area .refuse_submit {
-  background-color: white;
-  color: black;
-  margin-left: 20%;
-  border: black 1px solid;
 }
 </style>
