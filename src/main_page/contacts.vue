@@ -1,6 +1,7 @@
 <template>
   <el-container :IsDarkMode="IsDarkMode">
     <el-aside id="MiddleAside" width="280px">
+      <!--Search area  -->
       <div class="search_area">
         <input
           class="search_key"
@@ -10,67 +11,55 @@
         />
         <input class="search_key" placeholder="添加好友" v-model="add_str" @keyup.enter="Search_user()" />
       </div>
+
+      <!-- New friend notification area -->
       <div v-on:click="Show_new_friend()" class="new_friend">好友申请 ></div>
+
+      <!-- Contact list area -->
       <div class="contact_list">
         <ul
           v-for="item in get_contacts"
           v-bind:key="item.account"
           v-on:click="Select_friend(item.f_name,item.u_name,item.account,item.img_path,item.personal_profile)"
-          class="contact"
-          :class="{addclass: item.account === search_account}"
+          :class="{current_clicked: item.account === search_account}"
         >
-          <img :src="item.img_path" class="round_icon" />
-          <a class="contact_name">{{item.f_name}}</a>
+          <img :src="item.img_path" class="contact_avatar" />
+          <span class="contact_name">{{item.f_name}}</span>
         </ul>
       </div>
     </el-aside>
+
     <div id="rightPart">
-      <div class="ViewPersonalInfoDiv" :class="{BGCDark: IsDarkMode}" v-if="isShow_personal">
-        <div class="PersonalInfoLogoDiv">
-          <img :src="search_img_path" />
-        </div>
-        <div class="InfoDiv" :class="{InfoDivDark: IsDarkMode}">
-          <div class="UserIDDiv">帐号：{{search_account}}</div>
-          <div class="UserNameDiv">昵称：{{search_name}}</div>
-          <div class="UserRemarkDiv" v-if="!change_remark&&!isShow_add_user&&isShow_personal">
+      <!-- When right part is to show user info -->
+      <div class="view_user_info" v-if="isShow_personal">
+        <div class="InfoDiv">
+          <img :src="search_img_path" class="info_avatar" />
+          <div class="info_account">帐号：{{search_account}}</div>
+          <div class="info_nickname">昵称：{{search_name}}</div>
+          <div class="info_remarkname" v-if="!change_remark&&!isShow_add_user&&isShow_personal">
             备注：{{search_f_name}}
             <img
-              class="edit-icon"
+              class="edit_icon"
               src="icons/edit.svg"
               @click="Change_remark_status()"
             />
           </div>
-          <div class="UserRemarkDiv" v-if="change_remark&&!isShow_add_user&&isShow_personal">
-            <el-input
-              class="remark_key"
-              v-model="search_f_name"
-              @keyup.enter.native="Change_remark()"
-            ></el-input>
+          <div class="info_remarkname" v-if="change_remark&&!isShow_add_user&&isShow_personal">
+            <el-input v-model="search_f_name" @keyup.enter.native="Change_remark()"></el-input>
           </div>
-          <div class="UserIntroductionDiv">简介：{{ search_personal_profile }}</div>
+          <div class="info_introduction">简介：{{ search_personal_profile }}</div>
         </div>
-        <div class="SubmitButtonFormItem">
-          <el-button
-            class="SubmitButton_send"
-            @click="Show_send_message()"
-            v-if="!isShow_add_user&&isShow_personal"
-          >发送信息</el-button>
-          <el-button
-            class="SubmitButton_add"
-            @click="Show_send_application()"
-            v-if="isShow_add_user&&isShow_personal"
-          >添加好友</el-button>
-          <el-button
-            class="SubmitButton_delete"
-            @click="Del_contact()"
-            v-if="!isShow_add_user&&isShow_personal"
-          >删除好友</el-button>
+        <div class="ButtonDiv">
+          <el-button @click="Show_send_message()" v-if="!isShow_add_user&&isShow_personal">发送信息</el-button>
+          <el-button @click="Show_send_application()" v-if="isShow_add_user&&isShow_personal">添加好友</el-button>
+          <el-button @click="Del_contact()" v-if="!isShow_add_user&&isShow_personal">删除好友</el-button>
         </div>
       </div>
 
+      <!-- When right part is to send friend request -->
       <div class="send_application" v-if="isShow_application && !isShow_personal">
         <h2>验证信息</h2>
-        <textarea id="add_message">
+        <textarea id="request_message">
            Hello!
          </textarea>
         <el-button v-on:click="Send_application()" class="submit">发送申请</el-button>
@@ -79,12 +68,12 @@
         <span>发送成功</span>
       </div>
 
+      <!-- When right part is to show apply list info -->
       <div class="application_list" v-if="isShow_new_friend_list">
         <ul
           v-for="(item,index) in new_friend"
           v-bind:key="index"
           v-on:click="Select_new_friend(item.name,item.account,item.img_path,item.content,item.personal_profile,item.id,index)"
-          class="application"
         >
           <img :src="item.img_path" />
           <p>
@@ -93,25 +82,20 @@
         </ul>
       </div>
 
+      <!-- When right part is to view friend request -->
       <div class="view_application" v-if="isShow_new_application">
         <h2>好友申请</h2>
-        <div id="applyer-info">
+        <div class="applicant_info">
           <img :src="search_img_path" />
           <span class="a_name">{{search_name}}</span>
         </div>
         <p class="a_msg">{{search_content}}</p>
-        <div id="operations">
-          <el-button
-            v-on:click="Add_friend()"
-            class="add_submit"
-            v-if="isShow_application_button"
-          >同意</el-button>
-          <el-button
-            v-on:click="Refuse_friend()"
-            class="refuse_submit"
-            v-if="isShow_application_button"
-          >拒绝</el-button>
-          <p v-else>{{this.request_status}}</p>
+        <div>
+          <div v-if="isShow_application_button" class="operations">
+            <el-button v-on:click="Add_friend()" class="agree_btn">同意</el-button>
+            <el-button v-on:click="Refuse_friend()" class="refuse_btn">拒绝</el-button>
+          </div>
+          <p v-else class="status">{{this.request_status}}</p>
         </div>
       </div>
     </div>
@@ -292,7 +276,7 @@ export default {
     },
 
     Send_application() {
-      var message = document.getElementById("add_message").value;
+      var message = document.getElementById("request_message").value;
       this.$socket.emit("sendApplication", {
         to: this.search_account,
         message: message
@@ -606,26 +590,28 @@ ul {
   }
 
   // Contact list part of middle nav
-  .contact {
-    height: 75px;
-    display: flex;
-    align-items: center;
-    padding-left: 25px;
-    cursor: pointer;
+  .contact_list {
+    ul {
+      height: 75px;
+      display: flex;
+      align-items: center;
+      padding-left: 25px;
+      cursor: pointer;
 
-    .round_icon {
-      width: 55px;
-      height: 55px;
-      border-radius: 50%;
-    }
+      .contact_avatar {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+      }
 
-    .contact_name {
-      margin-left: 15px;
+      .contact_name {
+        margin-left: 15px;
+      }
     }
   }
 
   // contact style when clicked
-  .addclass {
+  .current_clicked {
     background: white;
   }
 }
@@ -639,42 +625,40 @@ ul {
 }
 
 // When right part is to show user info
-.ViewPersonalInfoDiv {
+.view_user_info {
   width: 300px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
 
-  .PersonalInfoLogoDiv {
-    img {
-      height: 150px;
-      width: 150px;
-      border-radius: 50%;
-    }
-  }
-
   .InfoDiv {
     margin: 10px 0;
     font-size: 18px;
 
-    .UserIDDiv,
-    .UserNameDiv,
-    .UserRemarkDiv,
-    .UserIntroductionDiv {
+    .info_avatar {
+      height: 150px;
+      width: 150px;
+      border-radius: 50%;
+    }
+
+    .info_account,
+    .info_nickname,
+    .info_remarkname,
+    .info_introduction {
       margin: 20px 0;
       display: flex;
       justify-content: center;
     }
 
-    .edit-icon {
+    .edit_icon {
       margin-left: 5px;
       width: 23px;
       height: 23px;
     }
   }
 
-  .SubmitButtonFormItem {
+  .ButtonDiv {
     width: 100%;
     display: flex;
     justify-content: space-around;
@@ -688,10 +672,6 @@ ul {
     .el-button + .el-button {
       margin-left: 0;
     }
-  }
-
-  .InfoDivDark {
-    color: rgb(230, 230, 230);
   }
 }
 
@@ -728,13 +708,13 @@ ul {
   }
 }
 
-// When right part is to show apply detail info
+// When right part is to view friend request
 .view_application {
   h2 {
     text-align: center;
   }
 
-  #applyer-info {
+  .applicant_info {
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -760,7 +740,7 @@ ul {
     border-radius: 5px;
   }
 
-  #operations {
+  .operations {
     display: flex;
     justify-content: space-between;
   }
@@ -770,16 +750,20 @@ ul {
     border-radius: 5px;
   }
 
-  .add_submit {
+  .agree_btn {
     background-color: rgb(78, 81, 158);
     border: rgb(78, 81, 158) 1px solid;
     color: white;
   }
 
-  .refuse_submit {
+  .refuse_btn {
     background-color: white;
     color: black;
     border: black 1px solid;
+  }
+
+  .status {
+    text-align: center;
   }
 }
 
