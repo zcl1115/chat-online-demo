@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container :IsDarkMode="IsDarkMode">
     <el-aside id="MiddleAside" width="280px">
       <div class="search_area">
         <input
@@ -8,12 +8,7 @@
           v-model="search_str"
           @keyup.enter="Search_contact()"
         />
-        <input
-          class="search_key"
-          placeholder="添加好友"
-          v-model="add_account"
-          @keyup.enter="Search_user()"
-        />
+        <input class="search_key" placeholder="添加好友" v-model="add_str" @keyup.enter="Search_user()" />
       </div>
       <div v-on:click="Show_new_friend()" class="new_friend">好友申请 ></div>
       <div class="contact_list">
@@ -30,11 +25,11 @@
       </div>
     </el-aside>
     <div id="rightPart">
-      <div class="ViewPersonalInfoDiv" :class="{BGCDark: IsDarkModeProp}" v-if="isShow_personal">
+      <div class="ViewPersonalInfoDiv" :class="{BGCDark: IsDarkMode}" v-if="isShow_personal">
         <div class="PersonalInfoLogoDiv">
           <img :src="search_img_path" />
         </div>
-        <div class="InfoDiv" :class="{InfoDivDark: IsDarkModeProp}">
+        <div class="InfoDiv" :class="{InfoDivDark: IsDarkMode}">
           <div class="UserIDDiv">帐号：{{search_account}}</div>
           <div class="UserNameDiv">昵称：{{search_name}}</div>
           <div class="UserRemarkDiv" v-if="!change_remark&&!isShow_add_user&&isShow_personal">
@@ -73,7 +68,7 @@
         </div>
       </div>
 
-      <div class="send_application" v-if="isShow_application">
+      <div class="send_application" v-if="isShow_application && !isShow_personal">
         <h2>验证信息</h2>
         <textarea id="add_message">
            Hello!
@@ -81,7 +76,7 @@
         <el-button v-on:click="Send_application()" class="submit">发送申请</el-button>
       </div>
       <div v-if="isShow_ok" class="show_ok">
-        <label>发送成功</label>
+        <span>发送成功</span>
       </div>
 
       <div class="application_list" v-if="isShow_new_friend_list">
@@ -98,7 +93,7 @@
         </ul>
       </div>
 
-      <div class="application_area" v-if="isShow_new_application">
+      <div class="view_application" v-if="isShow_new_application">
         <h2>好友申请</h2>
         <div id="applyer-info">
           <img :src="search_img_path" />
@@ -141,7 +136,7 @@ export default {
       name: "",
       get_contacts: [],
       isShow_personal: false,
-      add_account: "",
+      add_str: "",
       isShow_application: false,
       isShow_ok: false,
       isShow_add_user: false,
@@ -245,8 +240,8 @@ export default {
     },
 
     Search_user() {
-      this.search_account = this.add_account;
-      var id = this.search_account;
+      // this.search_account = this.add_str;
+      var id = this.add_str;
       this.axios
         .post(
           "api/friend/get_user",
@@ -600,6 +595,16 @@ ul {
     }
   }
 
+  // New friend requests part of middle nav
+  .new_friend {
+    height: 40px;
+    background-color: #f2f2f2;
+    color: #9d97a4;
+    padding: 0 25px;
+    line-height: 40px;
+    cursor: pointer;
+  }
+
   // Contact list part of middle nav
   .contact {
     height: 75px;
@@ -691,37 +696,40 @@ ul {
 }
 
 // When right part is to show apply list info
-.application {
+.application_list {
   width: 350px;
-  border-bottom: #e1e4e7 1px solid;
-  display: flex;
-  align-items: center;
-  padding: 20px 10px;
-  cursor: pointer;
+  ul {
+    border-bottom: #e1e4e7 1px solid;
+    display: flex;
+    align-items: center;
+    padding: 20px 10px;
+    cursor: pointer;
 
-  img {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
+    img {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+    }
+
+    p {
+      color: #c8ccd8;
+      display: inline-block;
+    }
+
+    span {
+      color: black;
+      font-weight: bold;
+      margin: 0 10px;
+    }
   }
 
-  p {
-    color: #c8ccd8;
-    display: inline-block;
+  ul:first-child {
+    border-top: #e8ecf1 1px solid;
   }
-
-  span {
-    color: black;
-    font-weight: bold;
-    margin: 0 10px;
-  }
-}
-.application:first-child {
-  border-top: #e8ecf1 1px solid;
 }
 
 // When right part is to show apply detail info
-.application_area {
+.view_application {
   h2 {
     text-align: center;
   }
@@ -775,51 +783,33 @@ ul {
   }
 }
 
+// When right part is to send friend request
 .send_application {
-  position: absolute;
-  left: 50%;
-  top: 20%;
-  width: 300px;
-}
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-.send_application h2 {
-  text-align: center;
-  width: 100%;
-}
+  h2 {
+    text-align: center;
+  }
 
-.send_application textarea {
-  display: inline-block;
-  width: 100%;
-  height: 200px;
-  border: black 1px solid;
-  border-radius: 5px;
-  font-size: 20px;
-}
+  textarea {
+    display: block;
+    width: 280px;
+    height: 150px;
+    margin: 25px 0;
+    padding: 10px;
+    outline: none;
+    box-sizing: border-box;
+    border: #b3c0d1 1px solid;
+    border-radius: 5px;
+    font-size: 16px;
+  }
 
-.send_application .submit {
-  background-color: rgb(78, 81, 158);
-  position: relative;
-  width: 100%;
-
-  height: 50px;
-  color: white;
-  border-radius: 5px;
-  margin-top: 20px;
-}
-
-.show_ok {
-  position: absolute;
-  left: 50%;
-  top: 40%;
-  font-size: 16px;
-}
-
-.new_friend {
-  height: 40px;
-  background-color: #f2f2f2;
-  color: #9d97a4;
-  padding: 0 25px;
-  line-height: 40px;
-  cursor: pointer;
+  .submit {
+    background-color: rgb(78, 81, 158);
+    color: white;
+    border-radius: 5px;
+  }
 }
 </style>

@@ -1,13 +1,13 @@
-import Vue from 'vue'
-import Main from './Main.vue'
-import ElementUI from 'element-ui'
-import '../assets/css/global.css'
-import 'element-ui/lib/theme-chalk/index.css'
+import Vue from 'vue';
+import Main from './Main.vue';
+import ElementUI from 'element-ui';
+import '../assets/css/global.css';
+import 'element-ui/lib/theme-chalk/index.css';
 import SocketIO from 'socket.io-client';
 import VueSocketIO from 'vue-socket.io';
-import axios from 'axios'
-import qs from 'qs'
-import echarts from 'echarts'
+import axios from 'axios';
+import qs from 'qs';
+import echarts from 'echarts';
 
 Vue.prototype.$echarts = echarts;
 Vue.use(new VueSocketIO({
