@@ -202,6 +202,7 @@ export default {
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      color: var(--menu-font-color);
       background-color: var(--mid-clicked-color);
     }
 
@@ -217,7 +218,7 @@ export default {
       .MenuItem {
         height: 75px;
         line-height: 75px;
-        color: var(--font-color);
+        color: var(--menu-font-color);
       }
 
       .MenuItem:hover {
@@ -235,7 +236,7 @@ export default {
     background-color: var(--mid-bg-color-dark);
 
     .LogoutButtonDark {
-      color: var(--font-color-dark);
+      color: var(--menu-font-color-dark);
       background-color: var(--mid-clicked-color-dark);
     }
 
@@ -243,7 +244,7 @@ export default {
       background-color: var(--mid-bg-color-dark);
 
       .MenuItemDark {
-        color: var(--font-color-dark);
+        color: var(--menu-font-color-dark);
       }
 
       .MenuItemDark:hover {

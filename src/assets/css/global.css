@@ -9,9 +9,13 @@ html, body, #app {
   --login-signup-bg-color: #f7f7f7;
   /*-------- Font --------*/
   /* Light */
-  --font-color: #606266;
+  --menu-font-color: #606266;
+  --info-font-color: #303133;
+  --placeholder-color: #c8ccd8;
   /* Dark */
-  --font-color-dark: #bfbfbf;
+  --menu-font-color-dark: #bfbfbf;
+  --info-font-color-dark: #bfbfbf;
+  --placeholder-color-dark: #5f5f5f;
   /*-------- Left --------*/
   /* Light */
   --left-bg-color: #f2f2f2;
@@ -30,6 +34,11 @@ html, body, #app {
   --mid-bg-color-dark: #131313;
   --mid-hover-color-dark: #151515;
   --mid-clicked-color-dark: #1a1a1a;
+  /* -------- Right -------- */
+  /* Light */
+  --right-bg-color: white;
+  /* Dark */
+  --right-bg-color-dark: #1a1a1a;
 }
 
 .BGCDark {
