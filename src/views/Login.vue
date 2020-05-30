@@ -10,7 +10,12 @@
           <el-input placeholder="请输入账号" v-model="message.account" clearable></el-input>
         </el-form-item>
         <el-form-item prop="pwd" class="input_style_login">
-          <el-input placeholder="请输入密码" v-model="message.pwd" show-password></el-input>
+          <el-input
+            placeholder="请输入密码"
+            v-model="message.pwd"
+            @keyup.enter.native="login"
+            show-password
+          ></el-input>
         </el-form-item>
       </el-form>
       <el-button type="primary" @click="login" class="login_style">登录</el-button>
@@ -38,14 +43,15 @@ export default {
         pwd: ""
       },
       LoginFormRules: {
-        account: [{ required: true, message: "账号必填！", trigger: "blur" },
+        account: [
+          { required: true, message: "账号必填！", trigger: "blur" },
           {
             min: 6,
             max: 20,
             message: "账号长度必须在6到20以内！",
             trigger: "blur"
           }
-          ],
+        ],
         pwd: [
           { required: true, message: "密码必填！", trigger: "blur" },
           { validator: PasswordMainRule, trigger: "blur" }
@@ -105,12 +111,14 @@ export default {
 </script>
 
 <style>
+@import "../assets/css/global.css";
+
 html {
   height: 100%;
 }
 
 body {
-  background-color: #f7f7f7;
+  background-color: var(--login-signup-bg-color);
 }
 
 .main_login {
@@ -149,8 +157,8 @@ img + span {
 .login_style {
   width: 270px;
   margin-bottom: 10px !important;
-  background-color: #4e519e !important;
-  border: #4e519e !important;
+  background-color: var(--special-color) !important;
+  border: var(--special-color) !important;
 }
 
 .signup_style {

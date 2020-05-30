@@ -183,12 +183,14 @@ export default {
 </script>
 
 <style>
+@import "../assets/css/global.css";
+
 html {
   height: 100%;
 }
 
 body {
-  background-color: #f7f7f7;
+  background-color: var(--login-signup-bg-color);
 }
 
 .main_signup {
@@ -216,7 +218,7 @@ body {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  color: #4e519e;
+  color: var(--special-color);
   font-size: 1.5em;
   opacity: 0;
 }
@@ -245,8 +247,8 @@ body {
 
 .logon_style {
   width: 270px;
-  background-color: #4e519e !important;
-  border: #4e519e !important;
+  background-color: var(--special-color) !important;
+  border: var(--special-color) !important;
 }
 
 #close-btn {

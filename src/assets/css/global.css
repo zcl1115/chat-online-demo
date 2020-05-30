@@ -2,25 +2,34 @@ html, body, #app {
   height: 100%;
   margin: 0;
   padding: 0;
-  /* font-family: "黑体"; */
 }
 
-button {
-  /* font-family: "黑体"; */
-}
-
-.FormLabel {
-  text-align: right;
-  vertical-align: middle;
-  font-size: 14px;
-  color: #606266;
-  line-height: 40px;
-  padding: 0 12px 0 0;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  position: absolute;
-  left: 0;
-  transform: translate(-100%);
+:root {
+  --special-color: #4e519e;
+  --login-signup-bg-color: #f7f7f7;
+  /*-------- Font --------*/
+  /* Light */
+  --font-color: #606266;
+  /* Dark */
+  --font-color-dark: #bfbfbf;
+  /*-------- Left --------*/
+  /* Light */
+  --left-bg-color: #f2f2f2;
+  --left-hover-color: #f7f7f7;
+  --left-clicked-color: #fff;
+  /* Dark */
+  --left-bg-color-dark: #0b0b0b;
+  --left-hover-color-dark: #131313;
+  --left-clicked-color-dark: #1a1a1a;
+  /*-------- Middle --------*/
+  /* Light */
+  --mid-bg-color: #f7f7f7;
+  --mid-hover-color: #fafafa;
+  --mid-clicked-color: white;
+  /* Dark */
+  --mid-bg-color-dark: #131313;
+  --mid-hover-color-dark: #151515;
+  --mid-clicked-color-dark: #1a1a1a;
 }
 
 .BGCDark {

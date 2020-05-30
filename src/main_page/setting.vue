@@ -1,31 +1,27 @@
 <template>
   <el-container>
     <el-aside class="MiddleAside" :class="{MiddleAsideDark: IsDarkMode}" width="280px">
-      <el-menu
-        class="MiddleAsideMenu"
-        :class="{MiddleAsideMenuDark: IsDarkMode}"
-        :default-active="ActiveButtonIndex"
-      >
-        <el-menu-item
-          class="LogoutButton"
-          @click="LogoutButtonClicked()"
-          :class="{MenuItem2Dark: IsDarkMode}"
-        >退出登录</el-menu-item>
+      <button
+        class="LogoutButton"
+        @click="LogoutButtonClicked()"
+        :class="{LogoutButtonDark: IsDarkMode}"
+      >退出登录</button>
+      <el-menu class="MiddleAsideMenu" :class="{MiddleAsideMenuDark: IsDarkMode}">
         <el-menu-item
           index="ViewPersonalInfoComponent"
-          class="OtherSettingButtons"
+          class="MenuItem"
           @click="SetDisplayMark('ViewPersonalInfoComponent')"
           :class="{MenuItemDark: IsDarkMode}"
         >个人信息</el-menu-item>
         <el-menu-item
           index="SetPasswordComponent"
-          class="OtherSettingButtons"
+          class="MenuItem"
           @click="SetDisplayMark('SetPasswordComponent')"
           :class="{MenuItemDark: IsDarkMode}"
         >帐号密码</el-menu-item>
         <el-menu-item
           index="SetThemeModeComponent"
-          class="OtherSettingButtons"
+          class="MenuItem"
           @click="SetDisplayMark('SetThemeModeComponent')"
           :class="{MenuItemDark: IsDarkMode}"
         >设置主题</el-menu-item>
@@ -34,7 +30,6 @@
     <component
       :is="RightSideDisplayMark"
       @SetDisplayMark="SetDisplayMark"
-      @SetDisplayMark2="SetDisplayMark2"
       @UpdatePersonalInfoInVue="UpdatePersonalInfoInVue"
       :UserIDProp="UserID"
       :UserNameProp="UserName"
@@ -46,11 +41,12 @@
 </template>
 
 <script>
-import ViewPersonalInfoComponent from "./ViewPersonalInfoComponent.vue";
-import SetPersonalInfoComponent from "./SetPersonalInfoComponent.vue";
-import SetPasswordComponent from "./SetPasswordComponent.vue";
-import SetLogoComponent from "./SetLogoComponent.vue";
-import SetThemeModeComponent from "./SetThemeModeComponent.vue";
+import DefultComponent from "../components/setting/DefultComponent.vue";
+import ViewPersonalInfoComponent from "../components/setting/ViewPersonalInfoComponent.vue";
+import SetPersonalInfoComponent from "../components/setting/SetPersonalInfoComponent.vue";
+import SetPasswordComponent from "../components/setting/SetPasswordComponent.vue";
+import SetLogoComponent from "../components/setting/SetLogoComponent.vue";
+import SetThemeModeComponent from "../components/setting/SetThemeModeComponent.vue";
 import { getCookie, DeleteCookie, setCookie } from "../components/cookieUtil";
 
 const GetPersonalInfoURL = "api/setting/GetPersonalInfo";
@@ -64,9 +60,7 @@ const UserIntroductionCookieKey = "UserIntroduction";
 export default {
   data() {
     return {
-      RightSideDisplayMark: "ViewPersonalInfoComponent",
-      ActiveButtonIndex: "ViewPersonalInfoComponent",
-
+      RightSideDisplayMark: "DefultComponent",
       UserID: getCookie(UserIDCookieKey),
       UserName: getCookie(UserNameCookieKey),
       UserIntroduction: getCookie(UserIntroductionCookieKey),
@@ -75,10 +69,6 @@ export default {
   },
   methods: {
     SetDisplayMark(val) {
-      this.RightSideDisplayMark = val;
-      this.ActiveButtonIndex = val;
-    },
-    SetDisplayMark2(val) {
       this.RightSideDisplayMark = val;
     },
     GetPersonalInfo() {
@@ -169,6 +159,7 @@ export default {
     }
   },
   components: {
+    DefultComponent,
     ViewPersonalInfoComponent,
     SetPersonalInfoComponent,
     SetLogoComponent,
@@ -196,90 +187,73 @@ export default {
 .el-container {
   height: 100%;
   margin: 0;
-}
 
-.el-aside {
-  color: #333;
-  height: 100%;
-
-  .el-menu-item.is-active,
-  .el-menu-item:hover {
-    color: black;
-    background-color: rgb(250, 250, 250);
-  }
-
-  .el-menu-item:focus {
-    background-color: #fff;
-    color: #000;
-  }
-}
-
-.MiddleAside {
-  background-color: rgb(247, 247, 247);
-  text-align: center;
-
-  .MiddleAsideMenu {
-    background-color: rgb(247, 247, 247);
-    border: none;
+  // Light
+  .MiddleAside {
+    text-align: center;
+    background-color: var(--mid-bg-color);
 
     .LogoutButton {
-      margin: 50px auto;
       width: 220px;
       height: 34px;
       line-height: 34px;
-      background-color: #fff;
+      margin: 50px auto;
+      outline: none;
+      border: none;
       border-radius: 5px;
-    }
-
-    .OtherSettingButtons {
-      height: 75px;
-      line-height: 75px;
-      vertical-align: top;
-    }
-
-    .MenuItem2Dark {
-      background-color: #1a1a1a;
-      color: rgb(220, 220, 220);
-    }
-
-    .MenuItem2Dark:hover {
-      background-color: #303133;
-      color: rgb(240, 240, 240);
-    }
-
-    .MenuItem2Dark.is-active,
-    .MenuItem2Dark:focus {
-      background-color: #303133;
-      color: rgb(250, 250, 250);
+      cursor: pointer;
+      background-color: var(--mid-clicked-color);
     }
 
     .LogoutButton:hover {
       color: white;
-      background-color: #4e519e;
+      background-color: var(--special-color);
+    }
+
+    .MiddleAsideMenu {
+      border: none;
+      background-color: var(--mid-bg-color);
+
+      .MenuItem {
+        height: 75px;
+        line-height: 75px;
+        color: var(--font-color);
+      }
+
+      .MenuItem:hover {
+        background-color: var(--mid-hover-color);
+      }
+
+      .MenuItem.is-active {
+        background-color: var(--mid-clicked-color);
+      }
     }
   }
 
-  .MiddleAsideMenuDark {
-    background-color: #131313;
-  }
+  // Dark
+  .MiddleAsideDark {
+    background-color: var(--mid-bg-color-dark);
 
-  .MenuItemDark {
-    color: rgb(210, 210, 210);
-  }
+    .LogoutButtonDark {
+      color: var(--font-color-dark);
+      background-color: var(--mid-clicked-color-dark);
+    }
 
-  .MenuItemDark:hover {
-    background-color: rgb(24, 24, 24);
-    color: rgb(220, 220, 220);
-  }
+    .MiddleAsideMenuDark {
+      background-color: var(--mid-bg-color-dark);
 
-  .MenuItemDark.is-active,
-  .MenuItemDark:focus {
-    background-color: #1a1a1a;
-    color: rgb(240, 240, 240);
-  }
-}
+      .MenuItemDark {
+        color: var(--font-color-dark);
+      }
 
-.MiddleAsideDark {
-  background-color: #131313;
+      .MenuItemDark:hover {
+        background-color: var(--mid-hover-color-dark);
+      }
+
+      .MenuItemDark.is-active {
+        background-color: var(--mid-clicked-color-dark);
+      }
+    }
+  }
 }
 </style>
