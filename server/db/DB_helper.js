@@ -1,4 +1,4 @@
-const SQLConfig = {
+﻿const SQLConfig = {
     host: 'localhost',
     user: 'root',
     password: 'zheng1998',
@@ -17,7 +17,7 @@ const SQLConfig2 = {
 
 function DB_helper() {
     var mysql = require('mysql');
-    var connection = mysql.createConnection(SQLConfig2);
+    var connection = mysql.createConnection(SQLConfig);
     connection.connect(function(err){
         if(err){
             console.log("connection failed!");
@@ -113,9 +113,8 @@ function DB_helper() {
             "   `chat_time` DATETIME,\n" +
             "   `contact` VARCHAR(20) NOT NULL,\n" +
             "   PRIMARY KEY ( `account` , `contact`),\n" +
-            "   FOREIGN KEY (`account`) REFERENCES `user`(`account`) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
-            "   FOREIGN KEY (`contact`) REFERENCES `user`(`account`) ON DELETE CASCADE ON UPDATE CASCADE\n" +
-            ");";
+            "   FOREIGN KEY ( `account` , `contact`) REFERENCES `contact`(`user_account` , `contact_account`) ON DELETE CASCADE ON UPDATE CASCADE\n" +
+            ")CHARSET=utf8;";
         connection.query(sql,function (err) {
             if(err){
                 console.log("[CREATE TABLE ERROR - ]",err.message);
