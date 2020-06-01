@@ -82,7 +82,7 @@ export default {
       recent_contacts_list: [],
       unread_message: [],
       forbidden_word: [],
-      now_contact: ""
+      now_contact: "",
     };
   },
   mounted() {
@@ -121,6 +121,9 @@ export default {
         return b1 - a1;
       });
     });
+    window.setInterval(() => {
+      setTimeout(this.init_recent_contacts, 0)
+    }, 5000);
   },
   methods: {
     SetDisplayPage(val) {
