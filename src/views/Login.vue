@@ -7,7 +7,7 @@
     <div class="form_container_login">
       <el-form :model="message" :rules="LoginFormRules">
         <el-form-item prop="account" class="input_style_login">
-          <el-input placeholder="请输入账号" v-model="message.account" clearable></el-input>
+          <el-input placeholder="请输入帐号" v-model="message.account" clearable></el-input>
         </el-form-item>
         <el-form-item prop="pwd" class="input_style_login">
           <el-input
@@ -44,11 +44,11 @@ export default {
       },
       LoginFormRules: {
         account: [
-          { required: true, message: "账号必填！", trigger: "blur" },
+          { required: true, message: "帐号必填！", trigger: "blur" },
           {
             min: 6,
             max: 20,
-            message: "账号长度必须在6到20以内！",
+            message: "帐号长度必须在6到20以内！",
             trigger: "blur"
           }
         ],
@@ -64,7 +64,7 @@ export default {
       if (this.message.account === "" || this.message.pwd === "") {
         this.$message({
           showClose: true,
-          message: "请输入账号密码！",
+          message: "请输入帐号密码！",
           type: "error"
         });
         return;
@@ -88,7 +88,7 @@ export default {
             if (res.status === "1") {
               this.$message({
                 showClose: true,
-                message: "账号不存在！",
+                message: "帐号不存在！",
                 type: "error"
               });
               return;

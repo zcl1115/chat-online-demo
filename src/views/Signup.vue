@@ -26,7 +26,7 @@
       </div>
       <el-form :model="users" :rules="Signup_FormRules">
         <el-form-item prop="account" class="input_style_signup">
-          <el-input placeholder="请输入账号(6-20位的字母数字组合)" v-model="users.account" clearable></el-input>
+          <el-input placeholder="请输入帐号(6-20位的字母数字组合)" v-model="users.account" clearable></el-input>
         </el-form-item>
         <el-form-item prop="name" class="input_style_signup">
           <el-input placeholder="请输入昵称(20位以内)" v-model="users.name" clearable></el-input>
@@ -79,11 +79,11 @@ export default {
       has_error: false,
       Signup_FormRules: {
         account: [
-          { required: true, message: "账号必填！", trigger: "blur" },
+          { required: true, message: "帐号必填！", trigger: "blur" },
           {
             min: 6,
             max: 20,
-            message: "账号长度必须在6到20以内！",
+            message: "帐号长度必须在6到20以内！",
             trigger: "blur"
           }
         ],
@@ -154,7 +154,7 @@ export default {
           } else if (res.status === "1") {
             this.$message({
               showClose: true,
-              message: "该账号已存在！",
+              message: "该帐号已存在！",
               type: "error"
             });
           }

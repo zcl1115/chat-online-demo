@@ -89,8 +89,12 @@ export default {
   position: relative;
   width: fit-content;
   width: -moz-fit-content;
-  border: 2px solid rgb(240, 240, 240);
-  background: rgba(240, 240, 240, 0.3);
+  /* border: 2px solid rgb(240, 240, 240); */
+  cursor: pointer;
+  padding: 5px;
+  background: var(--mid-bg-color);
+  border-radius: 5px;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.3);
 }
 .emoji {
   margin-right: 5px;

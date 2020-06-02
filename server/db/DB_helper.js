@@ -1,12 +1,12 @@
-﻿const SQLConfig = {
-    host: 'localhost',
-    user: 'root',
-    password: 'zheng1998',
-    database: 'test',
-    timezone: "08:00",
-    charset: 'UTF8MB4_GENERAL_CI'
-};
-const SQLConfig2 = {
+﻿// const SQLConfig = {
+//     host: 'localhost',
+//     user: 'root',
+//     password: 'zheng1998',
+//     database: 'test',
+//     timezone: "08:00",
+//     charset: 'UTF8MB4_GENERAL_CI'
+// };
+const SQLConfig = {
     host: 'localhost',
     user: 'rjgc',
     password: 'rjgc123',
@@ -18,10 +18,10 @@ const SQLConfig2 = {
 function DB_helper() {
     var mysql = require('mysql');
     var connection = mysql.createConnection(SQLConfig);
-    connection.connect(function(err){
-        if(err){
+    connection.connect(function (err) {
+        if (err) {
             console.log("connection failed!");
-            throw(err);
+            throw (err);
         }
     });
     this.isAcoountExist = function (account, cb) {
@@ -92,8 +92,8 @@ function DB_helper() {
             if (cb != null) return cb(result);
         });
     };
-    this.createTables=function () {
-        var sql="CREATE TABLE IF NOT EXISTS `user`(\n" +
+    this.createTables = function () {
+        var sql = "CREATE TABLE IF NOT EXISTS `user`(\n" +
             "   `account` VARCHAR(20) NOT NULL,\n" +
             "   `password` VARCHAR(12) NOT NULL,\n" +
             "   `name` VARCHAR(20) NOT NULL,\n" +
@@ -102,26 +102,26 @@ function DB_helper() {
             "   `online_status` int DEFAULT 0, \n" +
             "   PRIMARY KEY ( `account` )\n" +
             ");";
-        connection.query(sql,function (err) {
-            if(err){
-                console.log("[CREATE TABLE ERROR - ]",err.message);
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log("[CREATE TABLE ERROR - ]", err.message);
                 return;
             }
         });
-        sql="CREATE TABLE IF NOT EXISTS `recent_chat`(\n" +
+        sql = "CREATE TABLE IF NOT EXISTS `recent_chat`(\n" +
             "   `account` VARCHAR(20) NOT NULL,\n" +
             "   `chat_time` DATETIME,\n" +
             "   `contact` VARCHAR(20) NOT NULL,\n" +
             "   PRIMARY KEY ( `account` , `contact`),\n" +
             "   FOREIGN KEY ( `account` , `contact`) REFERENCES `contact`(`user_account` , `contact_account`) ON DELETE CASCADE ON UPDATE CASCADE\n" +
             ")CHARSET=utf8;";
-        connection.query(sql,function (err) {
-            if(err){
-                console.log("[CREATE TABLE ERROR - ]",err.message);
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log("[CREATE TABLE ERROR - ]", err.message);
                 return;
             }
         });
-        sql="CREATE TABLE IF NOT EXISTS `chat_history`(\n" +
+        sql = "CREATE TABLE IF NOT EXISTS `chat_history`(\n" +
             "   `chat_id` int NOT NULL AUTO_INCREMENT,\n" +
             "   `account` VARCHAR(20) NOT NULL,\n" +
             "   `start_time` DATE,\n" +
@@ -129,13 +129,13 @@ function DB_helper() {
             "   `save_path` TEXT,\n" +
             "   PRIMARY KEY ( `chat_id` )\n" +
             ");";
-        connection.query(sql,function (err) {
-            if(err){
-                console.log("[CREATE TABLE ERROR - ]",err.message);
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log("[CREATE TABLE ERROR - ]", err.message);
                 return;
             }
         });
-        sql="CREATE TABLE IF NOT EXISTS `offline_chat`(\n" +
+        sql = "CREATE TABLE IF NOT EXISTS `offline_chat`(\n" +
             "   `account_from` VARCHAR(20) NOT NULL,\n" +
             "   `account_to` VARCHAR(20) NOT NULL,\n" +
             "   `time` DATETIME,\n" +
@@ -145,37 +145,37 @@ function DB_helper() {
             "   FOREIGN KEY (`account_to`) REFERENCES `user`(`account`) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
             "   PRIMARY KEY ( `account_from`, `account_to`, `time` )\n" +
             ");";
-        connection.query(sql,function (err) {
-            if(err){
-                console.log("[CREATE TABLE ERROR - ]",err.message);
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log("[CREATE TABLE ERROR - ]", err.message);
                 return;
             }
         });
-        sql="CREATE TABLE IF NOT EXISTS `contact`(\n" +
+        sql = "CREATE TABLE IF NOT EXISTS `contact`(\n" +
             "   `user_account` VARCHAR(20) NOT NULL,\n" +
             "   `contact_account` VARCHAR(20) NOT NULL,\n" +
             "   `name` VARCHAR(20) NOT NULL,\n" +
             "   PRIMARY KEY ( `user_account`, `contact_account`)\n" +
             ");";
-        connection.query(sql,function (err) {
-            if(err){
-                console.log("[CREATE TABLE ERROR - ]",err.message);
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log("[CREATE TABLE ERROR - ]", err.message);
                 return;
             }
         });
-        sql="CREATE TABLE IF NOT EXISTS `request`(\n" +
+        sql = "CREATE TABLE IF NOT EXISTS `request`(\n" +
             "   `request_id` INT PRIMARY KEY AUTO_INCREMENT,\n" +
             "   `account` VARCHAR(20) NOT NULL,\n" +
             "   `contact_account` VARCHAR(20) NOT NULL,\n" +
             "   `content` VARCHAR(64) DEFAULT '空',\n" +
             "   `time` DATETIME, \n" +
-            "   `status` int default 0,\n"+
+            "   `status` int default 0,\n" +
             "   FOREIGN KEY (`account`) REFERENCES `user`(`account`) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
             "   FOREIGN KEY (`contact_account`) REFERENCES `user`(`account`) ON DELETE CASCADE ON UPDATE CASCADE\n" +
             ");";
-        connection.query(sql,function (err) {
-            if(err){
-                console.log("[CREATE TABLE ERROR - ]",err.message);
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log("[CREATE TABLE ERROR - ]", err.message);
                 return;
             }
         });
@@ -266,8 +266,8 @@ function DB_helper() {
         });
     };
     this.getRecentList = function (account, cb) {
-       var sql = 'SELECT recent_chat.contact,contact.name,user.img_path,recent_chat.chat_time,user.online_status FROM user,recent_chat,contact\n' +
-           'where recent_chat.contact=user.account and recent_chat.account=contact.user_account and recent_chat.contact=contact.contact_account and recent_chat.account=?; ';
+        var sql = 'SELECT recent_chat.contact,contact.name,user.img_path,recent_chat.chat_time,user.online_status FROM user,recent_chat,contact\n' +
+            'where recent_chat.contact=user.account and recent_chat.account=contact.user_account and recent_chat.contact=contact.contact_account and recent_chat.account=?; ';
         connection.query(sql, [account], function (err, results) {
             if (err) {
                 console.log(err.message);
@@ -289,12 +289,12 @@ function DB_helper() {
     };
     this.delRecentList = function (account, contact_account, cb) {
         var modSql = 'DELETE FROM recent_chat WHERE (account=? AND contact=?) OR (account=? AND contact=?);';
-        var modSqlParams = [account,contact_account,contact_account,account];
+        var modSqlParams = [account, contact_account, contact_account, account];
         connection.query(modSql, modSqlParams, function (err, result) {
             if (err) {
                 console.log(err.message);
             }
-            else{
+            else {
                 if (cb != null) return cb(result);
             }
 
@@ -426,134 +426,135 @@ function DB_helper() {
             if (err) {
                 console.log(err.message);
             }
-            else{
-                cb(results);}
+            else {
+                cb(results);
+            }
         });
     };
-     this.getUser = function (account, cb) {
-         var sql = 'SELECT account,name AS f_name,name AS u_name,img_path,personal_profile FROM user WHERE account =?;';
+    this.getUser = function (account, cb) {
+        var sql = 'SELECT account,name AS f_name,name AS u_name,img_path,personal_profile FROM user WHERE account =?;';
         connection.query(sql, [account], function (err, results) {
             console.log(results);
             if (err) {
                 console.log(err.message);
             }
-            else{
-                cb(results);}
+            else {
+                cb(results);
+            }
         });
     };
-    this.isContact = function (user_account,contact_account, cb) {
+    this.isContact = function (user_account, contact_account, cb) {
         var sql = 'SELECT contact_account FROM contact WHERE user_account =?AND contact_account=?;';
-        let SQLParam=[user_account,contact_account];
+        let SQLParam = [user_account, contact_account];
         connection.query(sql, SQLParam, function (err, results) {
             if (err) {
                 console.log(err.message);
             }
-            else{
-                var status=results.length;
+            else {
+                var status = results.length;
                 cb(status);
             }
         });
     };
-    this.addContact = function (user_account,contact_account,name,cb) {
-         var sql = 'INSERT INTO contact ' +
+    this.addContact = function (user_account, contact_account, name, cb) {
+        var sql = 'INSERT INTO contact ' +
             '(user_account,contact_account,name) ' +
             'values(?, ?, ?);';
 
-        let SQLParam=[user_account,contact_account,name];
+        let SQLParam = [user_account, contact_account, name];
         connection.query(sql, SQLParam, function (err, results) {
             if (err) {
                 console.log(err.message);
             }
-            else{
+            else {
                 cb(results);
             }
         });
     };
     //发送好友申请
-    this.addRequest=function (account,contact_account,content,time,cb) {
-        var sql ="INSERT INTO request"+
-            '(account,contact_account,content,time,status)'+
+    this.addRequest = function (account, contact_account, content, time, cb) {
+        var sql = "INSERT INTO request" +
+            '(account,contact_account,content,time,status)' +
             'value(?,?,?,?,?)';
-        let SQLParam=[account,contact_account,content,time,0];
-        var status=0;
+        let SQLParam = [account, contact_account, content, time, 0];
+        var status = 0;
         connection.query(sql, SQLParam, function (err, results) {
             if (err) {
                 console.log(err.message);
-                status=-1;
+                status = -1;
                 cb(status);
             }
-            else
-            {
+            else {
                 cb(status);
             }
         });
     };
     //获取申请列表
-    this.getApplicationList=function (account,cb) {
+    this.getApplicationList = function (account, cb) {
         //发给acoount的
-        var sql="SELECT user.name,user.account,user.personal_profile,request.content,request.status,request.request_id " +
+        var sql = "SELECT user.name,user.account,user.personal_profile,request.content,request.status,request.request_id " +
             "FROM request LEFT JOIN user ON request.account=user.account WHERE contact_account =?";
-        let SQLParam=[account];
+        let SQLParam = [account];
         connection.query(sql, SQLParam, function (err, results) {
             if (err) {
                 console.log(err.message);
             }
-            else{
+            else {
                 cb(results);
             }
         });
     };
 
     //改变状态
-    this.changeApplicationList=function (account,contact_account,status,cb) {
+    this.changeApplicationList = function (account, contact_account, status, cb) {
         //发给acoount的
-        var sql="UPDATE request SET status=? WHERE account=? AND contact_account=? AND status=0;";
-        let SQLParam=[status,account,contact_account];
+        var sql = "UPDATE request SET status=? WHERE account=? AND contact_account=? AND status=0;";
+        let SQLParam = [status, account, contact_account];
         connection.query(sql, SQLParam, function (err, results) {
             if (err) {
                 console.log(err.message);
             }
-            else{
+            else {
                 cb(results);
             }
         });
 
     };
-    this.getAplicationStatus=function (id,cb) {
+    this.getAplicationStatus = function (id, cb) {
         //发给acoount的
-        var sql="SELECT status FROM request WHERE request_id=?;";
-        let SQLParam=[id];
+        var sql = "SELECT status FROM request WHERE request_id=?;";
+        let SQLParam = [id];
         connection.query(sql, SQLParam, function (err, results) {
             if (err) {
                 console.log(err.message);
             }
-            else{
+            else {
                 cb(results);
             }
         });
 
     };
 
-    this.changeRefuseApplication=function (id,status,cb) {
+    this.changeRefuseApplication = function (id, status, cb) {
 
-        var sql="UPDATE request SET status=? WHERE request_id=?;";
-        let SQLParam=[status,id];
+        var sql = "UPDATE request SET status=? WHERE request_id=?;";
+        let SQLParam = [status, id];
         connection.query(sql, SQLParam, function (err, results) {
             if (err) {
                 console.log(err.message);
             }
-            else{
+            else {
                 cb(results);
             }
         });
 
-    }
-    this.delContact=function (account,contact_account,cb) {
+    };
+    this.delContact = function (account, contact_account, cb) {
         //发给acoount的
-        var sql="DELETE FROM contact WHERE user_account=? and contact_account=?";
-        var sql1="UPDATE request SET status=3 WHERE account=? AND contact_account=? AND status!=2";
-        let SQLParam=[account,contact_account];
-        let SQLParam1=[contact_account,account];
+        var sql = "DELETE FROM contact WHERE user_account=? and contact_account=?";
+        var sql1 = "UPDATE request SET status=3 WHERE account=? AND contact_account=? AND status!=2";
+        let SQLParam = [account, contact_account];
+        let SQLParam1 = [contact_account, account];
         connection.query(sql, SQLParam, function (err, results) {
             if (err) {
                 console.log(err.message);
@@ -575,35 +576,37 @@ function DB_helper() {
             if (err) {
                 console.log(err.message);
             }
-            else{
+            else {
                 cb(results);
             }
         });
 
-    }
-    this.getContact = function (user_account,str, cb) {
+    };
+    this.getContact = function (user_account, str, cb) {
         var sql = 'Select account,user.name AS u_name,img_path,personal_profile,contact.name AS f_name ' +
             'FROM user,contact ' +
             'WHERE contact.user_account=?AND user.account=contact.contact_account AND (contact.name=? OR user.name=? OR user.account=?);';
-        let SQLParam=[user_account,str,str,str];
+        let SQLParam = [user_account, str, str, str];
         connection.query(sql, SQLParam, function (err, results) {
             if (err) {
                 console.log(err.message);
             }
-            else{
-                cb(results);}
+            else {
+                cb(results);
+            }
         });
-    }
-    this.changeRemark=function (contact_account,account,str, cb) {
+    };
+    this.changeRemark = function (contact_account, account, str, cb) {
         var sql = 'UPDATE contact SET name=? WHERE user_account=? AND contact_account=?';
-        let SQLParam=[str,account,contact_account];
+        let SQLParam = [str, account, contact_account];
         connection.query(sql, SQLParam, function (err, results) {
             if (err) {
                 console.log(err.message);
             }
-            else{
-                cb(results);}
+            else {
+                cb(results);
+            }
         });
-    }
+    };
 }
 module.exports = DB_helper;

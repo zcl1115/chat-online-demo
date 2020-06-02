@@ -1,5 +1,5 @@
 <template>
-  <el-container :class="{BGCDark: IsDarkModeProp}"></el-container>
+  <el-container class="container" :class="{'container-dark': IsDarkModeProp}"></el-container>
 </template>
 
 <script>
@@ -9,8 +9,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.el-container {
+.container {
   height: 100%;
   width: 100%;
+  background-color: var(--right-bg-color);
+}
+
+.container-dark {
+  background-color: var(--right-bg-color-dark);
 }
 </style>

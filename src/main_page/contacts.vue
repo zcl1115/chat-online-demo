@@ -786,7 +786,7 @@ ul {
 .application-list {
   width: 350px;
   ul {
-    border-bottom: #e8ecf1 1px solid;
+    border-bottom: var(--splitter-color) 1px solid;
     display: flex;
     align-items: center;
     padding: 20px 10px;
@@ -811,13 +811,13 @@ ul {
   }
 
   ul:first-child {
-    border-top: #e8ecf1 1px solid;
+    border-top: var(--splitter-color) 1px solid;
   }
 }
 
 .application-list-dark {
   ul {
-    border-bottom: #373738 1px solid;
+    border-bottom: var(--splitter-color-dark) 1px solid;
 
     p {
       color: var(--placeholder-color-dark);
@@ -830,7 +830,7 @@ ul {
   }
 
   ul:first-child {
-    border-top: #373738 1px solid;
+    border-top: var(--splitter-color-dark) 1px solid;
   }
 }
 
@@ -862,7 +862,8 @@ ul {
     margin: 25px 0;
     overflow: auto;
     padding: 10px;
-    border: #b3c0d1 1px solid;
+    // border: #b3c0d1 1px solid;
+    background-color: var(--mid-bg-color);
     border-radius: 5px;
   }
 
@@ -878,14 +879,14 @@ ul {
 
   .agree-btn {
     background-color: var(--special-color);
-    border: var(--special-color) 1px solid;
+    border: none;
     color: white;
   }
 
   .refuse-btn {
-    background-color: white;
+    background-color: var(--mid-bg-color);
     color: black;
-    border: black 1px solid;
+    border: none;
   }
 
   .status {
@@ -895,13 +896,14 @@ ul {
 
 .view-application-dark {
   .a-msg {
-    border: #525253 1px solid;
+    border: none;
+    background-color: var(--mid-bg-color-dark);
   }
 
   .refuse-btn {
     color: var(--info-font-color-dark);
     background-color: var(--mid-bg-color-dark);
-    border: #383838 1px solid;
+    border: none;
   }
 }
 
@@ -923,9 +925,11 @@ ul {
     padding: 10px;
     outline: none;
     box-sizing: border-box;
-    border: #b3c0d1 1px solid;
+    border: none;
     border-radius: 5px;
     font-size: 16px;
+    color: var(--info-font-color);
+    background-color: var(--mid-bg-color);
   }
 
   .submit {
@@ -940,7 +944,7 @@ ul {
   textarea {
     color: var(--info-font-color-dark);
     background-color: var(--mid-bg-color-dark);
-    border: #525253 1px solid;
+    border: none;
   }
 }
 </style>

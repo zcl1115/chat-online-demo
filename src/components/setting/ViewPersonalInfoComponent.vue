@@ -1,20 +1,18 @@
 <template>
-  <el-container :class="{BGCDark: IsDarkModeProp}">
-    <div class="ViewPersonalInfoDiv" :class="{BGCDark: IsDarkModeProp}">
-      <div class="PersonalInfoLogoDiv">
-        <img :src="UserLogoPathProp" />
+  <el-container class="container" :class="{'container-dark': IsDarkModeProp}">
+    <div class="view-user-info">
+      <div class="info-div">
+        <div class="info-avatar">
+          <img :src="UserLogoPathProp" />
+        </div>
+        <div class="info-account">帐号：{{ UserIDProp }}</div>
+        <div class="info-nickname">昵称：{{ UserNameProp }}</div>
+        <div class="info-introduction">简介：{{ UserIntroductionProp }}</div>
       </div>
-      <div class="InfoDiv" :class="{InfoDivDark: IsDarkModeProp}">
-        <div class="UserIDDiv">帐号：{{ UserIDProp }}</div>
-        <div class="UserNameDiv">昵称：{{ UserNameProp }}</div>
-        <div class="UserIntroductionDiv">简介：{{ UserIntroductionProp }}</div>
+      <div class="button-div">
+        <el-button type="primary" @click="SubmitButtonClicked()">修改信息</el-button>
+        <el-button type="primary" @click="SetLogoButtonClicked()">修改头像</el-button>
       </div>
-      <el-form label-position="right" label-width="80px">
-        <el-form-item class="SubmitButtonFormItem" label-width="0">
-          <el-button type="primary" class="SubmitButton" @click="SubmitButtonClicked()">修改信息</el-button>
-          <el-button type="primary" class="SetLogoButton" @click="SetLogoButtonClicked()">修改头像</el-button>
-        </el-form-item>
-      </el-form>
     </div>
   </el-container>
 </template>
@@ -48,74 +46,67 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.el-container {
+.container {
+  width: 100%;
   height: 100%;
-  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--info-font-color);
+  background-color: var(--right-bg-color);
 }
 
-.ViewPersonalInfoDiv {
-  height: 400px;
+.container-dark {
+  color: var(--info-font-color-dark);
+  background-color: var(--right-bg-color-dark);
+}
+
+.view-user-info {
   width: 300px;
-  position: relative;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 
-  .PersonalInfoLogoDiv {
-    height: 150px;
-    width: 150px;
-    position: relative;
-    left: 50%;
-    top: 25%;
-    transform: translate(-50%, -50%);
-    margin-bottom: 50px;
-
-    img {
-      height: 100%;
-      width: 100%;
-      border-radius: 50%;
-    }
-  }
-
-  .InfoDiv {
-    margin: 20px 0;
-    text-align: center;
+  .info-div {
+    margin-bottom: 20px;
     font-size: 18px;
-    color: #303133;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-    .UserIDDiv,
-    .UserNameDiv {
-      margin-bottom: 20px;
+    .info-avatar {
+      img {
+        height: 150px;
+        width: 150px;
+        border-radius: 50%;
+      }
+    }
+
+    .info-avatar,
+    .info-account,
+    .info-nickname,
+    .info-introduction {
+      margin: 10px 0;
+      display: flex;
+      justify-content: center;
     }
   }
 
-  .InfoDivDark {
-    color: rgb(230, 230, 230);
+  .button-div {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+
+    button {
+      background-color: var(--special-color);
+      border: none;
+      color: white;
+    }
+
+    .el-button + .el-button {
+      margin-left: 0;
+    }
   }
-}
-
-.SubmitButtonFormItem {
-  margin: 0;
-
-  .SubmitButton {
-    background-color: rgb(78, 81, 158);
-    position: absolute;
-    left: 25%;
-    transform: translate(-50%);
-    border: none;
-  }
-
-  .SetLogoButton {
-    background-color: rgb(78, 81, 158);
-    position: absolute;
-    left: 75%;
-    transform: translate(-50%);
-    border: none;
-    margin: 0;
-  }
-}
-
-.BGCDark {
-  background-color: #1A1A1A;
 }
 </style>

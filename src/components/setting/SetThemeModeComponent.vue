@@ -1,11 +1,11 @@
 <template>
-  <el-container :class="{BGCDark: IsDarkModeProp}">
-    <div class="SetThemeModeDiv" :class="{BGCDark: IsDarkModeProp}">
-      <el-button class="ModeButton" @click="ModeButtonClicked(false)">
+  <el-container class="container" :class="{'container-dark': IsDarkModeProp}">
+    <div class="set-theme-mode">
+      <el-button class="mode-btn" @click="ModeButtonClicked(false)">
         <img class="icon" :class="{show: !IsDarkModeProp}" src="icons/check.svg" />
         <img class="theme" src="images/light-theme.png" />
       </el-button>
-      <el-button class="ModeButton" @click="ModeButtonClicked(true)">
+      <el-button class="mode-btn" @click="ModeButtonClicked(true)">
         <img class="icon" :class="{show: IsDarkModeProp}" src="icons/check.svg" />
         <img class="theme" src="images/dark-theme.png" />
       </el-button>
@@ -28,12 +28,17 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.el-container {
+.container {
   height: 100%;
   width: 100%;
+  background-color: var(--right-bg-color);
 }
 
-.SetThemeModeDiv {
+.container-dark {
+  background-color: var(--right-bg-color-dark);
+}
+
+.set-theme-mode {
   width: 600px;
   height: 200px;
   margin: 200px auto;
@@ -41,7 +46,7 @@ export default {
   justify-content: space-around;
   align-items: center;
 
-  .ModeButton {
+  .mode-btn {
     position: relative;
     height: 180px;
     width: 180px;

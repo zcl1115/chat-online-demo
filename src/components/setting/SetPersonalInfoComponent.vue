@@ -1,28 +1,34 @@
 <template>
-  <el-container :class="{BGCDark: IsDarkModeProp}">
-    <div class="SetPersonalInfoDiv" :class="{BGCDark: IsDarkModeProp}">
-      <div class="PersonalInfoLogoDiv">
+  <el-container class="container" :class="{'container-dark': IsDarkModeProp}">
+    <div class="set-user-info">
+      <div class="info-avatar">
         <img :src="UserLogoPathProp" />
       </div>
-      <div class="UserIDDiv" :class="{UserIDDivDark: IsDarkModeProp}">帐号：{{ UserIDProp }}</div>
       <el-form
-        label-position="right"
-        label-width="80px"
+        label-width="60px"
         :model="PersonlInfoForm"
         :rules="PersonlInfoFormRules"
         ref="PersonlInfoFormRef"
-        :class="{PersonalInfoFormDark: IsDarkModeProp}"
+        class="form-div"
       >
-        <el-form-item label prop="NewName" :class="{FormItemDark: IsDarkModeProp}">
-          <label class="FormLabel" :class="{FontDark: IsDarkModeProp}">昵称：</label>
+        <el-form-item
+          label="昵称"
+          prop="NewName"
+          class="form-item-update"
+          :class="{'form-item-update-dark': IsDarkModeProp}"
+        >
           <el-input v-model="PersonlInfoForm.NewName"></el-input>
         </el-form-item>
-        <el-form-item label prop="NewIntroduction">
-          <label class="FormLabel" :class="{FontDark: IsDarkModeProp}">简介：</label>
+        <el-form-item
+          label="简介"
+          prop="NewIntroduction"
+          class="form-item-update"
+          :class="{'form-item-update-dark': IsDarkModeProp}"
+        >
           <el-input v-model="PersonlInfoForm.NewIntroduction"></el-input>
         </el-form-item>
-        <el-form-item class="SubmitButtonFormItem" label-width="0">
-          <el-button type="primary" class="SubmitButton" @click="SubmitButtonClicked()">提交修改</el-button>
+        <el-form-item class="button-div" label-width="0">
+          <el-button type="primary" @click="SubmitButtonClicked()">提交修改</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -136,80 +142,77 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.el-container {
+.container {
+  width: 100%;
   height: 100%;
-  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--info-font-color);
+  background-color: var(--right-bg-color);
 }
 
-.FormLabel {
-  text-align: right;
-  vertical-align: middle;
-  font-size: 14px;
-  color: #606266;
-  line-height: 40px;
-  padding: 0 12px 0 0;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  position: absolute;
-  left: 0;
-  transform: translate(-100%);
+.container-dark {
+  color: var(--info-font-color-dark);
+  background-color: var(--right-bg-color-dark);
 }
 
-.SetPersonalInfoDiv {
-  height: 400px;
-  width: 500px;
-  position: relative;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+.set-user-info {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 
-  .PersonalInfoLogoDiv {
-    height: 150px;
-    width: 150px;
-    position: relative;
-    left: 50%;
-    top: 25%;
-    transform: translate(-50%, -50%);
-    margin-bottom: 50px;
+  .info-avatar {
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
 
     img {
-      height: 100%;
-      width: 100%;
+      height: 150px;
+      width: 150px;
       border-radius: 50%;
     }
   }
 
-  .UserIDDiv {
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: 18px;
-    color: #303133;
-  }
+  .form-div {
+    margin: 10px 0;
 
-  .UserIDDivDark {
-    color: rgb(230, 230, 230);
-  }
+    .button-div {
+      text-align: center;
 
-  .PersonalInfoFormDark {
-    color: rgb(230, 230, 230);
-
-    .FormItemDark {
-      .el-form-item__label {
-        color: rgb(230, 230, 230);
+      button {
+        background-color: var(--special-color);
+        border: none;
+        color: white;
       }
     }
   }
 }
+</style>
+<style lang="less">
+// To override style of label & input
+.form-item-update {
+  .el-form-item__label {
+    color: var(--info-font-color);
+  }
 
-.SubmitButtonFormItem {
-  margin: 0;
-
-  .SubmitButton {
-    background-color: rgb(78, 81, 158);
-    position: relative;
-    left: 50%;
-    transform: translate(-50%);
+  .el-input__inner {
     border: none;
+    color: var(--info-font-color);
+    background-color: var(--mid-bg-color);
+  }
+}
+.form-item-update-dark {
+  .el-form-item__label {
+    color: var(--info-font-color-dark);
+  }
+
+  .el-input__inner {
+    border: none;
+    color: var(--info-font-color-dark);
+    background-color: var(--mid-bg-color-dark);
   }
 }
 </style>

@@ -1,38 +1,47 @@
 <template>
-  <el-container :class="{el_dark: IsDarkMode}">
-    <el-aside class="MiddleAside" :class="{MiddleAsideDark: IsDarkMode}" width="300px">
+  <el-container class="container" :class="{'container-dark': IsDarkMode}">
+    <el-aside class="MiddleAside" :class="{MiddleAsideDark: IsDarkMode}" width="280px">
+      <!--Search area  -->
       <div class="search_area">
-        <el-input
+        <input
+          class="search_key"
           :class="{dark_search: IsDarkMode}"
           placeholder="搜索最近联系人"
           v-model="search_name"
-          suffix-icon="el-icon-search"
-        ></el-input>
+        />
       </div>
+
+      <!-- Chatting list area -->
       <div class="recent_contacts">
         <ul
           v-for="(people,index) in filter_recent_contacts"
           v-bind:key="index"
-          class="contact"
           :class="{contact_dark: IsDarkMode, addclassdark: contact_account === people.contact&&IsDarkMode,addclass: contact_account === people.contact}"
           v-on:click="select_contact(people.name,people.contact,people.img_path)"
         >
-          <img :src="people.img_path" class="round_icon" />
-          <a class="contact_name">{{people.name}}</a>
-          <i v-if="people.online_status === 0" class="el-icon-error"></i>
-          <i v-if="people.online_status === 1" class="el-icon-success"></i>
-          <img
-            src="images/point.png"
-            class="notice"
-            v-if="unread_contacts.indexOf(people.contact) !== -1 && contact_account !== people.contact"
-          />
+          <!-- Avatar and nickname -->
+          <div class="main_info">
+            <img :src="people.img_path" class="contact_avatar" />
+            <span class="contact_name">{{people.name}}</span>
+          </div>
+
+          <!-- Hints of user online/offline and message read/unread -->
+          <div class="additions">
+            <img
+              src="images/point.png"
+              class="msg_unread_notice"
+              v-if="unread_contacts.indexOf(people.contact) !== -1 && contact_account !== people.contact"
+            />
+            <i v-if="people.online_status === 0" class="online_or_not el-icon-circle-close"></i>
+            <i v-if="people.online_status === 1" class="online_or_not el-icon-circle-check"></i>
+          </div>
         </ul>
       </div>
     </el-aside>
+
+    <!-- Right part -->
     <div class="chat_area" v-if="isShow" :class="{chat_area_dark: IsDarkMode}">
-      <div class="friend_name" :class="{friend_name_dark: IsDarkMode}">
-        {{contacts}}
-      </div>
+      <div class="friend_name" :class="{friend_name_dark: IsDarkMode}">{{contacts}}</div>
       <!--eslint-disable-next-line-->
       <div class="message_show" v-if="!history_show">
         <div class="message_box" v-for="(message, index) in messages" :key="index">
@@ -71,12 +80,12 @@
         </div>
       </div>
       <component
-              :is="chat_history_show"
-              :IsDarkMode="IsDarkMode"
-              :contact="contact_account"
-              :img_path="contact_img"
-              :account="account"
-              @UpdateFlag="UpdateFlag"
+        :is="chat_history_show"
+        :IsDarkMode="IsDarkMode"
+        :contact="contact_account"
+        :img_path="contact_img"
+        :account="account"
+        @UpdateFlag="UpdateFlag"
       ></component>
       <div class="input_message">
         <div class="function_area" style>
@@ -90,16 +99,8 @@
             src="icons/upload.svg"
             onclick="document.getElementById('upload_clicked').click();"
           />
-          <img
-                  class="icon"
-                  src="icons/history.svg"
-                  v-on:click="show_history()"
-          />
-          <img
-                  class="icon"
-                  src="icons/word_cloud.svg"
-                  v-on:click="show_word_cloud()"
-          />
+          <img class="icon" src="icons/history.svg" v-on:click="show_history()" />
+          <img class="icon word_cloud" src="icons/cloud.svg" v-on:click="show_word_cloud()" />
           <input type="file" class="upload" id="upload_clicked" v-show="false" @change="uploadFile" />
           <emoji_picker @emoji_clicked="emoji_clicked" :inputData="emoji_picker_isShow"></emoji_picker>
         </div>
@@ -173,7 +174,7 @@ export default {
   },
   created() {
     this.account = getCookie("user_account");
-    if (this.selected_contact)this.Select_contact();
+    if (this.selected_contact) this.Select_contact();
   },
   mounted() {
     this.sockets.subscribe("getFile", data => {
@@ -210,15 +211,15 @@ export default {
     send_message() {
       var message = document.getElementById("message").value;
       for (let i in this.forbidden_word) {
-        let reg = new RegExp(this.forbidden_word[i],"g");
+        let reg = new RegExp(this.forbidden_word[i], "g");
         //判断内容中是否包括敏感词
-        if(message.indexOf(this.forbidden_word[i]) != -1){
-          let result = message.replace(reg,"**");
+        if (message.indexOf(this.forbidden_word[i]) != -1) {
+          let result = message.replace(reg, "**");
           message = result;
           this.$notify({
-            title: '警告',
-            message: '包含敏感词汇,已被替换,请注意!',
-            type: 'warning'
+            title: "警告",
+            message: "包含敏感词汇,已被替换,请注意!",
+            type: "warning"
           });
         }
       }
@@ -273,20 +274,20 @@ export default {
         file_name: message.content
       });
     },
-    show_history(){
-      if (this.history_show){
+    show_history() {
+      if (this.history_show) {
         this.chat_history_show = "";
         this.chat_history_show = "chat_history";
-      }else{
+      } else {
         this.chat_history_show = "chat_history";
       }
       this.history_show = true;
     },
-    show_word_cloud(){
-      if (this.history_show){
+    show_word_cloud() {
+      if (this.history_show) {
         this.chat_history_show = "";
         this.chat_history_show = "word_cloud";
-      }else{
+      } else {
         this.chat_history_show = "word_cloud";
       }
       this.history_show = true;
@@ -295,17 +296,20 @@ export default {
       this.chat_history_show = "";
       this.history_show = val.Flag;
     },
-    Select_contact(){
-      if (this.selected_contact){
+    Select_contact() {
+      if (this.selected_contact) {
         let t;
         for (t in this.recent_contacts_list) {
-          if (this.selected_contact===this.recent_contacts_list[t].contact){
+          if (this.selected_contact === this.recent_contacts_list[t].contact) {
             this.img_path = getCookie("UserLogoPath");
             this.contacts = this.recent_contacts_list[t].name;
             this.contact_account = this.selected_contact;
             this.isShow = true;
             this.contact_img = this.recent_contacts_list[t].img_path;
-            this.unread_contacts.splice(this.unread_contacts.indexOf(this.selected_contact), 1);
+            this.unread_contacts.splice(
+              this.unread_contacts.indexOf(this.selected_contact),
+              1
+            );
             break;
           }
         }
@@ -328,136 +332,188 @@ export default {
   }
 };
 </script>
-<style>
-.dark_search .el-input__inner {
-  background-color: #131313;
-  color: rgb(220, 220, 220);
-}
-</style>
+
 <style  lang="less" scoped>
-.el-container {
-  height: 100%;
+// prevent default style of ul, which appears at contact list and apply list
+ul {
+  padding: 0;
   margin: 0;
 }
-.el_dark {
-  background-color: #1A1A1A;
-}
+
+// Middle part of layout
 .MiddleAside {
-  background-color: rgb(247, 247, 247);
-  text-align: center;
+  background-color: var(--mid-bg-color);
+
+  .search_area {
+    height: 134px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+    .search_key {
+      width: 220px;
+      height: 34px;
+      border: none;
+      padding-left: 10px;
+      border-radius: 5px;
+    }
+
+    .search_key:focus {
+      outline: none;
+    }
+
+    .search_key::placeholder {
+      color: var(--placeholder-color);
+    }
+  }
+
+  .recent_contacts {
+    overflow: auto;
+    overflow-x: hidden;
+
+    ul {
+      height: 75px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: 25px;
+      padding-right: 25px;
+      color: var(--menu-font-color);
+      cursor: pointer;
+
+      .main_info {
+        display: flex;
+        align-items: center;
+
+        .contact_avatar {
+          width: 55px;
+          height: 55px;
+          border-radius: 50%;
+        }
+
+        .contact_name {
+          margin-left: 15px;
+        }
+      }
+
+      .additions {
+        display: flex;
+        align-items: center;
+
+        .msg_unread_notice {
+          width: 10px;
+          height: 10px;
+          margin-right: 10px;
+        }
+      }
+    }
+  }
 }
 
 .MiddleAsideDark {
-  background-color: #131313;
+  background-color: var(--mid-bg-color-dark);
 }
 
-.search_area {
-  text-align: center;
-  width: 100%;
-  height: 15%;
-  line-height: 6;
-}
-.recent_contacts {
-  width: 100%;
-  height: 83%;
-  overflow: auto;
-  overflow-x: hidden;
-}
-
+// Right part of layout
 .chat_area {
-  width: 75%;
+  width: 100%;
   height: 100%;
-  float: left;
-}
-.chat_area_dark {
-  background-color: #1A1A1A;
+  display: grid;
+  grid-template-rows: 50px auto 220px;
+  grid-template-columns: auto;
+  grid-template-areas:
+    "top"
+    "middle"
+    "bottom";
 }
 
+// Top part of chat area
 .friend_name {
-  text-align: center;
-  width: 100%;
-  height: 6%;
-  box-shadow: 0px 2px 0px 0px #f2f2f2;
-}
-.friend_name_dark {
-  color: rgb(240, 240, 240);
-}
-
-.message_show {
-  width: 100%;
-  height: 67%;
-  overflow: auto;
-  overflow-x: hidden;
-}
-
-.input_message {
-  width: 100%;
-  height: 27%;
-  box-shadow: 0px -2px 0px 0px #f2f2f2;
-}
-.function_area {
-  width: 100%;
-  height: 15%;
-}
-.input_area {
-  margin-top: 2px;
-  margin-bottom: 2px;
-  width: 100%;
-  height: 50%;
-}
-.content {
-  border: none;
-  resize: none;
-  cursor: pointer;
-  padding-top: 5px;
-  font-family: "SimSun", "Times New Roman", Georgia, Serif, serif;
-  width: 100%;
-  height: 100%;
-  line-height: 10px;
-  font-size: 20px;
-}
-.content_dark {
-  background-color: #1A1A1A;
-  color: rgb(240, 240, 240);
-}
-.content:focus {
-  outline: none;
-}
-.send_area {
-  margin-top: 8px;
-  text-align: right;
-  float: right;
-  width: 100%;
-  height: 23%;
-}
-.round_icon {
-  width: 40px;
-  height: 40px;
+  grid-area: top;
   display: flex;
-  border-radius: 50%;
-  align-items: center;
   justify-content: center;
-  overflow: hidden;
-  float: left;
-  margin-left: -30px;
-}
-.contact_name {
-  float: left;
-  width: 100px;
-  text-align: left;
-  margin-top: 12px;
-  margin-left: 20px;
-}
-.notice {
-  float: left;
-  margin-top: 18px;
-  width: 10px;
-  height: 10px;
+  align-items: center;
+  border-bottom: var(--splitter-color) 1px solid;
 }
 
-.contact {
-  width: 100%;
-  height: 60px;
+// Middle part of chat area
+.message_show {
+  grid-area: middle;
+}
+
+// Bottom part of chat area
+.input_message {
+  grid-area: bottom;
+
+  .function_area {
+    height: 35px;
+    padding-left: 10px;
+    padding-top: 5px;
+    border-top: var(--splitter-color) 1px solid;
+
+    .icon {
+      height: 25px;
+      margin: 5px;
+      cursor: pointer;
+    }
+
+    .word_cloud {
+      height: 30px;
+      margin: 2.5px 5px;
+    }
+  }
+
+  .input_area {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    width: 100%;
+    height: 120px;
+
+    .content {
+      width: 100%;
+      height: 100%;
+      padding: 5px;
+      padding-left: 15px;
+      box-sizing: border-box;
+      line-height: 20px;
+      font-size: 16px;
+      border: none;
+      resize: none;
+      cursor: text;
+      color: var(--info-font-color);
+    }
+
+    .content:focus {
+      outline: none;
+    }
+  }
+
+  .send_area {
+    position: relative;
+
+    button {
+      position: absolute;
+      right: 20px;
+    }
+  }
+}
+
+.container-dark {
+  background-color: var(--mid-bg-color-dark);
+}
+
+.chat_area_dark {
+  background-color: var(--right-bg-color-dark);
+}
+
+.friend_name_dark {
+  color: var(--info-font-color-dark);
+}
+
+.content_dark {
+  background-color: #1a1a1a;
+  color: rgb(240, 240, 240);
 }
 
 .contact_dark {
@@ -465,14 +521,6 @@ export default {
   color: rgb(220, 220, 220);
 }
 
-.icon {
-  margin-left: 5px;
-  width: 25px;
-  height: 25px;
-}
-.inline-block {
-  display: inline-block;
-}
 .upload {
   opacity: 0;
 }
@@ -484,7 +532,7 @@ p {
   background-color: white;
 }
 .addclassdark {
-  background-color: #1A1A1A;
+  background-color: #1a1a1a;
   color: rgb(240, 240, 240);
 }
 .message_box {

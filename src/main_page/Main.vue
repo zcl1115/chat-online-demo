@@ -82,7 +82,7 @@ export default {
       recent_contacts_list: [],
       unread_message: [],
       forbidden_word: [],
-      now_contact: "",
+      now_contact: ""
     };
   },
   mounted() {
@@ -122,7 +122,7 @@ export default {
       });
     });
     window.setInterval(() => {
-      setTimeout(this.init_recent_contacts, 0)
+      setTimeout(this.init_recent_contacts, 0);
     }, 5000);
   },
   methods: {

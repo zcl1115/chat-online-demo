@@ -1,30 +1,42 @@
 <template>
-  <el-container :class="{BGCDark: IsDarkModeProp}">
-    <div class="SetPasswordDiv" :class="{BGCDark: IsDarkModeProp}">
-      <div class="PersonalInfoLogoDiv">
+  <el-container class="container" :class="{'container-dark': IsDarkModeProp}">
+    <div class="set-user-password">
+      <div class="avatar">
         <img :src="UserLogoPathProp" />
       </div>
       <div>
         <el-form
-          label-position="right"
-          label-width="80px"
+          label-width="70px"
           :model="SetPasswordForm"
           :rules="SetPasswordFormRules"
           ref="SetPasswordFromRef"
+          class="form-div"
         >
-          <el-form-item prop="OldPassword">
-            <label class="FormLabel" :class="{FontDark: IsDarkModeProp}">原密码：</label>
+          <el-form-item
+            label="原密码"
+            prop="OldPassword"
+            class="form-item-update"
+            :class="{'form-item-update-dark': IsDarkModeProp}"
+          >
             <el-input v-model="SetPasswordForm.OldPassword" type="password" show-password></el-input>
           </el-form-item>
-          <el-form-item prop="NewPassword">
-            <label class="FormLabel" :class="{FontDark: IsDarkModeProp}">新密码：</label>
+          <el-form-item
+            label="新密码"
+            prop="NewPassword"
+            class="form-item-update"
+            :class="{'form-item-update-dark': IsDarkModeProp}"
+          >
             <el-input v-model="SetPasswordForm.NewPassword" type="password" show-password></el-input>
           </el-form-item>
-          <el-form-item prop="CheckPassword">
-            <label class="FormLabel" :class="{FontDark: IsDarkModeProp}">确认：</label>
+          <el-form-item
+            label="确认"
+            prop="CheckPassword"
+            class="form-item-update"
+            :class="{'form-item-update-dark': IsDarkModeProp}"
+          >
             <el-input v-model="SetPasswordForm.CheckPassword" type="password" show-password></el-input>
           </el-form-item>
-          <el-form-item class="SubmitButtonFormItem" label-width="0">
+          <el-form-item class="button-div" label-width="0">
             <el-button type="primary" class="SubmitButton" @click="SubmitButtonClicked()">提交修改</el-button>
           </el-form-item>
         </el-form>
@@ -150,59 +162,52 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.el-container {
+.container {
+  width: 100%;
   height: 100%;
-  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--info-font-color);
+  background-color: var(--right-bg-color);
 }
 
-.FormLabel {
-  text-align: right;
-  vertical-align: middle;
-  font-size: 14px;
-  color: #606266;
-  line-height: 40px;
-  padding: 0 12px 0 0;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  position: absolute;
-  left: 0;
-  transform: translate(-100%);
+.container-dark {
+  color: var(--info-font-color-dark);
+  background-color: var(--right-bg-color-dark);
 }
 
-.SetPasswordDiv {
-  height: 550px;
-  width: 400px;
-  position: relative;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+.set-user-password {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 
-  .PersonalInfoLogoDiv {
-    height: 150px;
-    width: 150px;
-    position: relative;
-    left: 50%;
-    top: 25%;
-    transform: translate(-50%, -50%);
-    margin-bottom: 80px;
+  .avatar {
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
 
     img {
-      height: 100%;
-      width: 100%;
+      height: 150px;
+      width: 150px;
       border-radius: 50%;
     }
   }
-}
 
-.SubmitButtonFormItem {
-  margin: 0;
+  .form-div {
+    margin: 10px 0;
 
-  .SubmitButton {
-    background-color: rgb(78, 81, 158);
-    position: relative;
-    left: 50%;
-    transform: translate(-50%);
-    border: none;
+    .button-div {
+      text-align: center;
+
+      button {
+        background-color: var(--special-color);
+        border: none;
+        color: white;
+      }
+    }
   }
 }
 </style>

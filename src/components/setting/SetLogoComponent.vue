@@ -1,34 +1,29 @@
 <template>
-  <el-container :class="{BGCDark: IsDarkModeProp}">
-    <div class="SetLogoDiv" :class="{BGCDark: IsDarkModeProp}">
-      <div class="PersonalInfoLogoDiv">
-        <img :src="UserLogoPathProp" />
+  <el-container class="container" :class="{'container-dark': IsDarkModeProp}">
+    <div class="set-user-avatar">
+      <div class="avatars">
+        <div class="old-avatar">
+          <img :src="UserLogoPathProp" />
+        </div>
+        <div class="new-avatar" :class="{'new-avatar-dark': IsDarkModeProp}">
+          <el-upload
+            :action="UploadAction()"
+            list-type="picture-card"
+            :on-remove="HandleRemove"
+            :on-change="HandleOnChange"
+            :on-success="UploadOnSuccess"
+            :auto-upload="false"
+            :limit="1"
+            :data="UploadData"
+            ref="UploadLogoRef"
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+        </div>
       </div>
-      <div class="NewLogoDiv">
-        <el-upload
-          :action="UploadAction()"
-          list-type="picture-card"
-          :on-remove="HandleRemove"
-          :on-change="HandleOnChange"
-          :on-success="UploadOnSuccess"
-          :auto-upload="false"
-          :limit="1"
-          :data="UploadData"
-          ref="UploadLogoRef"
-        >
-          <i class="el-icon-plus"></i>
-        </el-upload>
+      <div class="button-div">
+        <el-button type="primary" @click="SubmitButtonClicked()">提交修改</el-button>
       </div>
-      <div class="InfoDiv" :class="{InfoDivDark: IsDarkModeProp}">
-        <div class="UserIDDiv">帐号：{{ UserIDProp }}</div>
-        <div class="UserNameDiv">昵称：{{ UserNameProp }}</div>
-        <div class="UserIntroductionDiv">简介：{{ UserIntroductionProp }}</div>
-      </div>
-      <el-form label-position="right" label-width="80px">
-        <el-form-item class="SubmitButtonFormItem" label-width="0">
-          <el-button type="primary" class="SubmitButton" @click="SubmitButtonClicked()">提交修改</el-button>
-        </el-form-item>
-      </el-form>
     </div>
   </el-container>
 </template>
@@ -56,7 +51,7 @@ export default {
         )[0];
 
         if (UploadButton) {
-          UploadButton.style.display = "block";
+          UploadButton.style.display = "inline-block";
         }
       }, 700);
 
@@ -154,79 +149,81 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.el-container {
+.container {
+  width: 100%;
   height: 100%;
-  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--info-font-color);
+  background-color: var(--right-bg-color);
 }
 
-.SetLogoDiv {
-  height: 400px;
-  width: 500px;
-  position: relative;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+.container-dark {
+  color: var(--info-font-color-dark);
+  background-color: var(--right-bg-color-dark);
+}
 
-  .PersonalInfoLogoDiv {
-    height: 150px;
-    width: 150px;
-    position: relative;
-    left: 25%;
-    top: 25%;
-    transform: translate(-50%, -50%);
-    margin-bottom: 50px;
+.set-user-avatar {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 
-    img {
-      height: 100%;
-      width: 100%;
-      border-radius: 50%;
+  .avatars {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .old-avatar {
+      img {
+        height: 150px;
+        width: 150px;
+        border-radius: 50%;
+      }
     }
   }
 
-  .NewLogoDiv {
-    height: 150px;
-    width: 150px;
-    position: absolute;
-    left: 75%;
-    top: 25%;
-    transform: translate(-50%, -50%);
-    margin-bottom: 50px;
-  }
-
-  .InfoDiv {
-    margin: 20px 0;
+  .button-div {
     text-align: center;
-    font-size: 18px;
-    color: #303133;
 
-    .UserIDDiv,
-    .UserNameDiv {
-      margin-bottom: 20px;
+    button {
+      background-color: var(--special-color);
+      border: none;
     }
   }
 
-  .InfoDivDark {
-    color: rgb(230, 230, 230);
+  .avatars,
+  .button-div {
+    margin: 20px 0;
+  }
+}
+</style>
+
+<style lang="less">
+.new-avatar {
+  .el-upload--picture-card {
+    height: 150px !important;
+    width: 150px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    background-color: var(--mid-bg-color) !important;
+  }
+
+  .el-upload-list--picture-card .el-upload-list__item {
+    height: 150px !important;
+    width: 150px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    background-color: var(--mid-bg-color) !important;
   }
 }
 
-.SubmitButtonFormItem {
-  margin: 0;
-
-  .SubmitButton {
-    background-color: rgb(78, 81, 158);
-    position: relative;
-    left: 50%;
-    transform: translate(-50%);
-    border: none;
-  }
-
-  .SubmitButton2 {
-    background-color: rgb(78, 81, 158);
-    position: relative;
-    left: 50%;
-    transform: translate(-50%);
-    border: none;
+.new-avatar-dark {
+  .el-upload--picture-card {
+    background-color: var(--mid-bg-color-dark) !important;
   }
 }
 </style>
