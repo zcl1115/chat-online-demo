@@ -195,7 +195,7 @@ body {
 
 .main_signup {
   text-align: center;
-  margin-top: 90px;
+  padding-top: 90px;
 }
 
 .form_container_signup {

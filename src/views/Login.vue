@@ -123,7 +123,7 @@ body {
 
 .main_login {
   text-align: center;
-  margin-top: 150px;
+  padding-top: 150px;
 }
 
 .logo_part {
