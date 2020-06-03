@@ -110,6 +110,7 @@
           <img :src="item.img_path" />
           <p>
             <span class="application-name">{{item.name}}</span>请求添加您为好友
+            //<p>{{item.status}}</p>
           </p>
         </ul>
       </div>
