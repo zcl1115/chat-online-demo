@@ -588,6 +588,10 @@ ul {
   margin: 0;
 }
 
+::-webkit-scrollbar {
+  width: 0px;
+}
+
 // Middle part of layout
 .middle-part {
   background-color: var(--mid-bg-color);
@@ -786,7 +790,10 @@ ul {
 
 // When right part is to show apply list info
 .application-list {
-  width: 360px;
+  width: 500px;
+  max-height: 80%;
+  overflow: auto;
+
   ul {
     border-bottom: var(--splitter-color) 1px solid;
     display: flex;
@@ -959,4 +966,3 @@ ul {
   }
 }
 </style>
->>>>>>> refactor: change style of chatting page:src/components/Contacts.vue
