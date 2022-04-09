@@ -19,7 +19,7 @@
     "formidable": "^1.2.2",
     "less": "^3.11.1",
     "less-loader": "^5.0.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "morgan": "^1.10.0",
     "multiparty": "^4.2.1",
     "mysql": "^2.18.1",
